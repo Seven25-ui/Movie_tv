@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SE7EN CINEMA | Premium Mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #000000; --accent: #E95420; --card-bg: #111; --text: #ffffff;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 90px; }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            position: sticky; top: 0; background: rgba(0,0,0,0.95);
+            padding: 12px 15px; z-index: 1000; display: flex; align-items: center; gap: 10px;
+        }
+        .logo { color: var(--accent); font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; }
+        .search-box {
+            flex: 1; background: #1a1a1a; border: 1px solid #333;
+            border-radius: 20px; padding: 6px 15px; display: flex; align-items: center;
+        }
+        .search-box input {
+            background: transparent; border: none; color: #fff; outline: none;
+            width: 100%; margin-left: 8px; font-size: 13px;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            height: 55vh; width: 100%; background-size: cover; background-position: center;
+            display: flex; align-items: flex-end; padding: 20px;
+            background-image: linear-gradient(to top, #000 10%, transparent 90%);
+        }
+        .hero-info h1 { font-size: 1.8rem; margin-bottom: 5px; }
+        .hero-info p { font-size: 0.8rem; color: #bbb; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 12px; }
+
+        /* --- GRID --- */
+        .row { padding: 20px 15px 0; }
+        .row h2 { font-size: 1rem; margin-bottom: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        @media (min-width: 768px) { .grid { grid-template-columns: repeat(5, 1fr); } }
+
+        .card { background: #080808; border-radius: 8px; overflow: hidden; position: relative; aspect-ratio: 2/3; }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-meta { position: absolute; bottom: 0; width: 100%; padding: 8px; background: linear-gradient(to top, black, transparent); }
+        .card-meta h3 { font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* --- UPDATED BOTTOM NAV (All categories visible) --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: #0a0a0a;
+            border-top: 1px solid #222; display: flex; justify-content: space-around;
+            padding: 10px 5px; z-index: 2000;
+        }
+        .nav-btn { color: #777; text-decoration: none; text-align: center; font-size: 9px; flex: 1; transition: 0.3s; }
+        .nav-btn i { font-size: 18px; display: block; margin-bottom: 4px; }
+        .nav-btn.active { color: var(--accent); }
+
+        /* --- PLAYER & SEASONS --- */
+        #player-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; }
+        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; background: #111; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .episode-list { padding: 15px; height: calc(100vh - 56.25vw - 50px); overflow-y: auto; }
+        
+        select#season-select {
+            width: 100%; padding: 12px; background: #1a1a1a; color: #fff; border: 1px solid #333;
+            border-radius: 6px; margin: 10px 0; font-size: 14px; outline: none;
+        }
+        .ep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .ep-btn { background: #222; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 4px; font-size: 12px; }
+        .ep-btn:active { background: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="logo">SE7EN</div>
+    <div class="search-box">
+        <i class="fas fa-search" style="color:#555; font-size: 12px;"></i>
+        <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
+    </div>
+</div>
+
+<div class="hero" id="hero">
+    <div class="hero-info">
+        <h1 id="h-title">Loading...</h1>
+        <p id="h-desc">Please wait...</p>
+        <button id="h-btn" style="background:var(--accent); color:#fff; border:none; padding:10px 20px; border-radius:4px; font-weight:bold; font-size: 12px;">
+            <i class="fas fa-play"></i> WATCH NOW
+        </button>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="row">
+        <h2 id="row-title">🔥 TRENDING</h2>
+        <div class="grid" id="main-grid"></div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-btn active" onclick="location.reload()">
+        <i class="fas fa-home"></i>Home
+    </div>
+    <div class="nav-btn" onclick="fetchType('movie')">
+        <i class="fas fa-film"></i>Movies
+    </div>
+    <div class="nav-btn" onclick="fetchType('tv')">
+        <i class="fas fa-tv"></i>TV Shows
+    </div>
+    <div class="nav-btn" onclick="fetchLang('ko')">
+        <i class="fas fa-heart"></i>K-Drama
+    </div>
+    <div class="nav-btn" onclick="fetchLang('ja')">
+        <i class="fas fa-dragon"></i>Anime
+    </div>
+</div>
+
+<div id="player-overlay">
+    <div style="padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;">
+        <span id="p-title" style="font-size:12px; font-weight:bold; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; width:80%;">Loading...</span>
+        <i class="fas fa-times" onclick="closePlayer()" style="font-size: 20px;"></i>
+    </div>
+    <div class="video-wrapper">
+        <iframe id="v-frame" src="" allowfullscreen></iframe>
+    </div>
+    <div class="episode-list" id="ep-list">
+        </div>
+</div>
+
+<script>
+    const KEY = '3455ebd9bf16f0b30d2ed31128bf933c';
+    const TMDB = 'https://api.themoviedb.org/3';
+    const IMG = 'https://image.tmdb.org/t/p/w500';
+
+    async function init() {
+        const res = await fetch(`${TMDB}/trending/all/day?api_key=${KEY}`);
+        const data = await res.json();
+        const top = data.results[0];
+        
+        document.getElementById('h-title').innerText = top.title || top.name;
+        document.getElementById('h-desc').innerText = top.overview;
+        document.getElementById('hero').style.backgroundImage = `linear-gradient(to top, #000 10%, transparent), url('https://image.tmdb.org/t/p/original${top.backdrop_path}')`;
+        document.getElementById('h-btn').onclick = () => play(top.id, top.media_type || 'movie', top.title || top.name);
+
+        render(data.results);
+    }
+
+    function render(list) {
+        const g = document.getElementById('main-grid');
+        g.innerHTML = '';
+        list.forEach(m => {
+            if(!m.poster_path) return;
+            const type = m.media_type || (m.first_air_date ? 'tv' : 'movie');
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => play(m.id, type, m.title || m.name);
+            card.innerHTML = `<img src="${IMG + m.poster_path}"><div class="card-meta"><h3>${m.title || m.name}</h3></div>`;
+            g.appendChild(card);
+        });
+    }
+
+    async function fetchType(type) {
+        const res = await fetch(`${TMDB}/discover/${type}?api_key=${KEY}&sort_by=popularity.desc`);
+        const data = await res.json();
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('row-title').innerText = type === 'movie' ? "🎬 POPULAR MOVIES" : "📺 POPULAR TV SHOWS";
+        render(data.results.map(i => ({...i, media_type: type})));
+        updateNavIcons(type === 'movie' ? 1 : 2);
+    }
+
+    async function fetchLang(lang) {
+        const res = await fetch(`${TMDB}/discover/tv?api_key=${KEY}&with_original_language=${lang}`);
+        const data = await res.json();
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('row-title').innerText = lang === 'ko' ? "🇰🇷 K-DRAMA SPECIALS" : "🇯🇵 ANIME SERIES";
+        render(data.results.map(i => ({...i, media_type: 'tv'})));
+        updateNavIcons(lang === 'ko' ? 3 : 4);
+    }
+
+    async function search(q) {
+        const res = await fetch(`${TMDB}/search/multi?api_key=${KEY}&query=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('row-title').innerText = "SEARCH RESULTS";
+        render(data.results);
+    }
+
+    async function play(id, type, title) {
+        const overlay = document.getElementById('player-overlay');
+        overlay.style.display = 'block';
+        document.getElementById('p-title').innerText = title;
+        const frame = document.getElementById('v-frame');
+        const epBox = document.getElementById('ep-list');
+        
+        if(type === 'movie') {
+            frame.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
+            epBox.innerHTML = '<p style="text-align:center; padding:20px; color:#555;">Movie Mode Active</p>';
+        } else {
+            const res = await fetch(`${TMDB}/tv/${id}?api_key=${KEY}`);
+            const data = await res.json();
+            
+            frame.src = `https://vidsrc.me/embed/tv?tmdb=${id}&season=1&episode=1`;
+            
+            let html = `<select id="season-select" onchange="loadEpisodes(${id}, this.value)">`;
+            data.seasons.forEach(s => {
+                if(s.season_number > 0) html += `<option value="${s.season_number}">${s.name}</option>`;
+            });
+            html += `</select><div class="ep-grid" id="ep-render"></div>`;
+            epBox.innerHTML = html;
+            loadEpisodes(id, 1);
+        }
+    }
+
+    async function loadEpisodes(id, sNum) {
+        const res = await fetch(`${TMDB}/tv/${id}/season/${sNum}?api_key=${KEY}`);
+        const data = await res.json();
+        const epG = document.getElementById('ep-render');
+        epG.innerHTML = '';
+        data.episodes.forEach(ep => {
+            epG.innerHTML += `<button class="ep-btn" onclick="changeVid(${id}, ${sNum}, ${ep.episode_number})">${ep.episode_number}</button>`;
+        });
+    }
+
+    function changeVid(id, s, e) {
+        document.getElementById('v-frame').src = `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`;
+    }
+
+    function closePlayer() {
+        document.getElementById('player-overlay').style.display = 'none';
+        document.getElementById('v-frame').src = '';
+    }
+
+    function updateNavIcons(index) {
+        const btns = document.querySelectorAll('.nav-btn');
+        btns.forEach((b, i) => i === index ? b.classList.add('active') : b.classList.remove('active'));
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
