@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SE7EN CINEMA | Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="title" content="SE7EN CINEMA | Premium Streaming">
+<meta name="description" content="Stream the latest movies, TV shows, K-Drama, and Anime in high definition. Experience premium cinema at your fingertips.">
+<meta name="keywords" content="movies, streaming, se7en cinema, kdrama, anime, online player, aloygenex">
+<meta name="author" content="ALOYGENEX">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://se7encinema.com/"> <meta property="og:title" content="SE7EN CINEMA | Premium">
+<meta property="og:description" content="Watch your favorite movies and shows for free on SE7EN CINEMA.">
+<meta property="og:image" content="https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.jpg"> <meta name="theme-color" content="#E95420">
+<meta name="apple-mobile-web-app-status-bar-style" content="#E95420">
+<meta name="msapplication-navbutton-color" content="#E95420">
+
+<link rel="icon" type="image/png" href="https://image.tmdb.org/t/p/w200/wwemzKWzjKYJFfCeiB57q3r4Bcm.jpg">
     <style>
         :root {
             --bg: #000000; --accent: #E95420; --card-bg: #111; --text: #ffffff;
@@ -127,9 +140,102 @@
         .ep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .ep-btn { background: #151515; border: 1px solid #222; color: #fff; padding: 12px 5px; border-radius: 6px; cursor: pointer; font-size: 13px; }
         .ep-btn.active { background: var(--accent); border-color: var(--accent); }
+
+/* Custom Selection Color */
+::selection {
+    background: var(--accent);
+    color: white;
+}
+
+/* Custom Scrollbar para sa Desktop/Chrome */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #000;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 10px;
+}
+
+#hack-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 9999; display: flex;
+    justify-content: center; align-items: center; flex-direction: column;
+}
+
+.glitch {
+    color: #0f0; font-family: 'Courier New', monospace;
+    font-size: 2.5rem; font-weight: 900; position: relative;
+}
+
+/* Glitch Animation */
+.glitch::before, .glitch::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+
+.glitch::before {
+    left: 2px; text-shadow: -2px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px; text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+    animation: glitch-anim2 1s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+    0% { clip: rect(31px, 9999px, 94px, 0); }
+    20% { clip: rect(62px, 9999px, 42px, 0); }
+    100% { clip: rect(13px, 9999px, 86px, 0); }
+}
+
+@keyframes glitch-anim2 {
+    0% { clip: rect(10px, 9999px, 85px, 0); }
+    50% { clip: rect(90px, 9999px, 10px, 0); }
+    100% { clip: rect(50px, 9999px, 30px, 0); }
+}
+
+.hack-text {
+    margin-top: 20px; font-family: 'Courier New', monospace;
+    color: #0f0; font-size: 14px; line-height: 1.5;
+}
+
+/* Pula nga flash para murag mag-explode ang screen */
+@keyframes emergency-flash {
+    0% { background-color: #000; }
+    50% { background-color: #400; }
+    100% { background-color: #000; }
+}
+
+#hack-overlay.shock {
+    animation: emergency-flash 0.1s infinite;
+}
+
+/* Himoon natong dako ug pula ang error text */
+.glitch {
+    color: #ff0000 !important; /* Pula para kuyaw */
+    font-size: 3rem;
+    text-shadow: 0 0 20px #f00;
+}
+
     </style>
 </head>
 <body>
+
+<div id="hack-overlay">
+    <div class="glitch-wrapper">
+        <div class="glitch" data-text="SYSTEM CRITICAL ERROR">SYSTEM CRITICAL ERROR</div>
+        <div class="hack-text">
+            <p>> BOOTING SE7EN_CINEMA_OS...</p>
+            <p>> BYPASSING SECURITY...</p>
+            <p>> INJECTING ALOYGENEX_CORE...</p>
+            <p>> ACCESS GRANTED. 💀</p>
+        </div>
+    </div>
+</div>
 
 <div class="top-bar">
     <div class="logo">SE7EN</div>
@@ -313,7 +419,43 @@
         document.getElementById('v-frame').src = '';
     }
 
-    window.onload = init;
+    window.onload = () => {
+    const hackOverlay = document.getElementById('hack-overlay');
+    
+    // 1. I-trigger ang pula nga "shock" flicker
+    hackOverlay.classList.add('shock');
+
+    // 2. Play ang artificial "Static Noise"
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.type = 'sawtooth'; 
+    oscillator.frequency.setValueAtTime(100, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); 
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.start();
+
+    // 3. 10 SECONDS DELAY (10000ms)
+    setTimeout(() => {
+        // Undongon ang saba
+        oscillator.stop();
+
+        // 4. Glitch Exit Effect
+        hackOverlay.style.transition = "all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+        hackOverlay.style.opacity = "0";
+        hackOverlay.style.transform = "scale(2) rotate(5deg)"; // Murag mo-warp ang screen inig exit
+        
+        setTimeout(() => {
+            hackOverlay.style.display = "none";
+            // 5. Dayon i-load ang SE7EN CINEMA
+            init(); 
+        }, 500);
+    }, 10000); // Mao ni ang 10 segundos
+};
 </script>
 </body>
 </html>
