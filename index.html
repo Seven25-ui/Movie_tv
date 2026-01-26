@@ -162,80 +162,44 @@
 #hack-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: #000; z-index: 9999; display: flex;
-    justify-content: center; align-items: center; flex-direction: column;
+    justify-content: center; align-items: center; overflow: hidden;
+}
+#matrix-canvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
 }
 
-.glitch {
-    color: #0f0; font-family: 'Courier New', monospace;
-    font-size: 2.5rem; font-weight: 900; position: relative;
+/* Glitch Shake Effect - I-trigger via JS */
+.glitch-active {
+    animation: shake 0.2s infinite;
+    filter: hue-rotate(90deg) contrast(150%);
 }
 
-/* Glitch Animation */
-.glitch::before, .glitch::after {
-    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+@keyframes shake {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(5px, -5px); }
+    50% { transform: translate(-5px, 5px); }
+    75% { transform: translate(2px, -2px); }
+    100% { transform: translate(0,0); }
 }
 
-.glitch::before {
-    left: 2px; text-shadow: -2px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
+/* Red Flash para sa Glitch phase */
+.red-flash {
+    animation: flash-red 0.1s infinite;
 }
 
-.glitch::after {
-    left: -2px; text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
-    animation: glitch-anim2 1s infinite linear alternate-reverse;
+@keyframes flash-red {
+    0% { background: #000; }
+    50% { background: #200; }
+    100% { background: #000; }
 }
-
-@keyframes glitch-anim {
-    0% { clip: rect(31px, 9999px, 94px, 0); }
-    20% { clip: rect(62px, 9999px, 42px, 0); }
-    100% { clip: rect(13px, 9999px, 86px, 0); }
-}
-
-@keyframes glitch-anim2 {
-    0% { clip: rect(10px, 9999px, 85px, 0); }
-    50% { clip: rect(90px, 9999px, 10px, 0); }
-    100% { clip: rect(50px, 9999px, 30px, 0); }
-}
-
-.hack-text {
-    margin-top: 20px; font-family: 'Courier New', monospace;
-    color: #0f0; font-size: 14px; line-height: 1.5;
-}
-
-/* Pula nga flash para murag mag-explode ang screen */
-@keyframes emergency-flash {
-    0% { background-color: #000; }
-    50% { background-color: #400; }
-    100% { background-color: #000; }
-}
-
-#hack-overlay.shock {
-    animation: emergency-flash 0.1s infinite;
-}
-
-/* Himoon natong dako ug pula ang error text */
-.glitch {
-    color: #ff0000 !important; /* Pula para kuyaw */
-    font-size: 3rem;
-    text-shadow: 0 0 20px #f00;
-}
-
+ 
     </style>
 </head>
 <body>
 
 <div id="hack-overlay">
-    <div class="glitch-wrapper">
-        <div class="glitch" data-text="SYSTEM CRITICAL ERROR">SYSTEM CRITICAL ERROR</div>
-        <div class="hack-text">
-            <p>> BOOTING SE7EN_CINEMA_OS...</p>
-            <p>> BYPASSING SECURITY...</p>
-            <p>> INJECTING ALOYGENEX_CORE...</p>
-            <p>> ACCESS GRANTED. 💀</p>
-        </div>
+    <canvas id="matrix-canvas"></canvas>
     </div>
-</div>
 
 <div class="top-bar">
     <div class="logo">SE7EN</div>
@@ -419,43 +383,58 @@
         document.getElementById('v-frame').src = '';
     }
 
-    window.onload = () => {
-    const hackOverlay = document.getElementById('hack-overlay');
+window.onload = () => {
+    const canvas = document.getElementById('matrix-canvas');
+    const overlay = document.getElementById('hack-overlay');
+    const ctx = canvas.getContext('2d');
     
-    // 1. I-trigger ang pula nga "shock" flicker
-    hackOverlay.classList.add('shock');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    // 2. Play ang artificial "Static Noise"
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    oscillator.type = 'sawtooth'; 
-    oscillator.frequency.setValueAtTime(100, audioCtx.currentTime);
-    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); 
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    oscillator.start();
+    const chars = "0101010101010101ALOYGENEX";
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
 
-    // 3. 10 SECONDS DELAY (10000ms)
+    function draw() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0f0";
+        ctx.font = fontSize + "px monospace";
+        drops.forEach((y, i) => {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, y * fontSize);
+            if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
+    }
+
+    const matrixInt = setInterval(draw, 40);
+
+    // --- PHASE 1: MATRIX (First 6 Seconds) ---
     setTimeout(() => {
-        // Undongon ang saba
-        oscillator.stop();
-
-        // 4. Glitch Exit Effect
-        hackOverlay.style.transition = "all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-        hackOverlay.style.opacity = "0";
-        hackOverlay.style.transform = "scale(2) rotate(5deg)"; // Murag mo-warp ang screen inig exit
+        // --- PHASE 2: GLITCH (Next 4 Seconds) ---
+        overlay.classList.add('glitch-active', 'red-flash');
         
+        // Optional: Paspasan ang matrix inig glitch
+        clearInterval(matrixInt);
+        setInterval(draw, 10); 
+
         setTimeout(() => {
-            hackOverlay.style.display = "none";
-            // 5. Dayon i-load ang SE7EN CINEMA
-            init(); 
-        }, 500);
-    }, 10000); // Mao ni ang 10 segundos
+            // --- PHASE 3: EXIT ---
+            overlay.style.transition = "all 0.3s ease";
+            overlay.style.opacity = "0";
+            overlay.style.transform = "scale(2) blur(10px)";
+            
+            setTimeout(() => {
+                overlay.style.display = "none";
+                init(); // I-load ang main app (Trending movies)
+            }, 300);
+        }, 4000); // 4 seconds glitch
+
+    }, 6000); // 6 seconds matrix
 };
+
 </script>
 </body>
 </html>
