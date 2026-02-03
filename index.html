@@ -401,25 +401,28 @@ function nextEp() {
     }
 
     function switchServer(server, btn = null, s = currentS, e = currentE) {
-        const frame = document.getElementById('v-frame');
-        if(btn) {
-            btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-        let url = "";
-        if(currentType === 'movie') {
-            if(server === 'vidsrc1') url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`;
-            else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/movie/${currentID}`;
-            else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/movie/${currentID}`;
-            else url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
-        } else {
-            if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${s}&episode=${e}`;
-            else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
-            else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${s}/${e}`;
-            else url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
-        }
-        frame.src = url;
+    const frame = document.getElementById('v-frame');
+    if(btn) {
+        btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
     }
+    
+    let url = "";
+    if(currentType === 'movie') {
+        if(server === 'vidsrc1') url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`;
+        else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/movie/${currentID}`;
+        else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/movie/${currentID}`;
+        else if(server === 'vidsrc4') url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
+        else url = `https://embed.su/embed/movie/${currentID}`; // S5 Backup
+    } else {
+        if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${s}&episode=${e}`;
+        else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
+        else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${s}/${e}`;
+        else if(server === 'vidsrc4') url = `https://vidsrc.xyz/embed/tv/${currentID}/${s}/${e}`; // Updated S4
+        else url = `https://embed.su/embed/tv/${currentID}/${s}/${e}`; // Bag-ong S5
+    }
+    frame.src = url;
+}
 
     function closePlayer() { document.getElementById('player-overlay').style.display = 'none'; document.body.style.overflow = 'auto'; document.getElementById('v-frame').src = ''; }
 
