@@ -246,25 +246,20 @@ footer p {
     let currentID, currentType, currentS=1, currentE=1;
 
     async function apiCall(endpoint) {
-    try {
-        const token = atob(_mask).trim();
-        const response = await fetch(`${TMDB}${endpoint}`, {
-            method: 'GET',
-            headers: {
-                'accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Naay space diri!
-            }
-        });
+    // Gigamit nato ang imong v3 key para seguradong mo-load
+    const API_KEY = "3455ebd9bf16f0b30d2ed31128bf933c";
+    const connector = endpoint.includes('?') ? '&' : '?';
+    const url = `${TMDB}${endpoint}${connector}api_key=${API_KEY}`;
 
+    try {
+        const response = await fetch(url);
         if (!response.ok) {
-            // Kon naay error, mo-pop up ni sa imong screen
-            alert("TMDB Error: " + response.status + " - Check TMDB Settings!");
+            console.error("TMDB Error:", response.status);
             return null;
         }
-
         return await response.json();
     } catch (err) {
-        alert("Fetch Error: " + err);
+        console.error("Connection Error:", err);
         return null;
     }
 }
