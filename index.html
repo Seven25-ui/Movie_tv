@@ -233,7 +233,10 @@ footer p {
 </footer>
 
 <script>
-    const KEY = '3455ebd9bf16f0b30d2ed31128bf933c';
+    // 1. SECURITY MASKING (v4 Token)
+    // Mao ni ang imong Ninja Mask gikan sa Termux
+    const _mask = "ZXlKaGJHY2lPaUpJVXpJMU5pSjkuLi5MSUJnaw=="; 
+    
     const TMDB = 'https://api.themoviedb.org/3';
     const IMG = 'https://image.tmdb.org/t/p/w500';
     const SB_URL = "https://sshdwibenypcekgczpgc.supabase.co";
@@ -241,6 +244,24 @@ footer p {
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let currentID, currentType, currentS=1, currentE=1;
+
+    // --- NEW: CENTRALIZED SECURE FETCH ---
+    async function apiCall(endpoint) {
+        try {
+            const response = await fetch(`${TMDB}${endpoint}`, {
+                method: 'GET',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${atob(_mask)}` // I-decode ra inig request
+                }
+            });
+            if (!response.ok) throw new Error('API Error');
+            return await response.json();
+        } catch (err) {
+            console.error("Fetch Error:", err);
+            return null;
+        }
+    }
 
     async function checkPass() {
         const input = document.getElementById('pass-input').value;
@@ -255,8 +276,8 @@ footer p {
     function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
 
     async function init() {
-        const res = await fetch(`${TMDB}/trending/all/day?api_key=${KEY}`);
-        const data = await res.json();
+        const data = await apiCall('/trending/all/day');
+        if(!data) return;
         const top = data.results[0];
         document.getElementById('h-title').innerText = top.title || top.name;
         document.getElementById('h-desc').innerText = top.overview;
@@ -280,16 +301,14 @@ footer p {
     }
 
     async function fetchType(type) {
-        const res = await fetch(`${TMDB}/discover/${type}?api_key=${KEY}&sort_by=popularity.desc`);
-        const data = await res.json();
+        const data = await apiCall(`/discover/${type}?sort_by=popularity.desc`);
         document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = type === 'movie' ? "🎬 Popular Movies" : "📺 Popular TV Shows";
+        document.getElementById('row-title').innerText = type === 'movie' ? "🎬 Popular Movies" : " 📺 Popular TV Shows";
         render(data.results.map(i => ({...i, media_type: type})));
     }
 
     async function fetchLang(lang) {
-        const res = await fetch(`${TMDB}/discover/tv?api_key=${KEY}&with_original_language=${lang}`);
-        const data = await res.json();
+        const data = await apiCall(`/discover/tv?with_original_language=${lang}`);
         document.getElementById('hero').style.display = 'none';
         document.getElementById('row-title').innerText = lang === 'ko' ? "🇰🇷 K-Drama" : "🇯🇵 Anime";
         render(data.results.map(i => ({...i, media_type: 'tv'})));
@@ -297,20 +316,19 @@ footer p {
 
     async function search(q) {
         if(!q) return;
-        const res = await fetch(`${TMDB}/search/multi?api_key=${KEY}&query=${encodeURIComponent(q)}`);
-        const data = await res.json();
+        const data = await apiCall(`/search/multi?query=${encodeURIComponent(q)}`);
         document.getElementById('hero').style.display = 'none';
         document.getElementById('row-title').innerText = "Results: " + q;
         render(data.results);
     }
 
-    // --- LOGIC: PLAYER & AD-SHIELD SERVERS ---
+    // --- PLAYER LOGIC ---
     async function play(id, type, title) {
         currentID = id; currentType = type;
         document.getElementById('player-overlay').style.display = 'block';
         document.body.style.overflow = 'hidden';
         document.getElementById('p-title').innerText = title;
-        
+
         const sList = document.getElementById('server-list');
         sList.innerHTML = `
             <button class="ep-btn active" onclick="switchServer('vidsrc3', this)">S1 (No Ads)</button>
@@ -324,8 +342,7 @@ footer p {
             switchServer('vidsrc3');
             epBox.innerHTML = '<p style="text-align:center; color:#555; padding-top:20px;">Movie Mode Active</p>';
         } else {
-            const res = await fetch(`${TMDB}/tv/${id}?api_key=${KEY}`);
-            const data = await res.json();
+            const data = await apiCall(`/tv/${id}`);
             switchServer('vidsrc3', null, 1, 1);
             let html = `<select id="season-select" onchange="loadEpisodes(${id}, this.value)">`;
             data.seasons.forEach(s => { if(s.season_number > 0) html += `<option value="${s.season_number}">${s.name}</option>`; });
@@ -335,31 +352,8 @@ footer p {
         }
     }
 
-    function switchServer(server, btn = null, s = currentS, e = currentE) {
-        const frame = document.getElementById('v-frame');
-        if(btn) {
-            btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-        
-        let url = "";
-        if(currentType === 'movie') {
-            if(server === 'vidsrc1') url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`;
-            else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/movie/${currentID}`;
-            else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/movie/${currentID}`;
-            else url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
-        } else {
-            if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${s}&episode=${e}`;
-            else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
-            else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${s}/${e}`;
-            else url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
-        }
-        frame.src = url;
-    }
-
     async function loadEpisodes(id, sNum) {
-        const res = await fetch(`${TMDB}/tv/${id}/season/${sNum}?api_key=${KEY}`);
-        const data = await res.json();
+        const data = await apiCall(`/tv/${id}/season/${sNum}`);
         const epG = document.getElementById('ep-render');
         epG.innerHTML = '';
         data.episodes.forEach(ep => {
@@ -376,6 +370,27 @@ footer p {
             };
             epG.appendChild(btn);
         });
+    }
+
+    function switchServer(server, btn = null, s = currentS, e = currentE) {
+        const frame = document.getElementById('v-frame');
+        if(btn) {
+            btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        let url = "";
+        if(currentType === 'movie') {
+            if(server === 'vidsrc1') url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`;
+            else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/movie/${currentID}`;
+            else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/movie/${currentID}`;
+            else url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
+        } else {
+            if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${s}&episode=${e}`;
+            else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
+            else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${s}/${e}`;
+            else url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
+        }
+        frame.src = url;
     }
 
     function closePlayer() { document.getElementById('player-overlay').style.display = 'none'; document.body.style.overflow = 'auto'; document.getElementById('v-frame').src = ''; }
