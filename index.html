@@ -331,11 +331,13 @@ footer p {
         document.getElementById('p-title').innerText = title;
 
         const sList = document.getElementById('server-list');
+        // Gidugangan nato og "Next" button sa tumoy
         sList.innerHTML = `
-            <button class="ep-btn active" onclick="switchServer('vidsrc3', this)">S1 (No Ads)</button>
+            <button class="ep-btn active" onclick="switchServer('vidsrc3', this)">S1</button>
             <button class="ep-btn" onclick="switchServer('vidsrc1', this)">S2</button>
             <button class="ep-btn" onclick="switchServer('vidsrc2', this)">S3</button>
             <button class="ep-btn" onclick="switchServer('vidsrc4', this)">S4</button>
+            ${type === 'tv' ? `<button class="ep-btn" style="background:#0f0; color:#000;" onclick="nextEp()">Next ➔</button>` : ''}
         `;
 
         const epBox = document.getElementById('ep-list');
@@ -353,24 +355,49 @@ footer p {
         }
     }
 
+    let episodeList = []; // I-add ni sa taas nga part sa script
+
     async function loadEpisodes(id, sNum) {
         const data = await apiCall(`/tv/${id}/season/${sNum}`);
+        episodeList = data.episodes; // I-save ang episodes list
         const epG = document.getElementById('ep-render');
         epG.innerHTML = '';
         data.episodes.forEach(ep => {
             const btn = document.createElement('button');
+            btn.id = `ep-id-${ep.episode_number}`; // Butangan og ID para dali pangitaon
             btn.className = 'ep-btn' + (ep.episode_number === currentE ? ' active' : '');
             btn.innerText = ep.episode_number;
             btn.onclick = () => {
-                document.querySelectorAll('#ep-render .ep-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentS = sNum; currentE = ep.episode_number;
-                const activeSrvBtn = document.querySelector('#server-list .ep-btn.active');
-                const srv = activeSrvBtn.innerText.includes('S1') ? 'vidsrc3' : activeSrvBtn.innerText.includes('S2') ? 'vidsrc1' : activeSrvBtn.innerText.includes('S3') ? 'vidsrc2' : 'vidsrc4';
-                switchServer(srv, null, sNum, ep.episode_number);
+                playEp(sNum, ep.episode_number);
             };
             epG.appendChild(btn);
         });
+    }
+
+    // Bag-o nga function para sa pag-play sa episode
+    function playEp(sNum, eNum) {
+        document.querySelectorAll('#ep-render .ep-btn').forEach(b => b.classList.remove('active'));
+        const activeBtn = document.getElementById(`ep-id-${eNum}`);
+        if(activeBtn) activeBtn.classList.add('active');
+        
+        currentS = sNum; currentE = eNum;
+        const activeSrvBtn = document.querySelector('#server-list .ep-btn.active');
+        const srv = activeSrvBtn.innerText.includes('S1') ? 'vidsrc3' : activeSrvBtn.innerText.includes('S2') ? 'vidsrc1' : activeSrvBtn.innerText.includes('S3') ? 'vidsrc2' : 'vidsrc4';
+        
+        switchServer(srv, null, sNum, eNum);
+        document.getElementById('player-overlay').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+function nextEp() {
+        const nextNum = currentE + 1;
+        // I-check kon naa pa bay sunod nga episode sa listahan
+        const hasNext = episodeList.some(e => e.episode_number === nextNum);
+        
+        if (hasNext) {
+            playEp(currentS, nextNum);
+        } else {
+            alert("Last episode na ni sa kini nga season, Aloy!");
+        }
     }
 
     function switchServer(server, btn = null, s = currentS, e = currentE) {
