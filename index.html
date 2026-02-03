@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="icon" type="image/png" href="https://image.tmdb.org/t/p/w200/wwemzKWzjKYJFfCeiB57q3r4Bcm.jpg">
-    
+
     <style>
         :root {
             --bg: #000000; --accent: #E95420; --card-bg: #111; --text: #ffffff;
@@ -59,7 +59,6 @@
         .nav-btn i { font-size: 20px; display: block; margin-bottom: 4px; }
         .nav-btn.active, .nav-btn:hover { color: var(--accent); }
 
-        /* --- PLAYER & AD-SHIELD --- */
         #player-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; overflow-y: auto; }
         .player-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: #080808; position: sticky; top: 0; z-index: 10; }
         .player-container { display: flex; flex-direction: column; }
@@ -70,7 +69,7 @@
         }
         .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        
+
         select#season-select { width: 100%; padding: 12px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; margin-bottom: 20px; outline: none; }
         .ep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .ep-btn { background: #151515; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; }
@@ -82,79 +81,16 @@
         .glitch-active { animation: shake 0.2s infinite; filter: hue-rotate(90deg) contrast(150%); }
         @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px, -5px); } 50% { transform: translate(-5px, 5px); } 100% { transform: translate(0,0); } }
 
-        /* --- LOGIN AREA: ORANGE FLOATING CARD --- */
-#login-screen { 
-    position:fixed; top:0; left:0; width:100%; height:100%; 
-    background:#000; z-index:10000; display:flex; flex-direction:column; 
-    justify-content:center; align-items:center;
-}
+        /* --- LOGIN AREA --- */
+        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:10000; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+        .login-card { background: rgba(10, 10, 10, 0.95); padding: 30px; border-radius: 15px; border: 2px solid #FF4500; text-align: center; width: 85%; max-width: 310px; box-shadow: 0 0 15px rgba(255, 69, 0, 0.3); animation: orange-float 3s ease-in-out infinite; }
+        @keyframes orange-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+        .login-card input { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #333; background: #050505; color: #fff; margin-bottom: 15px; text-align: center; outline: none; }
 
-.login-card { 
-    background: rgba(10, 10, 10, 0.95); 
-    padding: 30px; 
-    border-radius: 15px; 
-    border: 2px solid #FF4500; /* Deep Orange Border */
-    text-align: center; 
-    width: 85%; 
-    max-width: 310px; 
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
-    animation: orange-float 3s ease-in-out infinite;
-}
-
-@keyframes orange-float {
-    0%, 100% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 69, 0, 0.4); }
-    50% { transform: translateY(-12px); box-shadow: 0 0 40px rgba(255, 69, 0, 0.7); }
-}
-
-.login-card input {
-    width: 100%; padding: 14px; border-radius: 8px; 
-    border: 1px solid #333; background: #050505; color: #fff; 
-    margin-bottom: 15px; text-align: center; outline: none; 
-    transition: 0.3s;
-}
-
-.login-card input:focus { 
-    border-color: #FF4500; 
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.6); 
-}
-
-/* --- FOOTER: NEON ORANGE PULSE --- */
-footer {
-    padding: 50px 20px;
-    text-align: center;
-    background: linear-gradient(to top, #0a0a0a, #000);
-    border-top: 2px solid #FF4500;
-    margin-top: 60px;
-    position: relative;
-    overflow: hidden;
-}
-
-footer p {
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px #FF4500; /* Glowing Orange Text */
-}
-
-/* Kani nga line ang magsiga sa babaw sa footer */
-.footer-glow-line {
-    position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-    background: #FF4500;
-    box-shadow: 0 0 20px #FF4500, 0 0 40px #FF4500;
-    animation: orange-pulse 2s infinite;
-}
-
-@keyframes orange-pulse {
-    0%, 100% { opacity: 0.8; filter: brightness(1); }
-    50% { opacity: 1; filter: brightness(1.5); box-shadow: 0 0 30px #FF4500, 0 0 50px #FF4500; }
-}
-
-#logout-btn {
-    background: #FF4500 !important;
-    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
-}
+        footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
+        footer p { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px #FF4500; }
+        .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
+        @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -162,15 +98,13 @@ footer p {
 <div id="login-screen">
     <h1 style="color:var(--accent); font-size:3.5rem; font-family:'Orbitron', sans-serif; margin-bottom: 20px;">SE7EN</h1>
     <div class="login-card">
-        <input type="password" id="pass-input" placeholder="Enter Secret Key..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #333; background:#000; color:#fff; margin-bottom:20px; text-align:center; outline:none; font-size: 1.1rem;">
+        <input type="password" id="pass-input" placeholder="Enter Secret Key..." style="font-size: 1.1rem;">
         <button onclick="checkPass()" id="login-btn" style="padding:15px; background:var(--accent); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; letter-spacing: 2px;">UNLOCK</button>
         <p id="login-err" style="color:#ff4d4d; display:none; margin-top:15px; font-size:14px;">Wrong Key, Aloy!</p>
     </div>
 </div>
 
-<div id="hack-overlay" style="display: none;">
-    <canvas id="matrix-canvas"></canvas>
-</div>
+<div id="hack-overlay" style="display: none;"><canvas id="matrix-canvas"></canvas></div>
 
 <div class="top-bar">
     <div class="logo">SE7EN</div>
@@ -178,7 +112,7 @@ footer p {
         <i class="fas fa-search" style="color:#444;"></i>
         <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
     </div>
-    <button id="logout-btn" onclick="logout()">LOGOUT</button>
+    <button id="logout-btn" onclick="logout()" style="display:none; cursor:pointer; padding:8px 15px; background:#FF4500; color:white; border:none; border-radius:20px; font-weight:bold; font-size:11px;">LOGOUT</button>
 </div>
 
 <div class="hero" id="hero">
@@ -214,8 +148,7 @@ footer p {
             <div class="video-wrapper">
                 <iframe id="v-frame" src="" allowfullscreen sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>
             </div>
-            <div id="server-list" style="display:flex; gap:8px; margin-top:15px; justify-content:center; flex-wrap:wrap;">
-                </div>
+            <div id="server-list" style="display:flex; gap:8px; margin-top:15px; justify-content:center; flex-wrap:wrap;"></div>
         </div>
         <div class="episode-section" id="ep-section">
             <div id="ep-list"></div>
@@ -225,53 +158,34 @@ footer p {
 
 <footer>
     <div class="footer-glow-line"></div>
-    <div style="margin-bottom: 15px;">
-        <i class="fas fa-fire-alt" style="color:#FF4500; font-size: 24px; filter: drop-shadow(0 0 5px #FF4500);"></i>
-    </div>
     <p>© 2026 SE7EN CINEMA | <span style="color:#FF4500">POWERED BY ALOYGENEX</span></p>
-    <div style="font-size: 10px; color: #555; margin-top: 10px; letter-spacing: 4px;">PREMIUM INTERFACE</div>
 </footer>
 
 <script>
-    // 1. SECURITY MASKING (v4 Token)
-    // Mao ni ang imong Ninja Mask gikan sa Termux
-    const _mask = "ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKaGRXUWlPaUl6TkRVMVpXSmtPV0ptTVRaaU1HSXpNR1JlWldRel1URXlPR0ptT1RNell5SXNJbTVpWmlJNk1UYzJOVGczTVRnd05TNDVNeklpSW5OMVlpSTZJakU1TkRFeE1HSmtPREJsTmpkaFpqVmtNalpqWVRJNE1TSXNJbk5qYjNCbGNpSTZXYmxoY0dsZmNtVmhaQ0pkTENKMmZYTnphVzl1SWpveE1YMC5QdkQ2WjhaREN6ck9FeHRJYlpuRldjcTAxU1JIM3ZuUkp4dlN6cUxJQmdr"; 
-    
+    const _mask = "ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKaGRXUWlPaUl6TkRVMVpXSmtPV0ptTVRaaU1HSXpNR1JlWldRel1URXlPR0ptT1RNell5SXNJbTVpWmlJNk1UYzJOVGczTVRnd05TNDVNeklpSW5OMVlpSTZJakU1TkRFeE1HSmtPREJsTmpkaFpqVmtNalpqWVRJNE1TSXNJbk5qYjNCbGNpSTZXYmxoY0dsZmNtVmhaQ0pkTENKMmZYTnphVzl1SWpveE1YMC5QdkQ2WjhaREN6ck9FeHRJYlpuRldjcTAxU1JIM3ZuUkp4dlN6cUxJQmdr";
     const TMDB = 'https://api.themoviedb.org/3';
     const IMG = 'https://image.tmdb.org/t/p/w500';
     const SB_URL = "https://sshdwibenypcekgczpgc.supabase.co";
     const SB_KEY = "sb_publishable_JNC3FBkyrwwBMU78wfQ3rQ_T9SVUnAX";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let currentID, currentType, currentS=1, currentE=1;
+    let currentID, currentType, currentS=1, currentE=1, episodeList = [];
 
     async function apiCall(endpoint) {
-    // Gigamit nato ang imong v3 key para seguradong mo-load
-    const API_KEY = "3455ebd9bf16f0b30d2ed31128bf933c";
-    const connector = endpoint.includes('?') ? '&' : '?';
-    const url = `${TMDB}${endpoint}${connector}api_key=${API_KEY}`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            console.error("TMDB Error:", response.status);
-            return null;
-        }
-        return await response.json();
-    } catch (err) {
-        console.error("Connection Error:", err);
-        return null;
+        const API_KEY = "3455ebd9bf16f0b30d2ed31128bf933c";
+        const connector = endpoint.includes('?') ? '&' : '?';
+        const url = `${TMDB}${endpoint}${connector}api_key=${API_KEY}`;
+        try {
+            const r = await fetch(url);
+            return r.ok ? await r.json() : null;
+        } catch(e) { return null; }
     }
-}
 
     async function checkPass() {
         const input = document.getElementById('pass-input').value;
-        if(!input) return;
-        try {
-            const { data } = await supabaseClient.from('access_keys').select('key_code').eq('key_code', input).single();
-            if (data) { localStorage.setItem('se7en_auth', 'true'); location.reload(); }
-            else { document.getElementById('login-err').style.display = 'block'; }
-        } catch (e) { console.error(e); }
+        const { data } = await supabaseClient.from('access_keys').select('key_code').eq('key_code', input).single();
+        if (data) { localStorage.setItem('se7en_auth', 'true'); location.reload(); }
+        else document.getElementById('login-err').style.display = 'block';
     }
 
     function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
@@ -295,166 +209,104 @@ footer p {
             const type = m.media_type || (m.first_air_date ? 'tv' : 'movie');
             const card = document.createElement('div');
             card.className = 'card';
-            card.onclick = () => { play(m.id, type, m.title || m.name); window.scrollTo({top: 0, behavior: 'smooth'}); };
+            card.onclick = () => { play(m.id, type, m.title || m.name); window.scrollTo({top:0, behavior:'smooth'}); };
             card.innerHTML = `<img src="${IMG + m.poster_path}"><div class="card-meta"><h3>${m.title || m.name}</h3></div>`;
             g.appendChild(card);
         });
     }
 
-    async function fetchType(type) {
-        const data = await apiCall(`/discover/${type}?sort_by=popularity.desc`);
-        document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = type === 'movie' ? "🎬 Popular Movies" : " 📺 Popular TV Shows";
-        render(data.results.map(i => ({...i, media_type: type})));
-    }
-
-    async function fetchLang(lang) {
-        const data = await apiCall(`/discover/tv?with_original_language=${lang}`);
-        document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = lang === 'ko' ? "🇰🇷 K-Drama" : "🇯🇵 Anime";
-        render(data.results.map(i => ({...i, media_type: 'tv'})));
-    }
-
-    async function search(q) {
-        if(!q) return;
-        const data = await apiCall(`/search/multi?query=${encodeURIComponent(q)}`);
-        document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = "Results: " + q;
-        render(data.results);
-    }
-
-    // --- PLAYER LOGIC ---
     async function play(id, type, title) {
-        currentID = id; currentType = type;
+        currentID = id; currentType = type; currentS = 1; currentE = 1;
         document.getElementById('player-overlay').style.display = 'block';
         document.body.style.overflow = 'hidden';
         document.getElementById('p-title').innerText = title;
 
-        const sList = document.getElementById('server-list');
-        sList.innerHTML = `
+        document.getElementById('server-list').innerHTML = `
             <button class="ep-btn active" onclick="switchServer('vidsrc_cc', this)">SERVER 1</button>
             <button class="ep-btn" onclick="switchServer('stable_backup', this)">SERVER 2</button>
             ${type === 'tv' ? `<button class="ep-btn" style="background:#0f0; color:#000;" onclick="nextEp()">Next ➔</button>` : ''}
         `;
 
-        if(type === 'movie') {
-            switchServer('vidsrc_cc'); // Tawgon ang cc server sa pagsugod
-        } else {
-            // ... imong loadEpisodes logic ...
-            switchServer('vidsrc_cc', null, 1, 1);
-        }
-
         const epBox = document.getElementById('ep-list');
         if(type === 'movie') {
-            switchServer('vidsrc3');
             epBox.innerHTML = '<p style="text-align:center; color:#555; padding-top:20px;">Movie Mode Active</p>';
+            switchServer('vidsrc_cc');
         } else {
             const data = await apiCall(`/tv/${id}`);
-            switchServer('vidsrc3', null, 1, 1);
             let html = `<select id="season-select" onchange="loadEpisodes(${id}, this.value)">`;
             data.seasons.forEach(s => { if(s.season_number > 0) html += `<option value="${s.season_number}">${s.name}</option>`; });
             html += `</select><div class="ep-grid" id="ep-render"></div>`;
             epBox.innerHTML = html;
-            loadEpisodes(id, 1);
+            await loadEpisodes(id, 1);
+            switchServer('vidsrc_cc', null, 1, 1);
         }
     }
 
-    let episodeList = []; // I-add ni sa taas nga part sa script
-
     async function loadEpisodes(id, sNum) {
         const data = await apiCall(`/tv/${id}/season/${sNum}`);
-        episodeList = data.episodes; // I-save ang episodes list
+        episodeList = data.episodes;
         const epG = document.getElementById('ep-render');
         epG.innerHTML = '';
         data.episodes.forEach(ep => {
             const btn = document.createElement('button');
-            btn.id = `ep-id-${ep.episode_number}`; // Butangan og ID para dali pangitaon
+            btn.id = `ep-id-${ep.episode_number}`;
             btn.className = 'ep-btn' + (ep.episode_number === currentE ? ' active' : '');
             btn.innerText = ep.episode_number;
-            btn.onclick = () => {
-                playEp(sNum, ep.episode_number);
-            };
+            btn.onclick = () => playEp(sNum, ep.episode_number);
             epG.appendChild(btn);
         });
     }
 
-    // Bag-o nga function para sa pag-play sa episode
     function playEp(sNum, eNum) {
+        currentS = sNum; currentE = eNum;
         document.querySelectorAll('#ep-render .ep-btn').forEach(b => b.classList.remove('active'));
         const activeBtn = document.getElementById(`ep-id-${eNum}`);
         if(activeBtn) activeBtn.classList.add('active');
-        
-        currentS = sNum; currentE = eNum;
-        const activeSrvBtn = document.querySelector('#server-list .ep-btn.active');
-        const srv = activeSrvBtn.innerText.includes('S1') ? 'vidsrc3' : activeSrvBtn.innerText.includes('S2') ? 'vidsrc1' : activeSrvBtn.innerText.includes('S3') ? 'vidsrc2' : 'vidsrc4';
-        
-        switchServer(srv, null, sNum, eNum);
+        switchServer('vidsrc_cc', null, sNum, eNum);
         document.getElementById('player-overlay').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-function nextEp() {
-        const nextNum = currentE + 1;
-        // I-check kon naa pa bay sunod nga episode sa listahan
-        const hasNext = episodeList.some(e => e.episode_number === nextNum);
-        
-        if (hasNext) {
-            playEp(currentS, nextNum);
-        } else {
-            alert("Last episode na ni sa kini nga season, Aloy!");
-        }
-    }
-
     function switchServer(server, btn = null, s = currentS, e = currentE) {
-    const frame = document.getElementById('v-frame');
-    const season = s || 1;
-    const episode = e || 1;
-
-    if(btn) {
-        btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        const frame = document.getElementById('v-frame');
+        if(btn) {
+            btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        let url = "";
+        if(currentType === 'movie') {
+            url = (server === 'vidsrc_cc') ? `https://vidsrc.cc/v2/embed/movie/${currentID}` : `https://embed.su/embed/movie/${currentID}`;
+        } else {
+            url = (server === 'vidsrc_cc') ? `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}` : `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
+        }
+        frame.src = url;
     }
 
-    let url = "";
-    if(currentType === 'movie') {
-        // Direct to vidsrc.cc (S1) and stable backup (S2)
-        if(server === 'vidsrc_cc') url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
-        else url = `https://embed.su/embed/movie/${currentID}`; 
-    } else {
-        // TV Series - vidsrc.cc format
-        if(server === 'vidsrc_cc') url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${season}/${episode}`;
-        else url = `https://embed.su/embed/tv/${currentID}/${season}/${episode}`;
+    function nextEp() {
+        const next = currentE + 1;
+        if (episodeList.some(e => e.episode_number === next)) playEp(currentS, next);
+        else alert("Last episode na ni, Aloy!");
     }
-
-    frame.src = url;
-}
 
     function closePlayer() { document.getElementById('player-overlay').style.display = 'none'; document.body.style.overflow = 'auto'; document.getElementById('v-frame').src = ''; }
 
     function startMatrix() {
         const canvas = document.getElementById('matrix-canvas');
-        const overlay = document.getElementById('hack-overlay');
-        overlay.style.display = 'flex';
+        document.getElementById('hack-overlay').style.display = 'flex';
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const chars = "0101010101010101ALOYGENEX";
-        const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        const drops = Array(columns).fill(1);
+        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
         const draw = () => {
             ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0f0"; ctx.font = fontSize + "px monospace";
+            ctx.fillStyle = "#0f0"; ctx.font = "16px monospace";
             drops.forEach((y, i) => {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * fontSize, y * fontSize);
-                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 16, y * 16);
+                if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             });
         };
-        const matrixInt = setInterval(draw, 40);
-        setTimeout(() => {
-            overlay.classList.add('glitch-active');
-            setTimeout(() => { overlay.style.display = "none"; init(); clearInterval(matrixInt); }, 1500);
-        }, 2500);
+        const int = setInterval(draw, 40);
+        setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
     }
 
     window.onload = () => {
@@ -464,6 +316,27 @@ function nextEp() {
             startMatrix();
         }
     };
+    
+    async function fetchType(t) {
+        const d = await apiCall(`/discover/${t}?sort_by=popularity.desc`);
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('row-title').innerText = t === 'movie' ? "🎬 Popular Movies" : "📺 Popular TV Shows";
+        render(d.results.map(i => ({...i, media_type: t})));
+    }
+
+    async function fetchLang(l) {
+        const d = await apiCall(`/discover/tv?with_original_language=${l}`);
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('row-title').innerText = l === 'ko' ? "🇰🇷 K-Drama" : "🇯🇵 Anime";
+        render(d.results.map(i => ({...i, media_type: 'tv'})));
+    }
+
+    async function search(q) {
+        const d = await apiCall(`/search/multi?query=${encodeURIComponent(q)}`);
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('row-title').innerText = "Results: " + q;
+        render(d.results);
+    }
 </script>
 </body>
 </html>
