@@ -403,6 +403,11 @@ function nextEp() {
 
     function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('v-frame');
+    
+    // Siguraduhon nato nga naay default values kon empty
+    const season = s || 1;
+    const episode = e || 1;
+
     if(btn) {
         btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -416,14 +421,14 @@ function nextEp() {
         else if(server === 'vidsrc4') url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
         else url = `https://embed.su/embed/movie/${currentID}`; 
     } else {
-        // TV SERIES LOGIC - Gi-fix nato ang mga link
-        if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${s}&episode=${e}`;
-        else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
-        else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${s}/${e}`;
-        // S4 & S5 - Mao ni atong fallback karon kay down ang vidsrc
-        else if(server === 'vidsrc4') url = `https://multiembed.mov/directstream.php?video_id=${currentID}&tmdb=1&s=${s}&e=${e}`;
-        else url = `https://embed.su/embed/tv/${currentID}/${s}/${e}`; 
+        // TV SERIES - Siguraduhon nato ang format sa URL
+        if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${season}&episode=${episode}`;
+        else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${season}/${episode}`;
+        else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${season}/${episode}`;
+        else if(server === 'vidsrc4') url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${season}/${episode}`;
+        else url = `https://embed.su/embed/tv/${currentID}/${season}/${episode}`; 
     }
+    
     frame.src = url;
 }
 
