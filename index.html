@@ -247,23 +247,24 @@ footer p {
 
     async function apiCall(endpoint) {
     try {
-        const decodedToken = atob(_mask).trim(); // Limpyo nga pag-decode
+        const token = atob(_mask).trim();
         const response = await fetch(`${TMDB}${endpoint}`, {
             method: 'GET',
             headers: {
                 'accept': 'application/json',
-                'Authorization': `Bearer ${decodedToken}` // Naay space!
+                'Authorization': `Bearer ${token}` // Naay space diri!
             }
         });
-        
+
         if (!response.ok) {
-            console.error(`TMDB Error: ${response.status}`);
+            // Kon naay error, mo-pop up ni sa imong screen
+            alert("TMDB Error: " + response.status + " - Check TMDB Settings!");
             return null;
         }
-        
+
         return await response.json();
     } catch (err) {
-        console.error("Fetch Error:", err);
+        alert("Fetch Error: " + err);
         return null;
     }
 }
