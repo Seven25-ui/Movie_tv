@@ -331,14 +331,15 @@ footer p {
         document.getElementById('p-title').innerText = title;
 
         const sList = document.getElementById('server-list');
-        // Gidugangan nato og "Next" button sa tumoy
-        sList.innerHTML = `
-            <button class="ep-btn active" onclick="switchServer('vidsrc3', this)">S1</button>
-            <button class="ep-btn" onclick="switchServer('vidsrc1', this)">S2</button>
-            <button class="ep-btn" onclick="switchServer('vidsrc2', this)">S3</button>
-            <button class="ep-btn" onclick="switchServer('vidsrc4', this)">S4</button>
-            ${type === 'tv' ? `<button class="ep-btn" style="background:#0f0; color:#000;" onclick="nextEp()">Next ➔</button>` : ''}
-        `;
+        // Pangitaa kini sa sulod sa play(id, type, title)
+sList.innerHTML = `
+    <button class="ep-btn active" onclick="switchServer('vidsrc3', this)">S1</button>
+    <button class="ep-btn" onclick="switchServer('vidsrc1', this)">S2</button>
+    <button class="ep-btn" onclick="switchServer('vidsrc2', this)">S3</button>
+    <button class="ep-btn" onclick="switchServer('vidsrc4', this)">S4</button>
+    <button class="ep-btn" onclick="switchServer('vidsrc5', this)">S5</button>
+    ${type === 'tv' ? `<button class="ep-btn" style="background:#0f0; color:#000;" onclick="nextEp()">Next ➔</button>` : ''}
+`;
 
         const epBox = document.getElementById('ep-list');
         if(type === 'movie') {
