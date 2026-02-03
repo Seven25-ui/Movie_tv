@@ -245,23 +245,28 @@ footer p {
 
     let currentID, currentType, currentS=1, currentE=1;
 
-    // --- NEW: CENTRALIZED SECURE FETCH ---
     async function apiCall(endpoint) {
-        try {
-            const response = await fetch(`${TMDB}${endpoint}`, {
-                method: 'GET',
-                headers: {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${atob(_mask)}` // I-decode ra inig request
-                }
-            });
-            if (!response.ok) throw new Error('API Error');
-            return await response.json();
-        } catch (err) {
-            console.error("Fetch Error:", err);
+    try {
+        const decodedToken = atob(_mask).trim(); // Limpyo nga pag-decode
+        const response = await fetch(`${TMDB}${endpoint}`, {
+            method: 'GET',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${decodedToken}` // Naay space!
+            }
+        });
+        
+        if (!response.ok) {
+            console.error(`TMDB Error: ${response.status}`);
             return null;
         }
+        
+        return await response.json();
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        return null;
     }
+}
 
     async function checkPass() {
         const input = document.getElementById('pass-input').value;
