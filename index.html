@@ -331,15 +331,18 @@ footer p {
         document.getElementById('p-title').innerText = title;
 
         const sList = document.getElementById('server-list');
-        // Pangitaa kini sa sulod sa play(id, type, title)
-sList.innerHTML = `
-    <button class="ep-btn active" onclick="switchServer('vidsrc3', this)">S1</button>
-    <button class="ep-btn" onclick="switchServer('vidsrc1', this)">S2</button>
-    <button class="ep-btn" onclick="switchServer('vidsrc2', this)">S3</button>
-    <button class="ep-btn" onclick="switchServer('vidsrc4', this)">S4</button>
-    <button class="ep-btn" onclick="switchServer('vidsrc5', this)">S5</button>
-    ${type === 'tv' ? `<button class="ep-btn" style="background:#0f0; color:#000;" onclick="nextEp()">Next ➔</button>` : ''}
-`;
+        sList.innerHTML = `
+            <button class="ep-btn active" onclick="switchServer('vidsrc_cc', this)">SERVER 1</button>
+            <button class="ep-btn" onclick="switchServer('stable_backup', this)">SERVER 2</button>
+            ${type === 'tv' ? `<button class="ep-btn" style="background:#0f0; color:#000;" onclick="nextEp()">Next ➔</button>` : ''}
+        `;
+
+        if(type === 'movie') {
+            switchServer('vidsrc_cc'); // Tawgon ang cc server sa pagsugod
+        } else {
+            // ... imong loadEpisodes logic ...
+            switchServer('vidsrc_cc', null, 1, 1);
+        }
 
         const epBox = document.getElementById('ep-list');
         if(type === 'movie') {
@@ -403,8 +406,6 @@ function nextEp() {
 
     function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('v-frame');
-    
-    // Siguraduhon nato nga naay default values kon empty
     const season = s || 1;
     const episode = e || 1;
 
@@ -412,23 +413,18 @@ function nextEp() {
         btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
     }
-    
+
     let url = "";
     if(currentType === 'movie') {
-        if(server === 'vidsrc1') url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`;
-        else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/movie/${currentID}`;
-        else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/movie/${currentID}`;
-        else if(server === 'vidsrc4') url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
+        // Direct to vidsrc.cc (S1) and stable backup (S2)
+        if(server === 'vidsrc_cc') url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
         else url = `https://embed.su/embed/movie/${currentID}`; 
     } else {
-        // TV SERIES - Siguraduhon nato ang format sa URL
-        if(server === 'vidsrc1') url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&season=${season}&episode=${episode}`;
-        else if(server === 'vidsrc2') url = `https://vidsrc.to/embed/tv/${currentID}/${season}/${episode}`;
-        else if(server === 'vidsrc3') url = `https://vidsrc.pro/embed/tv/${currentID}/${season}/${episode}`;
-        else if(server === 'vidsrc4') url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${season}/${episode}`;
-        else url = `https://embed.su/embed/tv/${currentID}/${season}/${episode}`; 
+        // TV Series - vidsrc.cc format
+        if(server === 'vidsrc_cc') url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${season}/${episode}`;
+        else url = `https://embed.su/embed/tv/${currentID}/${season}/${episode}`;
     }
-    
+
     frame.src = url;
 }
 
