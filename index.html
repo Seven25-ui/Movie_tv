@@ -102,11 +102,36 @@
     transition: 0.3s;
 }
 .plan-box:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.05); }
+.floating-key-btn {
+    position: fixed !important;
+    top: 15px !important;
+    right: 15px !important;
+    z-index: 100001 !important; /* Mas taas kaysa 10000 sa login screen */
+    padding: 8px 15px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #e95420;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: block !important;
+}
+
+/* Para dili matabunan ang 'Search' sa mobile */
+@media (max-width: 600px) {
+    .floating-key-btn {
+        top: 12px;
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+}
 
     </style>
 </head>
 <body>
-<button onclick="showLogin()" style="position:fixed; top:10px; right:10px; z-index:1000; padding:5px 10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:pointer;">
+<button onclick="showLogin()" class="floating-key-btn">
     I HAVE A KEY
 </button>
 <div id="login-screen">
