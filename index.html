@@ -126,6 +126,10 @@
     </div>
 </div>
 
+<button onclick="showLogin()" style="position:fixed; top:10px; right:10px; z-index:1000; padding:5px 10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:pointer;">
+    I HAVE A KEY
+</button>
+
 <div id="hack-overlay" style="display: none;"><canvas id="matrix-canvas"></canvas></div>
 
 <div class="top-bar">
@@ -461,6 +465,11 @@ function buyPlan(planName) {
 
     window.open(`https://m.me/${myFBID}?text=${encodeURIComponent(msg)}`, '_blank');
 }    
+
+function showLogin() {
+    // Pugson nato og pakita ang login screen
+    document.getElementById('login-screen').style.display = 'flex';
+}
 
 </script>
 </body>
