@@ -523,6 +523,16 @@ function buyPlan(planName) {
     document.addEventListener("mouseup", dragEnd, false);
     document.addEventListener("mousemove", drag, false);
 
+function showLogin() {
+    const loginScreen = document.getElementById('login-screen');
+    // Ipakita ang login screen bisan pa og naa sa free trial
+    loginScreen.style.display = 'flex';
+    
+    // Optional: I-focus dayon ang input field para type na lang dretso
+    const passInput = document.getElementById('pass-input');
+    if(passInput) passInput.focus();
+}
+
 </script>
 </body>
 </html>
