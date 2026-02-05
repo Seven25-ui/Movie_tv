@@ -102,32 +102,26 @@
     transition: 0.3s;
 }
 .plan-box:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.05); }
+
 .floating-key-btn {
     position: fixed !important;
-    top: 15px !important;
-    right: 15px !important;
-    z-index: 100001 !important; /* Mas taas kaysa 10000 sa login screen */
-    padding: 8px 15px;
-    font-size: 11px;
-    font-weight: 600;
+    top: 12px !important;
+    right: 15px !important; /* Default position */
+    z-index: 10001 !important;
     background: #e95420;
     color: white;
-    border: none;
+    padding: 8px 12px;
     border-radius: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    display: block !important;
 }
 
-/* Para dili matabunan ang 'Search' sa mobile */
-@media (max-width: 600px) {
-    .floating-key-btn {
-        top: 12px;
-        padding: 6px 10px;
-        font-size: 10px;
-    }
+/* Kung naay Logout button (Desktop/Wide Mobile), i-move gamay ang Key button sa wala */
+#logout-btn[style*="display: block"] ~ .floating-key-btn {
+    right: 100px !important; 
 }
-
     </style>
 </head>
 <body>
@@ -378,45 +372,47 @@ async function checkPass() {
     }
 
 window.onload = () => {
-        const isAuth = localStorage.getItem('se7en_auth') === 'true';
-        const loginScreen = document.getElementById('login-screen');
-        const logoutBtn = document.getElementById('logout-btn');
+    const isAuth = localStorage.getItem('se7en_auth') === 'true';
+    const loginScreen = document.getElementById('login-screen');
+    const logoutBtn = document.getElementById('logout-btn');
+    const keyBtn = document.getElementById('key-nav-btn'); // Siguruha nga ang imong button naay id="key-nav-btn"
 
-        // 1. KON NAKA-PREMIUM NA (Naka-login)
-        if (isAuth) {
-            loginScreen.style.display = 'none';
-            logoutBtn.style.display = 'block';
-            startMatrix(); // Sugod dayon ang matrix ug load sa movies
-            return;
-        }
+    // 1. KON NAKA-PREMIUM NA (Naka-login)
+    if (isAuth) {
+        loginScreen.style.display = 'none';
+        logoutBtn.style.display = 'block';
+        if (keyBtn) keyBtn.style.display = 'none'; // I-hide ang button kay Premium na man
+        startMatrix(); 
+        return;
+    }
 
-        // 2. KON WALA PAY LOGIN, CHECK ANG 1-HOUR FREE TRIAL
-        let trialStart = localStorage.getItem('se7en_trial_start');
-        const oneHour = 60 * 60 * 1000; // 1 Hour in milliseconds
+    // 2. KON WALA PAY LOGIN, CHECK ANG 1-HOUR FREE TRIAL
+    let trialStart = localStorage.getItem('se7en_trial_start');
+    const oneHour = 60 * 60 * 1000; 
 
-        if (!trialStart) {
-            // First time niya ni abli, sugod ang timer
-            trialStart = Date.now();
-            localStorage.setItem('se7en_trial_start', trialStart);
-        }
+    if (!trialStart) {
+        trialStart = Date.now();
+        localStorage.setItem('se7en_trial_start', trialStart);
+    }
 
-        const timePassed = Date.now() - trialStart;
+    const timePassed = Date.now() - trialStart;
 
-        if (timePassed < oneHour) {
-            // SULOD PA SA 1 HOUR: Pasudla siya
-            loginScreen.style.display = 'none';
-            startMatrix();
-            
-            // I-display ang floating countdown timer
-            showTrialTimer(oneHour - timePassed);
-        } else {
-            // LAPAS NA SA 1 HOUR: I-lock ang site
-            loginScreen.style.display = 'flex';
-            logoutBtn.style.display = 'none';
-            // Pwede nimo pun-an og alert para mahibalo siya
-            console.log("Free trial expired.");
-        }
-    };
+    if (timePassed < oneHour) {
+        // SULOD PA SA 1 HOUR: Pasudla siya
+        loginScreen.style.display = 'none';
+        if (keyBtn) keyBtn.style.display = 'block'; // Ipakita ang Key button para maka-upgrade sila
+        startMatrix();
+
+        // I-display ang floating countdown timer
+        showTrialTimer(oneHour - timePassed);
+    } else {
+        // LAPAS NA SA 1 HOUR: I-lock ang site
+        loginScreen.style.display = 'flex';
+        logoutBtn.style.display = 'none';
+        if (keyBtn) keyBtn.style.display = 'block'; // Ipakita gihapon sa login screen
+        console.log("Free trial expired.");
+    }
+};
 
     // --- FUNCTION PARA SA COUNTDOWN TIMER SA SCREEN ---
     function showTrialTimer(msLeft) {
