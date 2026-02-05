@@ -91,16 +91,38 @@
         footer p { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px #FF4500; }
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+
+.plan-box {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.plan-box:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.05); }
+
     </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <h1 style="color:var(--accent); font-size:3.5rem; font-family:'Orbitron', sans-serif; margin-bottom: 20px;">SE7EN</h1>
+    <h1 style="color:var(--accent); font-family:'Orbitron';">SE7EN PREMIUM</h1>
+    
     <div class="login-card">
-        <input type="password" id="pass-input" placeholder="Enter Secret Key..." style="font-size: 1.1rem;">
-        <button onclick="checkPass()" id="login-btn" style="padding:15px; background:var(--accent); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; letter-spacing: 2px;">UNLOCK</button>
-        <p id="login-err" style="color:#ff4d4d; display:none; margin-top:15px; font-size:14px;">Wrong Key, Aloy!</p>
+        <p style="margin-bottom:15px; font-size:13px; color:#aaa;">Pili og imong Plan:</p>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+            <div class="plan-box" onclick="buyPlan('7 Days')"><b>7 Days</b><br>₱50</div>
+            <div class="plan-box" onclick="buyPlan('30 Days')"><b>30 Days</b><br>₱150</div>
+            <div class="plan-box" onclick="buyPlan('3 Months')"><b>3 Months</b><br>₱400</div>
+            <div class="plan-box" style="background:#222;" onclick="alert('Trial Used na!')"><b>1 Hour</b><br>FREE</div>
+        </div>
+
+        <input type="password" id="pass-input" placeholder="Enter Your Key Here...">
+        <button onclick="checkPass()" id="login-btn">UNLOCK CINEMA</button>
+        <p id="login-err" style="color:#ff4d4d; display:none; margin-top:10px;">Mali ang Key!</p>
     </div>
 </div>
 
@@ -188,45 +210,24 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 async function checkPass() {
     const input = document.getElementById('pass-input').value.trim();
     const loginErr = document.getElementById('login-err');
-    const loginBtn = document.getElementById('login-btn');
 
-    if (!input) return;
+    const { data, error } = await supabaseClient
+        .from('access_keys')
+        .select('key_code, expiry_date')
+        .eq('key_code', input)
+        .maybeSingle();
 
-    // Change button text para mahibalo ta nga nag-loading
-    loginBtn.innerText = "VERIFYING...";
-    loginBtn.disabled = true;
-
-    try {
-        const { data, error } = await supabaseClient
-            .from('access_keys')
-            .select('key_code, expiry_date')
-            .eq('key_code', input)
-            .maybeSingle();
-
-        if (error) {
-            console.error("Supabase Error:", error);
-            alert("Database Connection Error! Check internet or Firewall.");
-            loginBtn.innerText = "UNLOCK";
-            loginBtn.disabled = false;
-            return;
-        }
-
-        if (data) {
-            // Check Expiry logic here... (same as before)
-            localStorage.setItem('se7en_auth', 'true');
-            location.reload();
-        } else {
-            loginErr.style.display = 'block';
-            loginErr.innerText = "Mali ang Key, Buddy!";
-            loginBtn.innerText = "UNLOCK";
-            loginBtn.disabled = false;
-        }
-    } catch (err) {
-        alert("System Error: " + err.message);
-        loginBtn.innerText = "UNLOCK";
-        loginBtn.disabled = false;
+    if (data) {
+        // --- KANI NGA PART ANG IMPORTANTE PARA DILI KA ORASAN ---
+        localStorage.setItem('se7en_auth', 'true');
+        localStorage.removeItem('se7en_trial_start'); // I-delete ang timer data
+        
+        location.reload(); 
+    } else {
+        loginErr.style.display = 'block';
+        loginErr.innerText = "Mali ang Key, Buddy!";
     }
-}    
+}
 
     function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
 
@@ -349,14 +350,70 @@ async function checkPass() {
         setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
     }
 
-    window.onload = () => {
-        if(localStorage.getItem('se7en_auth') === 'true') {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('logout-btn').style.display = 'block';
+window.onload = () => {
+        const isAuth = localStorage.getItem('se7en_auth') === 'true';
+        const loginScreen = document.getElementById('login-screen');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // 1. KON NAKA-PREMIUM NA (Naka-login)
+        if (isAuth) {
+            loginScreen.style.display = 'none';
+            logoutBtn.style.display = 'block';
+            startMatrix(); // Sugod dayon ang matrix ug load sa movies
+            return;
+        }
+
+        // 2. KON WALA PAY LOGIN, CHECK ANG 1-HOUR FREE TRIAL
+        let trialStart = localStorage.getItem('se7en_trial_start');
+        const oneHour = 60 * 60 * 1000; // 1 Hour in milliseconds
+
+        if (!trialStart) {
+            // First time niya ni abli, sugod ang timer
+            trialStart = Date.now();
+            localStorage.setItem('se7en_trial_start', trialStart);
+        }
+
+        const timePassed = Date.now() - trialStart;
+
+        if (timePassed < oneHour) {
+            // SULOD PA SA 1 HOUR: Pasudla siya
+            loginScreen.style.display = 'none';
             startMatrix();
+            
+            // I-display ang floating countdown timer
+            showTrialTimer(oneHour - timePassed);
+        } else {
+            // LAPAS NA SA 1 HOUR: I-lock ang site
+            loginScreen.style.display = 'flex';
+            logoutBtn.style.display = 'none';
+            // Pwede nimo pun-an og alert para mahibalo siya
+            console.log("Free trial expired.");
         }
     };
-    
+
+    // --- FUNCTION PARA SA COUNTDOWN TIMER SA SCREEN ---
+    function showTrialTimer(msLeft) {
+        const timerDiv = document.createElement('div');
+        timerDiv.id = "trial-countdown";
+        // Simple style para dili samok sa screen
+        timerDiv.style = "position:fixed; bottom:85px; right:15px; background:rgba(233,84,32,0.9); color:white; padding:8px 15px; border-radius:20px; font-size:11px; font-weight:bold; z-index:9999; border:1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5);";
+        document.body.appendChild(timerDiv);
+
+        const countdown = setInterval(() => {
+            msLeft -= 1000;
+            if (msLeft <= 0) {
+                clearInterval(countdown);
+                alert("Your 1-hour free trial has ended. Please purchase a pass to continue watching!");
+                location.reload(); // I-lock na ang site
+            }
+            
+            const mins = Math.floor(msLeft / 60000);
+            const secs = Math.floor((msLeft % 60000) / 1000);
+            timerDiv.innerHTML = `<i class="fas fa-clock"></i> FREE: ${mins}m ${secs}s left`;
+        }, 1000);
+    }
+
+    // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
     async function fetchType(t) {
         const d = await apiCall(`/discover/${t}?sort_by=popularity.desc`);
         document.getElementById('hero').style.display = 'none';
@@ -377,6 +434,34 @@ async function checkPass() {
         document.getElementById('row-title').innerText = "Results: " + q;
         render(d.results);
     }
+
+function buyPlan(planName) {
+    // --- USBA ANG PRESYO DIRI (Dali ra pangitaon) ---
+    const price7Days   = "₱50";
+    const price30Days  = "₱150";
+    const price3Months = "₱400";
+    
+    // IMONG DETALYE
+    const myGcash = "09489108928";
+    const myName = "GUARDIANA GENE";
+    const myFBID = "61580883153632"; 
+
+    // Logic para makuha ang saktong presyo depende sa gi-pili
+    let price = "";
+    if (planName.includes("7 Days")) price = price7Days;
+    else if (planName.includes("30 Days")) price = price30Days;
+    else if (planName.includes("3 Months")) price = price3Months;
+
+    // Ang mensahe
+    let msg = `Yo Aloy! Gusto ko mo-avail sa ${planName} pass (${price}).\n\n` +
+              `Nag-send na ko sa G-Cash:\n` +
+              `Number: ${myGcash}\n` +
+              `Name: ${myName}\n\n` +
+              `Mao ni ang akong screenshot sa resibo:`;
+
+    window.open(`https://m.me/${myFBID}?text=${encodeURIComponent(msg)}`, '_blank');
+}    
+
 </script>
 </body>
 </html>
