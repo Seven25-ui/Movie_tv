@@ -185,39 +185,105 @@ async function checkPass() {
     const input = document.getElementById('pass-input').value.trim();
     const loginErr = document.getElementById('login-err');
 
-    // --- 1. ADMIN BYPASS (IMONG EMERGENCY DOOR) ---
-    if (input === 'ALOY2026') { 
-        localStorage.setItem('se7en_auth', 'true');
-        location.reload();
-        return; 
-    }
-
-    // --- 2. DATABASE CHECK ---
+    // DATABASE CHECK NA LANG ANG MAHABILIN
     const { data, error } = await supabaseClient
         .from('access_keys')
-        .select('key_code, expiry_date') // Gi-select nato ang expiry_date gikan sa DB
+        .select('key_code, expiry_date')
         .eq('key_code', input)
         .maybeSingle();
 
     if (data) {
-        // --- 3. CHECK SA EXPIRY DATE ---
         if (data.expiry_date) {
             const now = new Date();
             const expiry = new Date(data.expiry_date);
-
             if (now > expiry) {
                 alert("Expired na imong Weekly Pass! Chat Aloy para pa-renew.");
                 return;
             }
         }
-
-        // Kon pasar sa tanan, pasudla na!
         localStorage.setItem('se7en_auth', 'true');
         location.reload();
+    } else {
+        loginErr.style.display = 'block';
+        loginErr.innerText = "Mali ang async function checkPass() {
+    const input = document.getElementById('pass-input').value.trim();
+    const loginErr = document.getElementById('login-err');
 
+    // DATABASE CHECK NA LANG ANG MAHABILIN
+    const { data, error } = await supabaseClient
+        .from('access_keys')
+        .select('key_code, expiry_date')
+        .eq('key_code', input)
+        .maybeSingle();
+
+    if (data) {
+        if (data.expiry_date) {
+            const now = new Date();
+            const expiry = new Date(data.expiry_date);
+            if (now > expiry) {
+                alert("Expired na imong Weekly Pass! Chat Aloy para pa-renew.");
+                return;
+            }
+        }
+        localStorage.setItem('se7en_auth', 'true');
+        location.reload();
     } else {
         loginErr.style.display = 'block';
         loginErr.innerText = "Mali ang Key, Buddy!";
+    }
+}async function checkPass() {
+    const input = document.getElementById('pass-input').value.trim();
+    const loginErr = document.getElementById('login-err');
+
+    // DATABASE CHECK NA LANG ANG MAHABILIN
+    const { data, error } = await supabaseClient
+        .from('access_keys')
+        .select('key_code, expiry_date')
+        .eq('key_code', input)
+        .maybeSingle();
+
+    if (data) {
+        if (data.expiry_date) {
+            const now = new Date();
+            const expiry = new Date(data.expiry_date);
+            if (now > expiry) {
+                alert("Expired na imong Weekly Pass! Chat Aloy para pa-renew.");
+                return;
+            }
+        }
+        localStorage.setItem('se7en_auth', 'true');
+        location.reload();
+    } else {
+        loginErr.style.display = 'block';
+        loginErr.innerText = "Mali ang Key, Buddy!";
+    }
+}async function checkPass() {
+    const input = document.getElementById('pass-input').value.trim();
+    const loginErr = document.getElementById('login-err');
+
+    // DATABASE CHECK NA LANG ANG MAHABILIN
+    const { data, error } = await supabaseClient
+        .from('access_keys')
+        .select('key_code, expiry_date')
+        .eq('key_code', input)
+        .maybeSingle();
+
+    if (data) {
+        if (data.expiry_date) {
+            const now = new Date();
+            const expiry = new Date(data.expiry_date);
+            if (now > expiry) {
+                alert("Expired na imong Weekly Pass! Chat Aloy para pa-renew.");
+                return;
+            }
+        }
+        localStorage.setItem('se7en_auth', 'true');
+        location.reload();
+    } else {
+        loginErr.style.display = 'block';
+        loginErr.innerText = "wrong ang Key, Buddy!";
+    }
+}Key, Buddy!";
     }
 }    
 
