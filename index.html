@@ -375,66 +375,81 @@ window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const loginScreen = document.getElementById('login-screen');
     const logoutBtn = document.getElementById('logout-btn');
-    const keyBtn = document.getElementById('key-nav-btn'); // Siguruha nga ang imong button naay id="key-nav-btn"
+    const keyBtn = document.getElementById('key-nav-btn'); 
 
     // 1. KON NAKA-PREMIUM NA (Naka-login)
     if (isAuth) {
-        loginScreen.style.display = 'none';
-        logoutBtn.style.display = 'block';
-        if (keyBtn) keyBtn.style.display = 'none'; // I-hide ang button kay Premium na man
-        startMatrix(); 
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (keyBtn) keyBtn.style.display = 'none'; 
+        startMatrix();
         return;
     }
 
     // 2. KON WALA PAY LOGIN, CHECK ANG 1-HOUR FREE TRIAL
     let trialStart = localStorage.getItem('se7en_trial_start');
-    const oneHour = 60 * 60 * 1000; 
+    const oneHour = 60 * 60 * 1000;
 
     if (!trialStart) {
+        // First time visitor, i-save ang start time
         trialStart = Date.now();
         localStorage.setItem('se7en_trial_start', trialStart);
     }
 
+    // I-calculate pila na ang nilabay nga oras sukad pag-start
     const timePassed = Date.now() - trialStart;
 
     if (timePassed < oneHour) {
         // SULOD PA SA 1 HOUR: Pasudla siya
-        loginScreen.style.display = 'none';
-        if (keyBtn) keyBtn.style.display = 'block'; // Ipakita ang Key button para maka-upgrade sila
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'none'; // Tago ang logout kay trial user pa
+        if (keyBtn) keyBtn.style.display = 'block'; 
         startMatrix();
 
-        // I-display ang floating countdown timer
-        showTrialTimer(oneHour - timePassed);
+        // TAWGON ANG TIMER (Wala nay sulod ang parenthesis para anti-reset)
+        showTrialTimer(); 
     } else {
         // LAPAS NA SA 1 HOUR: I-lock ang site
-        loginScreen.style.display = 'flex';
-        logoutBtn.style.display = 'none';
-        if (keyBtn) keyBtn.style.display = 'block'; // Ipakita gihapon sa login screen
+        if (loginScreen) loginScreen.style.display = 'flex';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (keyBtn) keyBtn.style.display = 'block'; 
         console.log("Free trial expired.");
     }
 };
 
-    // --- FUNCTION PARA SA COUNTDOWN TIMER SA SCREEN ---
-    function showTrialTimer(msLeft) {
-        const timerDiv = document.createElement('div');
-        timerDiv.id = "trial-countdown";
-        // Simple style para dili samok sa screen
-        timerDiv.style = "position:fixed; bottom:85px; right:15px; background:rgba(233,84,32,0.9); color:white; padding:8px 15px; border-radius:20px; font-size:11px; font-weight:bold; z-index:9999; border:1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5);";
-        document.body.appendChild(timerDiv);
+    // --- FUNCTION PARA SA COUNTDOWN TIMER SA SCREEN (HACKER PROOF) ---
+function showTrialTimer() {
+    // 1. Siguruha nga dili mo-doble ang timer div
+    if (document.getElementById('trial-countdown')) return;
 
-        const countdown = setInterval(() => {
-            msLeft -= 1000;
-            if (msLeft <= 0) {
-                clearInterval(countdown);
-                alert("Your 1-hour free trial has ended. Please purchase a pass to continue watching!");
-                location.reload(); // I-lock na ang site
-            }
-            
+    const timerDiv = document.createElement('div');
+    timerDiv.id = "trial-countdown";
+    timerDiv.style = "position:fixed; bottom:85px; right:15px; background:rgba(233,84,32,0.9); color:white; padding:8px 15px; border-radius:20px; font-size:11px; font-weight:bold; z-index:9999; border:1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); pointer-events: none;";
+    document.body.appendChild(timerDiv);
+
+    const oneHour = 60 * 60 * 1000;
+
+    const countdown = setInterval(() => {
+        // 2. I-GET ANG START TIME GIKAN SA STORAGE
+        const trialStart = localStorage.getItem('se7en_trial_start');
+        
+        // 3. I-CALCULATE ANG TINUOD NGA TIME PASSED
+        const now = Date.now();
+        const timePassed = now - trialStart;
+        const msLeft = oneHour - timePassed;
+
+        if (msLeft <= 0) {
+            clearInterval(countdown);
+            timerDiv.innerHTML = "Expired!";
+            alert("Your 1-hour free trial has ended. Please purchase a pass to continue watching!");
+            location.reload(); 
+        } else {
             const mins = Math.floor(msLeft / 60000);
             const secs = Math.floor((msLeft % 60000) / 1000);
             timerDiv.innerHTML = `<i class="fas fa-clock"></i> FREE: ${mins}m ${secs}s left`;
-        }, 1000);
-    }
+        }
+    }, 1000);
+}
 
     // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
     async function fetchType(t) {
