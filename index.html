@@ -183,42 +183,40 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     async function checkPass() {
     const input = document.getElementById('pass-input').value.trim();
-    const loginErr = document.getElementById('login-err');
 
-    // 1. I-check ang key sa Supabase (Gi-select sab nato ang expiry_date)
-    const { data, error } = await supabaseClient
+    // --- ADMIN BYPASS ---
+    // Kon kini imong i-type, automatic "Success" dayon bisag walay internet/database
+    if (input === 'ALOY2026') { 
+        localStorage.setItem('se7en_auth', 'true');
+        location.reload();
+        return; 
+    }
+
+    // --- NORMAL USER CHECK ---
+    const { data } = await supabaseClient
         .from('access_keys')
         .select('key_code, expiry_date, is_active')
         .eq('key_code', input)
         .single();
 
     if (data) {
-        // 2. Check kon gi-disable ba nimo ang key (Admin control)
         if (data.is_active === false) {
             alert("This key is deactivated. Please contact Aloy.");
             return;
         }
 
-        // 3. LOGIC SA EXPIRY
         if (data.expiry_date) {
-            const now = new Date(); // Oras karon
-            const expiry = new Date(data.expiry_date); // Oras sa database
-
-            // Kon ang oras karon mas dako pa sa expiry, "Expired" na siya
+            const now = new Date();
+            const expiry = new Date(data.expiry_date);
             if (now > expiry) {
-                alert("Expired na imong access, Buddy. Chat Aloy para pa-renew!");
+                alert("Expired na imong access, Buddy!");
                 return;
             }
         }
-
-        // 4. Kon pasar sa tanan, i-save ang login session
         localStorage.setItem('se7en_auth', 'true');
-        location.reload(); 
-
+        location.reload();
     } else {
-        // Kon mali ang key o wala sa database
-        loginErr.style.display = 'block';
-        loginErr.innerText = "Invalid Key! Palit sa kang Aloy.";
+        document.getElementById('login-err').style.display = 'block';
     }
 }
 
