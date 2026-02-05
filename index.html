@@ -125,7 +125,7 @@
     </style>
 </head>
 <body>
-<button onclick="showLogin()" class="floating-key-btn">
+<button id="key-nav-btn" onclick="showLogin()" style="position:fixed; bottom:20px; right:20px; z-index:10001; padding:10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:move; display:block; touch-action:none;">
     I HAVE A KEY
 </button>
 <div id="login-screen">
@@ -485,10 +485,45 @@ function buyPlan(planName) {
     window.open(`https://m.me/${myFBID}?text=${encodeURIComponent(msg)}`, '_blank');
 }    
 
-function showLogin() {
-    // Pugson nato og pakita ang login screen
-    document.getElementById('login-screen').style.display = 'flex';
-}
+<script>
+    const dragBtn = document.getElementById("key-nav-btn");
+    let active = false;
+    let currentX, currentY, initialX, initialY;
+    let xOffset = 0, yOffset = 0;
+
+    const dragStart = (e) => {
+        // Mo-detect kung mouse o touch ang gigamit
+        initialX = (e.type === "touchstart" ? e.touches[0].clientX : e.clientX) - xOffset;
+        initialY = (e.type === "touchstart" ? e.touches[0].clientY : e.clientY) - yOffset;
+        if (e.target === dragBtn) active = true;
+    };
+
+    const dragEnd = () => {
+        initialX = currentX;
+        initialY = currentY;
+        active = false;
+    };
+
+    const drag = (e) => {
+        if (active) {
+            e.preventDefault();
+            currentX = (e.type === "touchmove" ? e.touches[0].clientX : e.clientX) - initialX;
+            currentY = (e.type === "touchmove" ? e.touches[0].clientY : e.clientY) - initialY;
+            xOffset = currentX;
+            yOffset = currentY;
+            // Mao ni ang mo-lihok sa button sa screen
+            dragBtn.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+        }
+    };
+
+    // Mga Listeners para sa Mobile ug Desktop
+    document.addEventListener("touchstart", dragStart, false);
+    document.addEventListener("touchend", dragEnd, false);
+    document.addEventListener("touchmove", drag, { passive: false });
+    document.addEventListener("mousedown", dragStart, false);
+    document.addEventListener("mouseup", dragEnd, false);
+    document.addEventListener("mousemove", drag, false);
+</script>
 
 </script>
 </body>
