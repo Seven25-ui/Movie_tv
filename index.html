@@ -552,69 +552,71 @@ function showLogin() {
 
 <div id="notif-toast" style="
     position: fixed; 
-    bottom: 200px; /* Mas taas na ni para dili matabunan */
-    left: 20px; 
-    background: rgba(20, 20, 20, 0.95); 
+    bottom: 25px; /* Adjust ni depende sa gihabugon sa imong I HAVE A KEY button */
+    right: 20px;  
+    background: rgba(15, 15, 15, 0.98); 
     color: white; 
-    padding: 10px 15px; 
-    border-radius: 8px; 
-    font-family: sans-serif; 
-    font-size: 11px; 
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.5); 
+    padding: 12px 20px; 
+    border-radius: 12px; 
+    font-family: 'Segoe UI', Roboto, sans-serif; 
+    font-size: 13px; 
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.8); 
     display: none; 
     align-items: center; 
-    gap: 10px; 
-    border-left: 4px solid #28a745; /* GREEN COLOR */
+    gap: 15px; 
+    border: 1px solid rgba(40, 167, 69, 0.3); /* Soft green border */
     z-index: 10000; 
-    animation: slideIn 0.5s ease-out;">
-    <span style="font-size: 20px;">✅</span>
+    animation: slideInRight 0.6s cubic-bezier(0.23, 1, 0.32, 1);">
+    
+    <div style="
+        width: 24px; 
+        height: 24px; 
+        background-color: #28a745; 
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.8);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+    </div>
+
     <div>
-        <strong id="notif-user">Someone</strong> just claimed a <br>
-        <span style="color: #28a745; font-weight: bold;">Free 1-Hour Key!</span>
+        <strong id="notif-user" style="color: #f8f9fa;">Someone</strong> <br>
+        <span style="color: #28a745; font-weight: bold; text-transform: uppercase; font-size: 11px;">Claimed 1-Hour Free Access</span>
     </div>
 </div>
 
-<div id="phish-trigger" style="position: fixed; bottom: 140px; left: 20px; z-index: 9999;">
-    <a href="#" id="stealth-link" onclick="handleAction(event)" style="
-        background: linear-gradient(45deg, #1db954, #191414); /* Green/Spotify theme style */
-        color: white; 
-        padding: 12px 18px; 
-        border-radius: 50px; /* Mas lingin para dili "blocky" */
-        text-decoration: none; 
-        font-family: sans-serif; 
-        font-weight: bold; 
-        font-size: 13px; 
-        box-shadow: 0px 4px 15px rgba(40, 167, 69, 0.3); 
-        display: flex; 
-        align-items: center; 
-        gap: 8px;">
-        <span>🎁</span> Claim Free 1-Hour Key
-    </a>
-</div>
-
 <style>
-@keyframes slideIn { from { transform: translateX(-120%); } to { transform: translateX(0); } }
+@keyframes slideInRight {
+    from { transform: translateX(150%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
 </style>
 
 <script>
 function showNotification() {
-    const users = ["Ali_Matrix", "Juan23", "Cebu_User", "Davao_Master", "Manila_Watcher", "Seven_Fan", "Micheal", "skylit", "aloygene", "sarah", "naomi", "rachel90"];
+    const users = [
+        "Ali_Matrix", "skylit", "micheal", "rachhel90", "Juan23", "Cebu_User", "Davao_Master", "Manila_Watcher", 
+        "Seven_Fan", "Berto_Gamer", "Inday_Films", "Dodong_Watch", "Zoro_2026",
+        "Luffy_Premium", "Kulas_Vibe", "Teban_Movies", "Mina_Cebu", "Gardo_99"
+    ];
+    
     const toast = document.getElementById('notif-toast');
     const userText = document.getElementById('notif-user');
+    
     userText.innerText = users[Math.floor(Math.random() * users.length)];
+    
     toast.style.display = 'flex';
-    setTimeout(() => { toast.style.display = 'none'; }, 5000);
+    
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 5500);
 }
-setInterval(showNotification, 18000);
 
-function handleAction(event) {
-    var linkElement = document.getElementById('stealth-link');
-    var currentLink = linkElement.getAttribute('href');
-    if (currentLink === "#") {
-        event.preventDefault();
-        alert("Maintenance: Free keys are currently out of stock. Try again later.");
-    }
-}
+// Trigger matag 25 seconds
+setInterval(showNotification, 25000);
 </script>
 
 </body>
