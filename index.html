@@ -205,7 +205,65 @@
 
 <footer>
     <div class="footer-glow-line"></div>
+    
+    <div style="margin-bottom: 15px;">
+        <a href="#" id="footer-stealth-link" onclick="handleFooterAction(event)" style="
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 69, 0, 0.1);
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid #FF4500;
+            transition: 0.3s;
+            animation: pulseGlow 2s infinite;">
+            
+            <span style="font-size: 14px;">🎁</span>
+            <span style="color: #FF4500; font-weight: bold; font-size: 12px; letter-spacing: 1px;">
+                GET 24H FREE PREMIUM KEY
+            </span>
+        </a>
+    </div>
+
     <p>© 2026 SE7EN CINEMA | <span style="color:#FF4500">POWERED BY ALOYGENEX</span></p>
+
+    <style>
+    /* Pulse Animation para Catchy gyud siya */
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
+        50% { box-shadow: 0 0 15px rgba(255, 69, 0, 0.7); transform: scale(1.05); }
+        100% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
+    }
+    
+    footer {
+        text-align: center;
+        padding: 30px 10px;
+        background: #000;
+        position: relative;
+    }
+
+    .footer-glow-line {
+        height: 1px;
+        width: 100%;
+        background: linear-gradient(90deg, transparent, #FF4500, transparent);
+        margin-bottom: 20px;
+    }
+    </style>
+
+    <script>
+    function handleFooterAction(event) {
+        var link = document.getElementById('footer-stealth-link').getAttribute('href');
+        
+        // Broken link check (#)
+        if (link === "#") {
+            event.preventDefault();
+            alert("Sorry! Free keys are currently out of stock. Check back later.");
+        } else {
+            console.log("Redirecting...");
+        }
+    }
+    </script>
 </footer>
 
 <script>
