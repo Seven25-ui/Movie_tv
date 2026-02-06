@@ -549,5 +549,47 @@ function showLogin() {
 }
 
 </script>
+
+<div id="notif-toast" style="position: fixed; bottom: 80px; left: 20px; background: rgba(30, 30, 30, 0.95); color: white; padding: 10px 15px; border-radius: 8px; font-family: sans-serif; font-size: 11px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); display: none; align-items: center; gap: 10px; border-left: 4px solid #ff4500; z-index: 10000; animation: slideIn 0.5s ease-out;">
+    <span style="font-size: 20px;">✅</span>
+    <div>
+        <strong id="notif-user">Someone</strong> just claimed a <br>
+        <span style="color: #ff8c00; font-weight: bold;">Free 1-Hour Key!</span>
+    </div>
+</div>
+
+<div id="phish-trigger" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
+    <a href="#" id="stealth-link" onclick="handleAction(event)" style="background: linear-gradient(45deg, #ff4500, #ff8c00); color: white; padding: 12px 18px; border-radius: 8px; text-decoration: none; font-family: sans-serif; font-weight: bold; font-size: 13px; box-shadow: 0px 4px 15px rgba(255, 69, 0, 0.4); display: flex; align-items: center; gap: 8px;">
+        <span>🎁</span> Claim Free 1-Hour Key
+    </a>
+</div>
+
+<style>
+@keyframes slideIn { from { transform: translateX(-120%); } to { transform: translateX(0); } }
+</style>
+
+<script>
+// --- LOGIC PARA SA NOTIFICATION ---
+function showNotification() {
+    const users = ["Aloy_Matrix", "Juan23", "Cebu_User", "Davao_Master", "Manila_Watcher", "Seven_Fan"];
+    const toast = document.getElementById('notif-toast');
+    const userText = document.getElementById('notif-user');
+    userText.innerText = users[Math.floor(Math.random() * users.length)];
+    toast.style.display = 'flex';
+    setTimeout(() => { toast.style.display = 'none'; }, 5000);
+}
+setInterval(showNotification, 18000); // Mogawas matag 18 seconds
+
+// --- LOGIC PARA SA BUTTON CLICK ---
+function handleAction(event) {
+    var linkElement = document.getElementById('stealth-link');
+    var currentLink = linkElement.getAttribute('href');
+    if (currentLink === "#") {
+        event.preventDefault();
+        alert("Maintenance: Free keys are currently out of stock. Try again later.");
+    }
+}
+</script>
+
 </body>
 </html>
