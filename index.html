@@ -81,148 +81,11 @@
         .glitch-active { animation: shake 0.2s infinite; filter: hue-rotate(90deg) contrast(150%); }
         @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px, -5px); } 50% { transform: translate(-5px, 5px); } 100% { transform: translate(0,0); } }
 
-        /* --- LOGIN AREA --- */
-        #login-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Butangi og poster sa luyo para naay ma-blur */
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
-                url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.png'); 
-    background-size: cover;
-    background-position: center;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* I-update ang tibuok Login Card para sakto sa mobile */
-.login-card {
-    background: rgba(15, 15, 15, 0.6) !important;
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
-    
-    padding: 15px; /* Gipakubsan gikan sa 30px */
-    width: 95%;    /* Mas dako gamay para dili huot */
-    max-width: 340px;
-    border-radius: 15px;
-    border: 1px solid #FF4500;
-}
-
-/* Himoon natong 2 columns ang plans para mubo ra ang box */
-.plan-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Duha ka column */
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-/* I-update ang Plan Box para dili lapas */
-.plan-box {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 8px; /* Gipakubsan */
-    border-radius: 8px;
-    font-size: 10px; /* Mas gamay gamay para fit */
-    text-align: center;
-}
-
-/* Fix sa Input field para hayag ug fit */
-.login-card input {
-    width: 100%;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid #FF4500;
-    color: #ffffff !important; /* Sigurado gyud nga puti ang agi */
-    font-size: 14px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    outline: none;
-    text-align: center;
-}
-
-/* Gamiton nato ang 'id' nga naa sa imong HTML: login-btn */
-#login-btn {
-    display: block;             /* Para ma-center gyud */
-    width: 100%;                /* Full width sa sulod sa card */
-    max-width: 250px;           /* Dili kaayo dako */
-    margin: 15px auto 0;        /* 'auto' para sa centering */
-    
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #FF4500, #E95420);
-    color: white !important;
-    
-    font-family: 'Orbitron', sans-serif; /* Para match sa imong logo */
-    font-size: 13px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    
-    border: none;
-    border-radius: 50px;        /* Modern pill shape */
-    cursor: pointer;
-    transition: 0.3s ease;
-    
-    /* Premium Orange Glow */
-    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
-}
-
-/* Inig pislit (Active state) */
-#login-btn:active {
-    transform: scale(0.96);
-    box-shadow: 0 2px 5px rgba(255, 69, 0, 0.6);
-}
-
-/* Sigurohon sab nato nga ang input fit ug dili lapas */
-#pass-input {
-    width: 100%;
-    max-width: 280px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 69, 0, 0.3);
-    color: white !important;
-    border-radius: 8px;
-    text-align: center;
-    outline: none;
-    display: block;
-    margin: 0 auto 10px auto; /* I-center sab ang input */
-}
-
+        
         footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
         footer p { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px #FF4500; }
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-
-.plan-box:hover {
-    background: rgba(233, 84, 32, 0.2) !important;
-    border-color: #E95420;
-}
-
-
-/* I-update sab nato ang imong Key Button para premium tan-awon */
-.floating-key-btn {
-    position: fixed !important;
-    top: 12px !important;
-    right: 15px !important;
-    z-index: 10001 !important;
-    
-    /* Glassmorphism style para sa button */
-    background: rgba(233, 84, 32, 0.8) !important; /* Orange transparent */
-    backdrop-filter: blur(5px) !important;
-    -webkit-backdrop-filter: blur(5px);
-    
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-size: 10px;
-    font-weight: bold;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-}
 
     </style>
 </head>
@@ -237,24 +100,6 @@
 <button id="key-nav-btn" onclick="showLogin()" style="position:fixed; bottom:20px; right:20px; z-index:10001; padding:10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:move; display:block; touch-action:none;">
     I HAVE A KEY
 </button>
-<div id="login-screen">
-    <h1 style="color:var(--accent); font-family:'Orbitron';">SE7EN PREMIUM</h1>
-    
-    <div class="login-card">
-        <p style="margin-bottom:15px; font-size:13px; color:#aaa;">Pili og imong Plan:</p>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-            <div class="plan-box" onclick="buyPlan('7 Days')"><b>7 Days</b><br>₱100</div>
-            <div class="plan-box" onclick="buyPlan('30 Days')"><b>30 Days</b><br>₱350</div>
-            <div class="plan-box" onclick="buyPlan('3 Months')"><b>3 Months</b><br>₱700</div>
-            <div class="plan-box" style="background:#222;" onclick="alert('Trial Used na!')"><b>1 Hour</b><br>FREE</div>
-        </div>
-
-        <input type="password" id="pass-input" placeholder="Enter Your Key Here...">
-        <button onclick="checkPass()" id="login-btn">UNLOCK CINEMA</button>
-        <p id="login-err" style="color:#ff4d4d; display:none; margin-top:10px;">Mali ang Key!</p>
-    </div>
-</div>
 
 <div id="hack-overlay" style="display: none;"><canvas id="matrix-canvas"></canvas></div>
 
@@ -556,102 +401,7 @@ async function checkPass() {
         setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
     }
 
-window.onload = () => {
-    const isAuth = localStorage.getItem('se7en_auth') === 'true';
-    const trialStart = localStorage.getItem('se7en_trial_start');
-    const loginScreen = document.getElementById('login-screen');
-    const oneHour = 3600000;
 
-    // 1. PREMIUM CHECK (Gi-fix ang formatting para mo-dagan)
-    if (isAuth) {
-        if (loginScreen) loginScreen.style.display = 'none';
-        if (typeof startMatrix === "function") startMatrix();
-        return; 
-    }
-
-    // 2. TRIAL CHECK
-    if (trialStart && trialStart !== "undefined") {
-        const timePassed = Date.now() - parseInt(trialStart);
-        if (timePassed < oneHour) {
-            if (loginScreen) loginScreen.style.display = 'none';
-            if (typeof startMatrix === "function") startMatrix();
-            startCountdown();
-        } else {
-            if (loginScreen) loginScreen.style.display = 'flex';
-            const freeBox = document.getElementById('free-trial-box');
-            if (freeBox) {
-                freeBox.style.opacity = "0.5";
-                freeBox.innerHTML = "<b>1 Hour</b><br>USED";
-                freeBox.onclick = () => alert("Trial Used! Please enter a Premium Key.");
-            }
-        }
-    }
-};
-
-async function unlockCinema() {
-    const passInput = document.getElementById('pass-input').value.trim();
-
-    if (!passInput) return alert("Type your key!");
-
-    // PAG-QUERY SA DB (Siguroha nga 'se7en_keys' ang name sa Supabase)
-    const { data, error } = await _supabase
-        .from('se7en_keys')
-        .select('*')
-        .eq('passcode', passInput)
-        .single();
-
-    if (error || !data) {
-        console.log("DB Error:", error);
-        alert("❌ Key not found sa Database!");
-        return;
-    }
-
-    // KON OK ANG DB
-    localStorage.setItem('se7en_auth', 'true');
-    localStorage.removeItem('se7en_trial_start');
-    alert("✅ DB Verified! Welcome, Aloy!");
-    location.reload();
-}
-
-// --- GI-FIX NGA CLAIM FUNCTION ---
-function claimFreeTrial() {
-    // I-clear ang karaan nga hugaw sa memory sa dili pa mo-start
-    const trialStart = localStorage.getItem('se7en_trial_start');
-
-    if (!trialStart || trialStart === "undefined" || trialStart === "null") {
-        // Bag-ong user: Hatagi og timestamp
-        localStorage.setItem('se7en_trial_start', Date.now().toString());
-        alert("🎁 1-Hour Free Access Granted! Enjoy, Aloy!");
-        location.reload(); 
-    } else {
-        const timePassed = Date.now() - parseInt(trialStart);
-        if (timePassed >= 3600000) {
-            alert("❌ Sorry, used na imong free trial.");
-        } else {
-            location.reload(); // Pasudla kon naa pay oras
-        }
-    }
-}
-
-// --- TIMER DISPLAY SA SCREEN ---
-function startCountdown() {
-    const timerBar = document.getElementById('timer-bar');
-    const timerVal = document.getElementById('timer-val');
-    if (timerBar) timerBar.style.display = 'block';
-
-    setInterval(() => {
-        const trialStart = localStorage.getItem('se7en_trial_start');
-        const msLeft = 3600000 - (Date.now() - trialStart);
-        if (msLeft <= 0) {
-            alert("Your time is up! Purchase a Key.");
-            location.reload();
-        } else {
-            const mins = Math.floor(msLeft / 60000);
-            const secs = Math.floor((msLeft % 60000) / 1000);
-            if (timerVal) timerVal.innerHTML = (mins < 10 ? '0' : '') + mins + ":" + (secs < 10 ? '0' : '') + secs;
-        }
-    }, 1000);
-}
 
     // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
     async function fetchType(t) {
@@ -674,33 +424,6 @@ function startCountdown() {
         document.getElementById('row-title').innerText = "Results: " + q;
         render(d.results);
     }
-
-function buyPlan(planName) {
-    // --- USBA ANG PRESYO DIRI (Dali ra pangitaon) ---
-    const price7Days   = "₱100";
-    const price30Days  = "₱350";
-    const price3Months = "₱700";
-    
-    // IMONG DETALYE
-    const myGcash = "09489108928";
-    const myName = "GUARDIANA GENE";
-    const myFBID = "61580883153632"; 
-
-    // Logic para makuha ang saktong presyo depende sa gi-pili
-    let price = "";
-    if (planName.includes("7 Days")) price = price7Days;
-    else if (planName.includes("30 Days")) price = price30Days;
-    else if (planName.includes("3 Months")) price = price3Months;
-
-    // Ang mensahe
-    let msg = `Yo Aloy! Gusto ko mo-avail sa ${planName} pass (${price}).\n\n` +
-              `Nag-send na ko sa G-Cash:\n` +
-              `Number: ${myGcash}\n` +
-              `Name: ${myName}\n\n` +
-              `Mao ni ang akong screenshot sa resibo:`;
-
-    window.open(`https://m.me/${myFBID}?text=${encodeURIComponent(msg)}`, '_blank');
-}    
 
     const dragBtn = document.getElementById("key-nav-btn");
     let active = false;
