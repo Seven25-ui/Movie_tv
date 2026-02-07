@@ -590,40 +590,31 @@ window.onload = () => {
     }
 };
 
-// --- 2. ANG TIG-VERIFY (SUPABASE UNLOCK) ---
 async function unlockCinema() {
     const passInput = document.getElementById('pass-input').value.trim();
-    const btn = document.querySelector('.unlock-btn');
-
-    if (!passInput) return alert("Type your key, Aloy!");
-
-    btn.innerText = "VERIFYING...";
     
-    try {
-        // I-check sa imong bag-ong table 'se7en_keys'
-        const { data, error } = await _supabase
-            .from('se7en_keys')
-            .select('*')
-            .eq('passcode', passInput)
-            .single();
+    // Check kon naay sulod ang input
+    if (!passInput) return alert("Type your key!");
 
-        if (error || !data) {
-            alert("❌ Invalid Key! Please message Aloy.");
-            btn.innerText = "UNLOCK CINEMA";
-            return;
-        }
+    // PAG-QUERY SA DB
+    const { data, error } = await _supabase
+        .from('se7en_keys') // KINAHANGLAN MATCH SA SQL TABLE NAME
+        .select('*')
+        .eq('passcode', passInput)
+        .single();
 
-        // SUCCESS: I-save ang VIP status ug I-DELETE ang Trial record
-        localStorage.setItem('se7en_auth', 'true');
-        localStorage.removeItem('se7en_trial_start'); // Mao ni ang secret para dili na ma-lock!
-        
-        alert("✅ ACCESS GRANTED! Welcome back, Master.");
-        location.reload();
-
-    } catch (err) {
-        alert("System Error. Check connection.");
-        btn.innerText = "UNLOCK CINEMA";
+    if (error || !data) {
+        console.log("DB Error:", error); // I-check ni sa console kon naay error
+        alert("❌ Key not found sa Database!");
+        return;
     }
+
+    // KON OK ANG DB: I-save sa browser
+    localStorage.setItem('se7en_auth', 'true');
+    localStorage.removeItem('se7en_trial_start'); // I-clear ang trial para dili ka ma-lockout
+    
+    alert("✅ DB Verified! Welcome, Aloy!");
+    location.reload();
 }
 
 // --- GI-FIX NGA CLAIM FUNCTION ---
