@@ -82,10 +82,41 @@
         @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px, -5px); } 50% { transform: translate(-5px, 5px); } 100% { transform: translate(0,0); } }
 
         /* --- LOGIN AREA --- */
-        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:10000; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-        .login-card { background: rgba(10, 10, 10, 0.95); padding: 30px; border-radius: 15px; border: 2px solid #FF4500; text-align: center; width: 85%; max-width: 310px; box-shadow: 0 0 15px rgba(255, 69, 0, 0.3); animation: orange-float 3s ease-in-out infinite; }
-        @keyframes orange-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
-        .login-card input { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #333; background: #050505; color: #fff; margin-bottom: 15px; text-align: center; outline: none; }
+        #login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Butangi og background image para naay ma-blur sa luyo sa card */
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.png'); 
+    background-size: cover;
+    background-position: center;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    /* Himoon nato nga transparent black */
+    background: rgba(10, 10, 10, 0.5) !important; 
+    
+    /* Mao ni ang magic fix */
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #FF4500;
+    text-align: center;
+    width: 85%;
+    max-width: 310px;
+    box-shadow: 0 0 25px rgba(255, 69, 0, 0.4);
+    animation: orange-float 3s ease-in-out infinite;
+}
 
         footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
         footer p { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px #FF4500; }
