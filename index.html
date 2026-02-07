@@ -90,28 +90,25 @@
 /* KANI ANG MO-COVER SA TIBUOK SCREEN */
 #login-screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #000000; /* Blackout ang luyo */
-    display: flex; /* Magic para sa centering */
+    top: 0; left: 0;
+    width: 100%; height: 100vh;
+    background: #000;
+    display: flex; 
     justify-content: center;
     align-items: center;
-    z-index: 10000; /* Pinaka-ibabaw sa tanan */
+    z-index: 10000;
+    padding: 20px;
 }
 
-/* KANI ANG BOX SA LOGIN/REGISTER */
 .auth-box {
-    background: #111111;
+    background: #111;
     padding: 30px;
     border-radius: 15px;
     border: 1px solid #333;
-    width: 90%;
-    max-width: 380px;
+    width: 100%;
+    max-width: 380px; /* Fixed width sa center */
     text-align: center;
     box-shadow: 0 0 30px rgba(233, 84, 32, 0.2);
-    margin: auto; /* Siguroha nga dili mopilit sa kilid */
 }
 
 /* PARA SA MATA (EYE ICON) PARA DILI MAG-AWAS */
@@ -206,18 +203,19 @@ input:focus {
 </head>
 <body>
 
-<div id="status-bar" style="background: rgba(0,0,0,0.5); padding: 5px; border-radius: 20px; width: fit-content; margin: 10px auto; border: 1px solid #ff8c00;">
-    <span style="color: #00ff00; animation: blink 1s infinite;">●</span> 
-    <span id="user-count" style="color: white; font-family: 'Courier New', monospace; font-size: 13px;">34</span> 
+<body>
+
+<div id="status-bar" style="background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 20px; width: fit-content; margin: 15px auto; border: 1px solid #ff8c00; display: flex; align-items: center; gap: 8px; z-index: 10001; backdrop-filter: blur(5px);">
+    <span style="color: #00ff00; animation: blink 1s infinite;">●</span>
+    <span id="user-count" style="color: white; font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold;">34</span>
     <span style="color: #ccc; font-size: 12px;">users streaming now</span>
 </div>
 
 <div id="login-screen">
     <div class="auth-box">
         <h2 id="auth-title">LOGIN</h2>
-        
         <div id="login-form">
-            <input type="text" id="login-user" placeholder="Username">
+            <input type="text" id="login-user" placeholder="Username" autocomplete="off">
             <div class="pass-container">
                 <input type="password" id="login-pass" placeholder="Password">
                 <span class="eye-icon" onclick="togglePass('login-pass')">👁️</span>
@@ -225,10 +223,9 @@ input:focus {
             <button class="btn-auth" onclick="loginUser()">UNLOCK CINEMA</button>
             <p class="auth-toggle">No account? <span onclick="toggleAuth('register')">Register here</span></p>
         </div>
-
         <div id="register-form" style="display:none;">
             <p class="trial-tag">Get 1-Hour Free Access!</p>
-            <input type="text" id="reg-user" placeholder="Choose Username">
+            <input type="text" id="reg-user" placeholder="Choose Username" autocomplete="off">
             <div class="pass-container">
                 <input type="password" id="reg-pass" placeholder="Create Password">
                 <span class="eye-icon" onclick="togglePass('reg-pass')">👁️</span>
@@ -241,18 +238,34 @@ input:focus {
 
 <div id="hack-overlay" style="display:none;">
     <canvas id="matrix-canvas"></canvas>
-    <div style="position: absolute; color: #0f0; font-family: 'Orbitron'; font-size: 20px; text-shadow: 0 0 10px #0f0;">
-        BYPASSING SECURITY... ALOYGENEX
+    <div style="position: absolute; color: #0f0; font-family: 'Orbitron'; font-size: 18px; text-shadow: 0 0 10px #0f0; text-align: center; width: 100%;">
+        
+    </div>
+</div>
+
+<div id="player-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; overflow-y: auto;">
+    <div class="player-header" style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111; position: sticky; top: 0; z-index: 10;">
+        <div class="logo" style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">SE7EN PLAY</div>
+        <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:30px; cursor:pointer; line-height:1;">&times;</button>
+    </div>
+    <div class="player-container">
+        <div class="video-section">
+            <div class="video-wrapper">
+                <iframe id="video-iframe" src="" allowfullscreen></iframe>
+            </div>
+            <div style="padding: 20px;">
+                <h1 id="p-title" style="font-size: 1.5rem; color: #E95420;">Movie Title</h1>
+                <p id="p-desc" style="color: #bbb; font-size: 0.9rem; margin-top: 10px; line-height: 1.5;">Description...</p>
+            </div>
+        </div>
+        <div class="episode-section" id="episode-area" style="display:none; padding: 0 20px 20px;">
+            <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; border-radius:5px; margin-bottom:15px;"></select>
+            <div class="ep-grid" id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap:10px;"></div>
+        </div>
     </div>
 </div>
 
 <div id="main-content" style="display:none;">
-    <div id="status-bar" style="background: rgba(0,0,0,0.5); padding: 5px; border-radius: 20px; width: fit-content; margin: 10px auto; border: 1px solid #ff8c00; text-align:center;">
-        <span style="color: #00ff00; animation: blink 1s infinite;">●</span>
-        <span id="user-count" style="color: white; font-family: 'Courier New', monospace; font-size: 13px;">34</span>
-        <span style="color: #ccc; font-size: 12px;">users streaming now</span>
-    </div>
-
     <div class="top-bar">
         <div class="logo">SE7EN</div>
         <div class="search-box">
