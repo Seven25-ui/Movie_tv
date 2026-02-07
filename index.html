@@ -660,7 +660,7 @@ function toggleAuth(mode) {
 // 2. SHOW/HIDE PASSWORD
 function togglePass(id) {
     const input = document.getElementById(id);
-    input.type = input.type === "password" ? "text" : "password";
+    if(input) input.type = input.type === "password" ? "text" : "password";
 }
 
 // 3. REGISTER FUNCTION
@@ -670,12 +670,13 @@ async function registerUser() {
 
     if(!user || !pass) return alert("Ayaw kalimti ang username ug password!");
 
-    const { error } = await _supabase
+    // GI-FIX: supabaseClient na ang gamit diri
+    const { error } = await supabaseClient
         .from('se7en_users')
         .insert([{ username: user, password: pass, status: 'free_trial' }]);
 
     if (error) {
-        alert("❌ Error: Basin naay naggamit na ana nga username.");
+        alert("❌ Error: " + error.message);
     } else {
         alert("✅ Success! Registered na ka. Login na, Master.");
         toggleAuth('login');
@@ -687,12 +688,15 @@ async function loginUser() {
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value.trim();
 
-    const { data, error } = await _supabase
+    if(!user || !pass) return alert("Isulat imong login details!");
+
+    // GI-FIX: supabaseClient na ang gamit diri
+    const { data, error } = await supabaseClient
         .from('se7en_users')
         .select('*')
         .eq('username', user)
         .eq('password', pass)
-        .single();
+        .maybeSingle(); // 'maybeSingle' para dili mo-error kon walay nakit-an
 
     if (error || !data) {
         alert("❌ Invalid Login! Check imong username o password.");
