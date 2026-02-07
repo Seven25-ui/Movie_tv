@@ -92,47 +92,57 @@
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
+
+/* I-update nato ang imong Plan Box para naay Blur */
 .plan-box {
-    background: #1a1a1a;
-    border: 1px solid #444;
+    /* Usbon nato ang solid color ngadto sa Transparent Black (0.6) */
+    background: rgba(26, 26, 26, 0.6) !important; 
+    
+    /* Mao ni ang Magic Blur effect */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+
+    /* Imong original settings pero gi-improve ang border */
+    border: 1px solid rgba(255, 255, 255, 0.2); 
     padding: 10px;
     border-radius: 8px;
     font-size: 11px;
+    color: white; /* Siguruha nga puti ang text */
     cursor: pointer;
     transition: 0.3s;
+    
+    /* Para naay "glow" effect */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
-.plan-box:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.05); }
 
+/* Inig itudlo ang mouse o itunob ang tudlo (Hover) */
+.plan-box:hover { 
+    border-color: #ff4500; 
+    background: rgba(255, 69, 0, 0.3) !important; 
+    transform: scale(1.05); 
+}
+
+/* I-update sab nato ang imong Key Button para premium tan-awon */
 .floating-key-btn {
     position: fixed !important;
     top: 12px !important;
-    right: 15px !important; /* Default position */
+    right: 15px !important;
     z-index: 10001 !important;
-    background: #e95420;
+    
+    /* Glassmorphism style para sa button */
+    background: rgba(233, 84, 32, 0.8) !important; /* Orange transparent */
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px);
+    
     color: white;
     padding: 8px 12px;
     border-radius: 5px;
     font-size: 10px;
     font-weight: bold;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
 }
 
-/* Kung naay Logout button (Desktop/Wide Mobile), i-move gamay ang Key button sa wala */
-#logout-btn[style*="display: block"] ~ .floating-key-btn {
-    right: 100px !important; 
-}
-
-/* I-apply ni sa main container sa imong login/plan box */
-.your-plan-box-class {
-    background: rgba(0, 0, 0, 0.6) !important; /* Transparency */
-    backdrop-filter: blur(12px) !important;    /* Mao ni ang magic blur */
-    -webkit-backdrop-filter: blur(12px);       /* Para sa mobile browsers */
-    
-    border: 2px solid #ff4500;                 /* Imong orange border */
-    border-radius: 20px;                       /* Para lingin ang kanto */
-    box-shadow: 0 0 20px rgba(255, 69, 0, 0.2); /* Glamour glow */
-}
     </style>
 </head>
 <body>
