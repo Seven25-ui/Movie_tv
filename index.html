@@ -125,6 +125,65 @@
     </style>
 </head>
 <body>
+
+<div id="promo-overlay" style="
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.6); /* Mas light para makita ang luyo */
+    backdrop-filter: blur(10px);    /* Kani ang mo-blur sa imong interface */
+    -webkit-backdrop-filter: blur(10px); /* Para sa Safari/iOS */
+    z-index: 99999; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;">
+    
+    <div style="
+        width: 85%; 
+        max-width: 400px; 
+        background: rgba(26, 26, 26, 0.9); /* Glass effect style */
+        padding: 35px; 
+        border-radius: 20px; 
+        border: 1px solid rgba(40, 167, 69, 0.5); 
+        text-align: center; 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        font-family: sans-serif;">
+        
+        <div style="font-size: 50px; margin-bottom: 10px;">🎁</div>
+        <h1 style="color: #28a745; margin: 0 0 10px 0; letter-spacing: 1px;">FREE 1-HOUR</h1>
+        <p style="color: #eee; line-height: 1.6; font-size: 15px;">
+            You've unlocked <b>Limited Free Access</b>! <br> 
+            Experience premium streaming at <b>SE7EN CINEMA</b>.
+        </p>
+        
+        <button onclick="activateTimer()" style="
+            margin-top: 25px; 
+            background: #28a745; 
+            color: #fff; 
+            border: none; 
+            padding: 16px 35px; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            transition: 0.3s;">
+            CLAIM MY FREE 1HR NOW
+        </button>
+        
+        <p style="color: #888; font-size: 11px; margin-top: 15px; text-transform: uppercase;">
+            No credit card required.
+        </p>
+    </div>
+</div>
+
+<div id="timer-bar" style="display:none; position:fixed; top:0; left:0; width:100%; background:rgba(40,167,69,0.95); color:#fff; text-align:center; padding:10px 0; font-family:monospace; font-weight:bold; z-index:88888; letter-spacing:1px; box-shadow:0 2px 10px rgba(0,0,0,0.5);">
+    FREE ACCESS ENDS IN: <span id="timer-val">60:00</span>
+</div>
+
 <button id="key-nav-btn" onclick="showLogin()" style="position:fixed; bottom:20px; right:20px; z-index:10001; padding:10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:move; display:block; touch-action:none;">
     I HAVE A KEY
 </button>
@@ -432,82 +491,81 @@ async function checkPass() {
 window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const loginScreen = document.getElementById('login-screen');
-    const logoutBtn = document.getElementById('logout-btn');
-    const keyBtn = document.getElementById('key-nav-btn'); 
 
-    // 1. KON NAKA-PREMIUM NA (Naka-login)
+    // 1. KON NAKA-LOGIN (PREMIUM USER)
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'block';
-        if (keyBtn) keyBtn.style.display = 'none'; 
-        startMatrix();
+        startMatrix(); // Tawgon imong existing function
         return;
     }
 
-    // 2. KON WALA PAY LOGIN, CHECK ANG 1-HOUR FREE TRIAL
+    // 2. CHECK KON NAG-START NA BA ANG TRIAL
     let trialStart = localStorage.getItem('se7en_trial_start');
     const oneHour = 60 * 60 * 1000;
 
     if (!trialStart) {
-        // First time visitor, i-save ang start time
-        trialStart = Date.now();
-        localStorage.setItem('se7en_trial_start', trialStart);
-    }
-
-    // I-calculate pila na ang nilabay nga oras sukad pag-start
-    const timePassed = Date.now() - trialStart;
-
-    if (timePassed < oneHour) {
-        // SULOD PA SA 1 HOUR: Pasudla siya
-        if (loginScreen) loginScreen.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'none'; // Tago ang logout kay trial user pa
-        if (keyBtn) keyBtn.style.display = 'block'; 
-        startMatrix();
-
-        // TAWGON ANG TIMER (Wala nay sulod ang parenthesis para anti-reset)
-        showTrialTimer(); 
+        // WALA PA KA-CLAIM: Ipakita ang Blurred Pop-up
+        document.getElementById('promo-overlay').style.display = 'flex';
+        // I-lock usa ang site bg (optional depende sa imong css)
+        if (loginScreen) loginScreen.style.display = 'flex'; 
     } else {
-        // LAPAS NA SA 1 HOUR: I-lock ang site
-        if (loginScreen) loginScreen.style.display = 'flex';
-        if (logoutBtn) logoutBtn.style.display = 'none';
-        if (keyBtn) keyBtn.style.display = 'block'; 
-        console.log("Free trial expired.");
+        // NAG-START NA: Check kon expired na
+        const timePassed = Date.now() - trialStart;
+
+        if (timePassed < oneHour) {
+            // SULOD PA SA ORAS: Pasudla
+            document.getElementById('promo-overlay').style.display = 'none';
+            if (loginScreen) loginScreen.style.display = 'none';
+            startMatrix();
+            startCountdown(); // I-resume ang timer display
+        } else {
+            // EXPIRED NA: I-lock ang site
+            document.getElementById('promo-overlay').style.display = 'none';
+            if (loginScreen) loginScreen.style.display = 'flex';
+            console.log("Free trial expired.");
+        }
     }
 };
 
-    // --- FUNCTION PARA SA COUNTDOWN TIMER SA SCREEN (HACKER PROOF) ---
-function showTrialTimer() {
-    // 1. Siguruha nga dili mo-doble ang timer div
-    if (document.getElementById('trial-countdown')) return;
+// --- FUNCTION INIG CLICK SA BUTTON ---
+function activateTimer() {
+    // 1. I-save ang start time sa memory (Anti-Reset)
+    localStorage.setItem('se7en_trial_start', Date.now());
 
-    const timerDiv = document.createElement('div');
-    timerDiv.id = "trial-countdown";
-    timerDiv.style = "position:fixed; bottom:85px; right:15px; background:rgba(233,84,32,0.9); color:white; padding:8px 15px; border-radius:20px; font-size:11px; font-weight:bold; z-index:9999; border:1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); pointer-events: none;";
-    document.body.appendChild(timerDiv);
+    // 2. Tago-on ang Overlay
+    document.getElementById('promo-overlay').style.display = 'none';
+
+    // 3. I-start ang countdown display
+    startCountdown();
+    
+    // 4. I-reload para ma-trigger ang imong movie player/matrix
+    location.reload();
+}
+
+// --- FUNCTION PARA SA COUNTDOWN DISPLAY ---
+function startCountdown() {
+    const timerBar = document.getElementById('timer-bar');
+    const timerVal = document.getElementById('timer-val');
+    timerBar.style.display = 'block';
 
     const oneHour = 60 * 60 * 1000;
 
     const countdown = setInterval(() => {
-        // 2. I-GET ANG START TIME GIKAN SA STORAGE
         const trialStart = localStorage.getItem('se7en_trial_start');
-        
-        // 3. I-CALCULATE ANG TINUOD NGA TIME PASSED
-        const now = Date.now();
-        const timePassed = now - trialStart;
-        const msLeft = oneHour - timePassed;
+        const msLeft = oneHour - (Date.now() - trialStart);
 
         if (msLeft <= 0) {
             clearInterval(countdown);
-            timerDiv.innerHTML = "Expired!";
-            alert("Your 1-hour free trial has ended. Please purchase a pass to continue watching!");
-            location.reload(); 
+            timerVal.innerHTML = "EXPIRED";
+            alert("Your 1-hour free access has ended. Buy a VIP Key to continue!");
+            location.reload(); // Mo-lock na ni siya kay check-on man ang time sa window.onload
         } else {
             const mins = Math.floor(msLeft / 60000);
             const secs = Math.floor((msLeft % 60000) / 1000);
-            timerDiv.innerHTML = `<i class="fas fa-clock"></i> FREE: ${mins}m ${secs}s left`;
+            timerVal.innerHTML = (mins < 10 ? '0' : '') + mins + ":" + (secs < 10 ? '0' : '') + secs;
         }
     }, 1000);
-}
+}      
 
     // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
     async function fetchType(t) {
