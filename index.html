@@ -433,27 +433,33 @@ async function checkPass() {
 window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const loginScreen = document.getElementById('login-screen');
+    const logoutBtn = document.getElementById('logout-btn'); // Siguruha nga naa ni sa HTML
     const trialStart = localStorage.getItem('se7en_trial_start');
-    const oneHour = 3600000; // 1 Hour
+    const oneHour = 3600000; // 1 Hour in MS
 
-    // 1. Kon naka-Premium na, pasudla dayon
+    // 1. KON NAKA-PREMIUM NA (Naka-login gamit ang Key)
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
-        startMatrix(); 
+        if (logoutBtn) logoutBtn.style.display = 'block'; // Ipakita ang Logout
+        startMatrix();
         return;
     }
 
-    // 2. Kon naggamit na sa Trial
+    // 2. KON NAGGAMIT SA FREE TRIAL
     if (trialStart) {
         const timePassed = Date.now() - trialStart;
         if (timePassed < oneHour) {
-            // Pasudla samtang naa pay oras
+            // Sulod pa sa oras: Pasudla
             if (loginScreen) loginScreen.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'none'; // Tago ang logout sa trial
             startMatrix();
-            startCountdown(); // Tawgon ang timer display
+            startCountdown(); 
         } else {
-            // Expired na: I-lock ang site ug i-disable ang FREE box
+            // Expired na: I-lock ang site
             if (loginScreen) loginScreen.style.display = 'flex';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            
+            // I-disable ang Free Box sa interface
             const freeBox = document.getElementById('free-trial-box');
             if (freeBox) {
                 freeBox.style.opacity = "0.5";
