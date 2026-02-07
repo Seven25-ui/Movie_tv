@@ -145,17 +145,35 @@
     text-align: center;
 }
 
-/* Fix sa Unlock Button */
+/* I-center ug i-modernize ang Unlock Button */
 #unlock-btn {
-    width: 100%;
-    padding: 12px;
-    background: #FF4500;
+    display: block;             /* Kinahanglan para ma-center gamit ang margin */
+    width: 100%;                /* Full width para sayon pisliton sa mobile */
+    max-width: 280px;           /* Dili kaayo lapas */
+    margin: 20px auto 0;        /* 'auto' sa kilid para ma-center gyud */
+    
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #FF4500, #E95420);
     color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
+    
+    font-size: 14px;
+    font-weight: 800;
     text-transform: uppercase;
-    font-size: 12px;
+    letter-spacing: 2px;
+    
+    border: none;
+    border-radius: 50px;        /* 'Pill-shaped' para modern tan-awon */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Premium Orange Glow */
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+}
+
+/* Effect inig pislit (Hover/Active) */
+#unlock-btn:active {
+    transform: scale(0.95);     /* Mo-unlod gamay inig pislit */
+    box-shadow: 0 2px 8px rgba(255, 69, 0, 0.6);
 }
 
         footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
