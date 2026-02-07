@@ -87,19 +87,14 @@
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-/* 1. MAIN CONTAINER (Ang karaan nga login-screen) */
 #login-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
-    display: flex; /* Para ma-center ang auth-box */
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 9999; /* Siguroha nga mas taas ni kaysa sa ubang elements */
+    background: black; /* Para dili makita ang sulod sa luyo */
 }
 
 /* 2. ANG BOX SA TUNGA */
@@ -537,28 +532,20 @@ async function checkPass() {
     }
 
 window.onload = () => {
-    // 1. I-check kon naka-login na ba ang user sa karaan nga session
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
-    
-    // 2. Tawgon ang mga main containers gikan sa HTML
     const loginScreen = document.getElementById('login-screen');
-    const mainContent = document.getElementById('main-content');
+    const mainContent = document.querySelector('main'); // O unsa man ang ID sa imong main content
+    const navBar = document.querySelector('.bottom-nav'); // Ang imong menu sa ubos
 
     if (isAuth) {
-        // KON NAKA-LOGIN: Itago ang login, ipakita ang sulod sa cinema
         if (loginScreen) loginScreen.style.display = 'none';
         if (mainContent) mainContent.style.display = 'block';
-        
-        // Sugdi ang imong Matrix effect o Movie Loading functions
-        if (typeof startMatrix === "function") startMatrix();
-        
-        console.log("Welcome back, Aloy! Access Granted.");
+        if (navBar) navBar.style.display = 'flex';
     } else {
-        // KON WALA PA NAKA-LOGIN: Siguroha nga login screen ang makita
+        // KON WALA PA NAKA-LOGIN: ITAGO ANG TANAN EXCEPT LOGIN
         if (loginScreen) loginScreen.style.display = 'flex';
         if (mainContent) mainContent.style.display = 'none';
-        
-        console.log("Waiting for Login or Registration...");
+        if (navBar) navBar.style.display = 'none'; // I-hide ang menu sa ubos!
     }
 };
 
