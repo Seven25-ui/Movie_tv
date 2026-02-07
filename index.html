@@ -556,21 +556,20 @@ async function checkPass() {
         setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
     }
 
-// --- 1. ANG TIG-BANTAY (WINDOW ONLOAD) ---
 window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const trialStart = localStorage.getItem('se7en_trial_start');
     const loginScreen = document.getElementById('login-screen');
     const oneHour = 3600000;
 
-    // PRIORITY 1: Kon naka-Premium na, pasudla diretso!
+    // 1. PREMIUM CHECK (Gi-fix ang formatting para mo-dagan)
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
         if (typeof startMatrix === "function") startMatrix();
         return; 
     }
 
-    // PRIORITY 2: Kon naay Trial, check kon expired na ba
+    // 2. TRIAL CHECK
     if (trialStart && trialStart !== "undefined") {
         const timePassed = Date.now() - parseInt(trialStart);
         if (timePassed < oneHour) {
@@ -578,7 +577,6 @@ window.onload = () => {
             if (typeof startMatrix === "function") startMatrix();
             startCountdown();
         } else {
-            // Expired Trial: Ipakita ang login pero ayaw i-block ang input
             if (loginScreen) loginScreen.style.display = 'flex';
             const freeBox = document.getElementById('free-trial-box');
             if (freeBox) {
@@ -592,27 +590,25 @@ window.onload = () => {
 
 async function unlockCinema() {
     const passInput = document.getElementById('pass-input').value.trim();
-    
-    // Check kon naay sulod ang input
+
     if (!passInput) return alert("Type your key!");
 
-    // PAG-QUERY SA DB
+    // PAG-QUERY SA DB (Siguroha nga 'se7en_keys' ang name sa Supabase)
     const { data, error } = await _supabase
-        .from('se7en_keys') // KINAHANGLAN MATCH SA SQL TABLE NAME
+        .from('se7en_keys')
         .select('*')
         .eq('passcode', passInput)
         .single();
 
     if (error || !data) {
-        console.log("DB Error:", error); // I-check ni sa console kon naay error
+        console.log("DB Error:", error);
         alert("❌ Key not found sa Database!");
         return;
     }
 
-    // KON OK ANG DB: I-save sa browser
+    // KON OK ANG DB
     localStorage.setItem('se7en_auth', 'true');
-    localStorage.removeItem('se7en_trial_start'); // I-clear ang trial para dili ka ma-lockout
-    
+    localStorage.removeItem('se7en_trial_start');
     alert("✅ DB Verified! Welcome, Aloy!");
     location.reload();
 }
