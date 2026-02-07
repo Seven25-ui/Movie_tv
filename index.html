@@ -126,6 +126,12 @@
 </head>
 <body>
 
+<div id="status-bar" style="background: rgba(0,0,0,0.5); padding: 5px; border-radius: 20px; width: fit-content; margin: 10px auto; border: 1px solid #ff8c00;">
+    <span style="color: #00ff00; animation: blink 1s infinite;">●</span> 
+    <span id="user-count" style="color: white; font-family: 'Courier New', monospace; font-size: 13px;">34</span> 
+    <span style="color: #ccc; font-size: 12px;">users streaming now</span>
+</div>
+
 <button id="key-nav-btn" onclick="showLogin()" style="position:fixed; bottom:20px; right:20px; z-index:10001; padding:10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:move; display:block; touch-action:none;">
     I HAVE A KEY
 </button>
@@ -251,6 +257,24 @@
         margin-bottom: 20px;
     }
     </style>
+
+<div id="notification-area" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;"></div>
+
+<style>
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.toast {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border-left: 5px solid #ff8c00;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-family: sans-serif;
+    font-size: 13px;
+    animation: slideUp 0.5s ease-out;
+}
+</style>
 
     <script>
     function handleFooterAction(event) {
@@ -603,6 +627,45 @@ function showLogin() {
     const passInput = document.getElementById('pass-input');
     if(passInput) passInput.focus();
 }
+
+// --- LIVE USER COUNTER ---
+function liveUsers() {
+    const el = document.getElementById('user-count');
+    let count = parseInt(el.innerText);
+    // Mag-random change (+ o -) para realistic
+    let change = Math.floor(Math.random() * 3) - 1; 
+    el.innerText = Math.max(28, count + change);
+}
+setInterval(liveUsers, 4000);
+
+// --- SALES NOTIFICATION ---
+const buyers = ["Jojo_Dvo", "Gardo_99", "Liza_VIP", "Master_K", "User_772", "Davao_Boy", "Admin_01"];
+const packages = ["7 Days Premium", "30 Days VIP", "Unlimited Access"];
+
+function showSale() {
+    const area = document.getElementById('notification-area');
+    const name = buyers[Math.floor(Math.random() * buyers.length)];
+    const pkg = packages[Math.floor(Math.random() * packages.length)];
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `✅ <b>${name}</b> just purchased <b>${pkg}</b>`;
+    
+    area.appendChild(toast);
+    
+    // Mawala human sa 6 seconds
+    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 6000);
+}
+
+// Mo-trigger ang popup matag 15-30 seconds
+function startPopups() {
+    let rand = Math.floor(Math.random() * 15000) + 15000;
+    setTimeout(() => {
+        showSale();
+        startPopups();
+    }, rand);
+}
+startPopups();
 
 </script>
 
