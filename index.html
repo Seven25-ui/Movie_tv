@@ -559,55 +559,56 @@ async function checkPass() {
 window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const loginScreen = document.getElementById('login-screen');
-    const logoutBtn = document.getElementById('logout-btn'); // Siguruha nga naa ni sa HTML
     const trialStart = localStorage.getItem('se7en_trial_start');
-    const oneHour = 3600000; // 1 Hour in MS
+    const oneHour = 3600000; 
 
-    // 1. KON NAKA-PREMIUM NA (Naka-login gamit ang Key)
+    // 1. KON NAKA-PREMIUM (Naka-login)
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'block'; // Ipakita ang Logout
-        startMatrix();
+        if (typeof startMatrix === "function") startMatrix();
         return;
     }
 
     // 2. KON NAGGAMIT SA FREE TRIAL
-    if (trialStart) {
-        const timePassed = Date.now() - trialStart;
+    if (trialStart && trialStart !== "undefined") {
+        const timePassed = Date.now() - parseInt(trialStart);
+        
         if (timePassed < oneHour) {
-            // Sulod pa sa oras: Pasudla
+            // SULOD PA SA ORAS - Pasudla diretso
             if (loginScreen) loginScreen.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'none'; // Tago ang logout sa trial
-            startMatrix();
+            if (typeof startMatrix === "function") startMatrix();
             startCountdown(); 
         } else {
-            // Expired na: I-lock ang site
-            if (loginScreen) loginScreen.style.display = 'flex';
-            if (logoutBtn) logoutBtn.style.display = 'none';
-            
-            // I-disable ang Free Box sa interface
+            // EXPIRED NA - Ayaw pasudla
             const freeBox = document.getElementById('free-trial-box');
             if (freeBox) {
                 freeBox.style.opacity = "0.5";
                 freeBox.innerHTML = "<b>1 Hour</b><br>USED";
-                freeBox.onclick = () => alert("Trial Used na!");
+                freeBox.onclick = () => alert("Trial Used na! Buy a key to continue.");
             }
         }
     }
 };
 
-// --- ACTION INIG PISLIT SA FREE BOX ---
+// --- KANI NGA FUNCTION ANG I-FIX NATO ---
 function claimFreeTrial() {
     const trialStart = localStorage.getItem('se7en_trial_start');
-    if (!trialStart) {
-        localStorage.setItem('se7en_trial_start', Date.now());
-        alert("🎁 1-Hour Free Access Granted! Enjoy, Aloy!");
-        location.reload(); 
+
+    // Check kon "null" ba gyud o "undefined"
+    if (!trialStart || trialStart === "undefined") {
+        // BAG-ONG USER: Hatagi og access
+        localStorage.setItem('se7en_trial_start', Date.now().toString());
+        alert("🎁 1-Hour Free Access Granted! Enjoy, SE7EN User!");
+        location.reload(); // I-reload para mo-trigger ang window.onload condition #2
     } else {
+        // DAAN NGA USER: Check kon expire na ba
+        const timePassed = Date.now() - parseInt(trialStart);
         const oneHour = 3600000;
-        if (Date.now() - trialStart >= oneHour) {
-            alert("❌ Sorry, Trial Used na gyud!");
+
+        if (timePassed >= oneHour) {
+            alert("❌ Sorry, Trial Used na gyud! Please purchase a key.");
         } else {
+            // Kon naa pa sa sulod sa 1 hour, i-reload lang para mo-login
             location.reload();
         }
     }
