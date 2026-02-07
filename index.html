@@ -100,21 +100,49 @@
     align-items: center;
 }
 
-.login-card {
-    /* Himoon natong 0.4 para transparent kaayo */
-    background: rgba(15, 15, 15, 0.4) !important; 
+.login-card input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
     
-    /* Mao ni ang mo-himo sa "Glass" effect */
-    backdrop-filter: blur(20px) !important; 
-    -webkit-backdrop-filter: blur(20px) !important;
+    /* Glass Effect para sa Input */
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 69, 0, 0.3); /* Orange border nga transparent */
     
-    padding: 30px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 69, 0, 0.5); /* Mas nipis nga orange line */
+    /* Text Styling */
+    color: #ffffff !important; /* Sigurado gyud nga puti ang text */
+    font-size: 16px; /* Para dili mag-zoom sa iPhone/Android inig click */
     text-align: center;
-    width: 90%;
-    max-width: 320px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    outline: none;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+/* Inig i-click ang input (Focus) */
+.login-card input:focus {
+    border-color: #FF4500;
+    background: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.4);
+}
+
+/* Para sa placeholder (ang text nga "Enter Your Key Here...") */
+.login-card input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 12px;
+    background: #FF4500;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
 }
 
         footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
