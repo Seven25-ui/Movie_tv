@@ -88,8 +88,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Butangi og background image para naay ma-blur sa luyo sa card */
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+    /* Butangi og poster sa luyo para naay ma-blur */
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
                 url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.png'); 
     background-size: cover;
     background-position: center;
@@ -101,21 +101,20 @@
 }
 
 .login-card {
-    /* Himoon nato nga transparent black */
-    background: rgba(10, 10, 10, 0.5) !important; 
+    /* Himoon natong 0.4 para transparent kaayo */
+    background: rgba(15, 15, 15, 0.4) !important; 
     
-    /* Mao ni ang magic fix */
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
+    /* Mao ni ang mo-himo sa "Glass" effect */
+    backdrop-filter: blur(20px) !important; 
+    -webkit-backdrop-filter: blur(20px) !important;
     
     padding: 30px;
-    border-radius: 15px;
-    border: 2px solid #FF4500;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 69, 0, 0.5); /* Mas nipis nga orange line */
     text-align: center;
-    width: 85%;
-    max-width: 310px;
-    box-shadow: 0 0 25px rgba(255, 69, 0, 0.4);
-    animation: orange-float 3s ease-in-out infinite;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
         footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
@@ -123,35 +122,21 @@
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-
-/* I-update nato ang imong Plan Box para naay Blur */
 .plan-box {
-    /* Usbon nato ang solid color ngadto sa Transparent Black (0.6) */
-    background: rgba(26, 26, 26, 0.6) !important; 
-    
-    /* Mao ni ang Magic Blur effect */
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-
-    /* Imong original settings pero gi-improve ang border */
-    border: 1px solid rgba(255, 255, 255, 0.2); 
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 11px;
-    color: white; /* Siguruha nga puti ang text */
-    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05) !important; /* Super transparent */
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
     transition: 0.3s;
-    
-    /* Para naay "glow" effect */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Inig itudlo ang mouse o itunob ang tudlo (Hover) */
-.plan-box:hover { 
-    border-color: #ff4500; 
-    background: rgba(255, 69, 0, 0.3) !important; 
-    transform: scale(1.05); 
+.plan-box:hover {
+    background: rgba(233, 84, 32, 0.2) !important;
+    border-color: #E95420;
 }
+
 
 /* I-update sab nato ang imong Key Button para premium tan-awon */
 .floating-key-btn {
