@@ -628,22 +628,33 @@ function showLogin() {
     if(passInput) passInput.focus();
 }
 
-// --- LIVE USER COUNTER ---
-function liveUsers() {
+// --- RANDOM LIVE COUNTER ---
+function updateLiveUsers() {
     const el = document.getElementById('user-count');
-    let count = parseInt(el.innerText);
-    // Mag-random change (+ o -) para realistic
-    let change = Math.floor(Math.random() * 3) - 1; 
-    el.innerText = Math.max(28, count + change);
-}
-setInterval(liveUsers, 4000);
+    if (!el) return;
+    
+    let currentCount = parseInt(el.innerText);
+    // Mag-random og -2 to +3 nga lihok
+    let fluctuation = Math.floor(Math.random() * 6) - 2; 
+    let newCount = currentCount + fluctuation;
 
-// --- SALES NOTIFICATION ---
-const buyers = ["Jojo_Dvo", "Gardo_99", "Liza_VIP", "Master_K", "User_772", "Davao_Boy", "Admin_01"];
+    // I-limit nato para dili moubos sa 25 ug dili molapas sa 48
+    if (newCount < 25) newCount = 28;
+    if (newCount > 48) newCount = 42;
+
+    el.innerText = newCount;
+}
+// Mo-lihok ang number matag 5 ka segundo
+setInterval(updateLiveUsers, 5000); 
+
+// --- VIP NOTIFICATION (Paspas nga Test) ---
+const buyers = ["Jojo_Dvo", "Gardo_99", "Liza_VIP", "Master_K", "User_772", "Davao_Boy", "Admin_01", "Cebu_Queen", "Samal_Dev"];
 const packages = ["7 Days Premium", "30 Days VIP", "Unlimited Access"];
 
 function showSale() {
     const area = document.getElementById('notification-area');
+    if (!area) return;
+
     const name = buyers[Math.floor(Math.random() * buyers.length)];
     const pkg = packages[Math.floor(Math.random() * packages.length)];
     
@@ -654,17 +665,22 @@ function showSale() {
     area.appendChild(toast);
     
     // Mawala human sa 6 seconds
-    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 6000);
+    setTimeout(() => { 
+        toast.style.opacity = '0'; 
+        setTimeout(() => toast.remove(), 500); 
+    }, 6000);
 }
 
-// Mo-trigger ang popup matag 15-30 seconds
+// I-set nato ang delay para matag 10-20 seconds naay mogawas
 function startPopups() {
-    let rand = Math.floor(Math.random() * 15000) + 15000;
+    let randomDelay = Math.floor(Math.random() * 10000) + 10000; // 10s to 20s
     setTimeout(() => {
         showSale();
-        startPopups();
-    }, rand);
+        startPopups(); // Repeat the cycle
+    }, randomDelay);
 }
+
+// Start the engine
 startPopups();
 
 </script>
