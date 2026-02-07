@@ -785,6 +785,32 @@ function startPopups() {
 // Start the engine
 startPopups();
 
+// --- LIVE SEARCH TRIGGER PARA SA CLASS "search-box" ---
+let typingTimer; 
+const doneTypingInterval = 500; 
+
+// Kuhaon nato ang input sa sulod sa .search-box
+const searchInputField = document.querySelector('.search-box input');
+
+if (searchInputField) {
+    searchInputField.addEventListener('input', function() {
+        clearTimeout(typingTimer);
+        const query = this.value.trim();
+
+        if (query.length > 2) {
+            typingTimer = setTimeout(() => {
+                // Tawgon ang imong gi-paste nga function
+                search(query); 
+            }, doneTypingInterval);
+        } else if (query.length === 0) {
+            // I-reset kon gi-delete ang text
+            document.getElementById('hero').style.display = 'flex';
+            document.getElementById('row-title').innerText = "Trending Now";
+            location.reload(); 
+        }
+    });
+}
+
 </script>
 
 <div id="notif-toast" style="
