@@ -557,36 +557,44 @@ async function checkPass() {
     }
 
 window.onload = () => {
+    // 1. KUHAON ANG STATUS GIKAN SA STORAGE
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
+    const trialStartRaw = localStorage.getItem('se7en_trial_start');
     const loginScreen = document.getElementById('login-screen');
-    const trialStart = localStorage.getItem('se7en_trial_start');
     const oneHour = 3600000; 
 
-    // 1. KON NAKA-PREMIUM (Naka-login)
+    // 2. PRIORITY #1: CHECK KON NAKA-PREMIUM (PASSCODE)
+    // Kinahanglan kini ang unahon para dili ka ma-block sa trial logic
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
         if (typeof startMatrix === "function") startMatrix();
-        return;
+        console.log("Welcome back, Premium User!");
+        return; // Hunong na diri, ayaw na i-check ang trial
     }
 
-    // 2. KON NAGGAMIT SA FREE TRIAL
-    if (trialStart && trialStart !== "undefined") {
-        const timePassed = Date.now() - parseInt(trialStart);
+    // 3. PRIORITY #2: CHECK KON NAKA-FREE TRIAL
+    if (trialStartRaw && trialStartRaw !== "undefined") {
+        const trialStart = parseInt(trialStartRaw);
+        const timePassed = Date.now() - trialStart;
         
         if (timePassed < oneHour) {
-            // SULOD PA SA ORAS - Pasudla diretso
+            // Sulod pa sa oras - Pasudla
             if (loginScreen) loginScreen.style.display = 'none';
             if (typeof startMatrix === "function") startMatrix();
             startCountdown(); 
         } else {
-            // EXPIRED NA - Ayaw pasudla
+            // Expired na - Ipakita ang login screen ug i-disable ang Free Box
+            if (loginScreen) loginScreen.style.display = 'flex';
             const freeBox = document.getElementById('free-trial-box');
             if (freeBox) {
                 freeBox.style.opacity = "0.5";
                 freeBox.innerHTML = "<b>1 Hour</b><br>USED";
-                freeBox.onclick = () => alert("Trial Used na! Buy a key to continue.");
+                freeBox.onclick = () => alert("Trial Used na! Buy a key.");
             }
         }
+    } else {
+        // BAG-ONG USER O WALA PA KA-LOGIN: Ipakita ang login screen
+        if (loginScreen) loginScreen.style.display = 'flex';
     }
 };
 
