@@ -556,42 +556,75 @@ async function checkPass() {
         setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
     }
 
+// --- 1. ANG TIG-BANTAY (WINDOW ONLOAD) ---
 window.onload = () => {
-    // 1. KUHAON ANG DATA (Siguroha nga Number ang makuha sa trial)
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
-    const trialStartRaw = localStorage.getItem('se7en_trial_start');
+    const trialStart = localStorage.getItem('se7en_trial_start');
     const loginScreen = document.getElementById('login-screen');
-    const oneHour = 3600000; 
+    const oneHour = 3600000;
 
-    // 2. PRIORITY #1: PASSCODE CHECK (Dili ma-block sa trial)
+    // PRIORITY 1: Kon naka-Premium na, pasudla diretso!
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
         if (typeof startMatrix === "function") startMatrix();
-        console.log("Premium Access: ON");
         return; 
     }
 
-    // 3. PRIORITY #2: FREE TRIAL CHECK
-    if (trialStartRaw && trialStartRaw !== "undefined" && trialStartRaw !== "null") {
-        const trialStart = parseInt(trialStartRaw);
-        const timePassed = Date.now() - trialStart;
-        
+    // PRIORITY 2: Kon naay Trial, check kon expired na ba
+    if (trialStart && trialStart !== "undefined") {
+        const timePassed = Date.now() - parseInt(trialStart);
         if (timePassed < oneHour) {
-            // Sulod pa sa oras - Pasudla
             if (loginScreen) loginScreen.style.display = 'none';
             if (typeof startMatrix === "function") startMatrix();
-            startCountdown(); 
+            startCountdown();
         } else {
-            // Expired na - I-lock ang trial button pero ayaw i-lock ang passcode input
+            // Expired Trial: Ipakita ang login pero ayaw i-block ang input
+            if (loginScreen) loginScreen.style.display = 'flex';
             const freeBox = document.getElementById('free-trial-box');
             if (freeBox) {
                 freeBox.style.opacity = "0.5";
                 freeBox.innerHTML = "<b>1 Hour</b><br>USED";
-                freeBox.onclick = () => alert("Trial Used na! Use a Premium Key.");
+                freeBox.onclick = () => alert("Trial Used! Please enter a Premium Key.");
             }
         }
     }
 };
+
+// --- 2. ANG TIG-VERIFY (SUPABASE UNLOCK) ---
+async function unlockCinema() {
+    const passInput = document.getElementById('pass-input').value.trim();
+    const btn = document.querySelector('.unlock-btn');
+
+    if (!passInput) return alert("Type your key, Aloy!");
+
+    btn.innerText = "VERIFYING...";
+    
+    try {
+        // I-check sa imong bag-ong table 'se7en_keys'
+        const { data, error } = await _supabase
+            .from('se7en_keys')
+            .select('*')
+            .eq('passcode', passInput)
+            .single();
+
+        if (error || !data) {
+            alert("❌ Invalid Key! Please message Aloy.");
+            btn.innerText = "UNLOCK CINEMA";
+            return;
+        }
+
+        // SUCCESS: I-save ang VIP status ug I-DELETE ang Trial record
+        localStorage.setItem('se7en_auth', 'true');
+        localStorage.removeItem('se7en_trial_start'); // Mao ni ang secret para dili na ma-lock!
+        
+        alert("✅ ACCESS GRANTED! Welcome back, Master.");
+        location.reload();
+
+    } catch (err) {
+        alert("System Error. Check connection.");
+        btn.innerText = "UNLOCK CINEMA";
+    }
+}
 
 // --- GI-FIX NGA CLAIM FUNCTION ---
 function claimFreeTrial() {
