@@ -145,35 +145,51 @@
     text-align: center;
 }
 
-/* I-center ug i-modernize ang Unlock Button */
-#unlock-btn {
-    display: block;             /* Kinahanglan para ma-center gamit ang margin */
-    width: 100%;                /* Full width para sayon pisliton sa mobile */
-    max-width: 280px;           /* Dili kaayo lapas */
-    margin: 20px auto 0;        /* 'auto' sa kilid para ma-center gyud */
+/* Gamiton nato ang 'id' nga naa sa imong HTML: login-btn */
+#login-btn {
+    display: block;             /* Para ma-center gyud */
+    width: 100%;                /* Full width sa sulod sa card */
+    max-width: 250px;           /* Dili kaayo dako */
+    margin: 15px auto 0;        /* 'auto' para sa centering */
     
-    padding: 12px 24px;
+    padding: 12px 20px;
     background: linear-gradient(135deg, #FF4500, #E95420);
-    color: white;
+    color: white !important;
     
-    font-size: 14px;
-    font-weight: 800;
+    font-family: 'Orbitron', sans-serif; /* Para match sa imong logo */
+    font-size: 13px;
+    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     
     border: none;
-    border-radius: 50px;        /* 'Pill-shaped' para modern tan-awon */
+    border-radius: 50px;        /* Modern pill shape */
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
     
     /* Premium Orange Glow */
     box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
 }
 
-/* Effect inig pislit (Hover/Active) */
-#unlock-btn:active {
-    transform: scale(0.95);     /* Mo-unlod gamay inig pislit */
-    box-shadow: 0 2px 8px rgba(255, 69, 0, 0.6);
+/* Inig pislit (Active state) */
+#login-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 5px rgba(255, 69, 0, 0.6);
+}
+
+/* Sigurohon sab nato nga ang input fit ug dili lapas */
+#pass-input {
+    width: 100%;
+    max-width: 280px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 69, 0, 0.3);
+    color: white !important;
+    border-radius: 8px;
+    text-align: center;
+    outline: none;
+    display: block;
+    margin: 0 auto 10px auto; /* I-center sab ang input */
 }
 
         footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
