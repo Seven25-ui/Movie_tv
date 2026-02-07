@@ -87,6 +87,116 @@
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
+/* 1. MAIN CONTAINER (Ang karaan nga login-screen) */
+#login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
+    display: flex; /* Para ma-center ang auth-box */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. ANG BOX SA TUNGA */
+.auth-box {
+    background: #161616;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #333;
+    width: 90%; /* Responsive para sa CP */
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+.auth-box h2 {
+    color: #ff4500;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+/* 3. INPUTS UG WRAPPERS */
+.pass-container {
+    position: relative;
+    width: 100%;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #222;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 8px;
+    box-sizing: border-box; /* Importante para dili molapas ang width */
+    font-size: 16px; /* Para dili mo-auto-zoom sa iPhone/Brave */
+}
+
+input:focus {
+    border-color: #ff4500;
+    outline: none;
+}
+
+/* 4. ANG MATA (Eye Icon) */
+.eye-icon {
+    position: absolute;
+    right: 15px;
+    top: 35%; /* Gi-adjust para mo-center sa input box */
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+}
+
+/* 5. BUTTONS */
+.btn-auth {
+    width: 100%;
+    padding: 14px;
+    background: #ff4500;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-auth:hover {
+    background: #cc3700;
+    transform: scale(1.02);
+}
+
+/* 6. TOGGLE LINK */
+.auth-toggle {
+    font-size: 13px;
+    margin-top: 20px;
+    color: #888;
+}
+
+.auth-toggle span {
+    color: #ff4500;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* PARA SA TRIAL TAG */
+.trial-tag {
+    color: #ff4500;
+    font-size: 12px;
+    margin-bottom: 15px;
+    background: rgba(255, 69, 0, 0.1);
+    padding: 5px;
+    border-radius: 4px;
+}
+
     </style>
 </head>
 <body>
@@ -100,6 +210,31 @@
 <button id="key-nav-btn" onclick="showLogin()" style="position:fixed; bottom:20px; right:20px; z-index:10001; padding:10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:move; display:block; touch-action:none;">
     I HAVE A KEY
 </button>
+
+<div class="auth-box">
+    <h2 id="auth-title">LOGIN</h2>
+    
+    <div id="login-form">
+        <input type="text" id="login-user" placeholder="Username">
+        <div class="pass-container">
+            <input type="password" id="login-pass" placeholder="Password">
+            <span class="eye-icon" onclick="togglePass('login-pass')">👁️</span>
+        </div>
+        <button class="btn-auth" onclick="loginUser()">UNLOCK CINEMA</button>
+        <p class="auth-toggle">No account? <span onclick="toggleAuth('register')">Register here</span></p>
+    </div>
+
+    <div id="register-form" style="display:none;">
+        <p style="color: #ff4500; font-size: 12px;">Get 1-Hour Free Access!</p>
+        <input type="text" id="reg-user" placeholder="Choose Username">
+        <div class="pass-container">
+            <input type="password" id="reg-pass" placeholder="Create Password">
+            <span class="eye-icon" onclick="togglePass('reg-pass')">👁️</span>
+        </div>
+        <button class="btn-auth" onclick="registerUser()">CREATE ACCOUNT</button>
+        <p class="auth-toggle">Have an account? <span onclick="toggleAuth('login')">Login here</span></p>
+    </div>
+</div>
 
 <div id="hack-overlay" style="display: none;"><canvas id="matrix-canvas"></canvas></div>
 
@@ -401,7 +536,31 @@ async function checkPass() {
         setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
     }
 
+window.onload = () => {
+    // 1. I-check kon naka-login na ba ang user sa karaan nga session
+    const isAuth = localStorage.getItem('se7en_auth') === 'true';
+    
+    // 2. Tawgon ang mga main containers gikan sa HTML
+    const loginScreen = document.getElementById('login-screen');
+    const mainContent = document.getElementById('main-content');
 
+    if (isAuth) {
+        // KON NAKA-LOGIN: Itago ang login, ipakita ang sulod sa cinema
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (mainContent) mainContent.style.display = 'block';
+        
+        // Sugdi ang imong Matrix effect o Movie Loading functions
+        if (typeof startMatrix === "function") startMatrix();
+        
+        console.log("Welcome back, Aloy! Access Granted.");
+    } else {
+        // KON WALA PA NAKA-LOGIN: Siguroha nga login screen ang makita
+        if (loginScreen) loginScreen.style.display = 'flex';
+        if (mainContent) mainContent.style.display = 'none';
+        
+        console.log("Waiting for Login or Registration...");
+    }
+};
 
     // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
     async function fetchType(t) {
@@ -552,6 +711,61 @@ if (searchInputField) {
             location.reload(); 
         }
     });
+}
+
+// 1. TOGGLE LOGIN/REGISTER
+function toggleAuth(mode) {
+    const isReg = mode === 'register';
+    document.getElementById('auth-title').innerText = isReg ? 'REGISTER' : 'LOGIN';
+    document.getElementById('login-form').style.display = isReg ? 'none' : 'block';
+    document.getElementById('register-form').style.display = isReg ? 'block' : 'none';
+}
+
+// 2. SHOW/HIDE PASSWORD
+function togglePass(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+// 3. REGISTER FUNCTION
+async function registerUser() {
+    const user = document.getElementById('reg-user').value.trim();
+    const pass = document.getElementById('reg-pass').value.trim();
+
+    if(!user || !pass) return alert("Ayaw kalimti ang username ug password!");
+
+    const { error } = await _supabase
+        .from('se7en_users')
+        .insert([{ username: user, password: pass, status: 'free_trial' }]);
+
+    if (error) {
+        alert("❌ Error: Basin naay naggamit na ana nga username.");
+    } else {
+        alert("✅ Success! Registered na ka. Login na, Master.");
+        toggleAuth('login');
+    }
+}
+
+// 4. LOGIN FUNCTION
+async function loginUser() {
+    const user = document.getElementById('login-user').value.trim();
+    const pass = document.getElementById('login-pass').value.trim();
+
+    const { data, error } = await _supabase
+        .from('se7en_users')
+        .select('*')
+        .eq('username', user)
+        .eq('password', pass)
+        .single();
+
+    if (error || !data) {
+        alert("❌ Invalid Login! Check imong username o password.");
+        return;
+    }
+
+    localStorage.setItem('se7en_auth', 'true');
+    localStorage.setItem('se7en_username', user);
+    location.reload();
 }
 
 </script>
