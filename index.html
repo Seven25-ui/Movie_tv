@@ -202,88 +202,68 @@ input:focus {
     <span style="color: #ccc; font-size: 12px;">users streaming now</span>
 </div>
 
-<button id="key-nav-btn" onclick="showLogin()" style="position:fixed; bottom:20px; right:20px; z-index:10001; padding:10px; font-size:10px; background:#e95420; border:none; border-radius:5px; color:white; cursor:move; display:block; touch-action:none;">
-    I HAVE A KEY
-</button>
-
-<div class="auth-box">
-    <h2 id="auth-title">LOGIN</h2>
-    
-    <div id="login-form">
-        <input type="text" id="login-user" placeholder="Username">
-        <div class="pass-container">
-            <input type="password" id="login-pass" placeholder="Password">
-            <span class="eye-icon" onclick="togglePass('login-pass')">👁️</span>
+<div id="login-screen">
+    <div class="auth-box">
+        <h2 id="auth-title">LOGIN</h2>
+        
+        <div id="login-form">
+            <input type="text" id="login-user" placeholder="Username">
+            <div class="pass-container">
+                <input type="password" id="login-pass" placeholder="Password">
+                <span class="eye-icon" onclick="togglePass('login-pass')">👁️</span>
+            </div>
+            <button class="btn-auth" onclick="loginUser()">UNLOCK CINEMA</button>
+            <p class="auth-toggle">No account? <span onclick="toggleAuth('register')">Register here</span></p>
         </div>
-        <button class="btn-auth" onclick="loginUser()">UNLOCK CINEMA</button>
-        <p class="auth-toggle">No account? <span onclick="toggleAuth('register')">Register here</span></p>
-    </div>
 
-    <div id="register-form" style="display:none;">
-        <p style="color: #ff4500; font-size: 12px;">Get 1-Hour Free Access!</p>
-        <input type="text" id="reg-user" placeholder="Choose Username">
-        <div class="pass-container">
-            <input type="password" id="reg-pass" placeholder="Create Password">
-            <span class="eye-icon" onclick="togglePass('reg-pass')">👁️</span>
+        <div id="register-form" style="display:none;">
+            <p class="trial-tag">Get 1-Hour Free Access!</p>
+            <input type="text" id="reg-user" placeholder="Choose Username">
+            <div class="pass-container">
+                <input type="password" id="reg-pass" placeholder="Create Password">
+                <span class="eye-icon" onclick="togglePass('reg-pass')">👁️</span>
+            </div>
+            <button class="btn-auth" onclick="registerUser()">CREATE ACCOUNT</button>
+            <p class="auth-toggle">Have an account? <span onclick="toggleAuth('login')">Login here</span></p>
         </div>
-        <button class="btn-auth" onclick="registerUser()">CREATE ACCOUNT</button>
-        <p class="auth-toggle">Have an account? <span onclick="toggleAuth('login')">Login here</span></p>
     </div>
 </div>
 
-<div id="hack-overlay" style="display: none;"><canvas id="matrix-canvas"></canvas></div>
-
-<div class="top-bar">
-    <div class="logo">SE7EN</div>
-    <div class="search-box">
-        <i class="fas fa-search" style="color:#444;"></i>
-        <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
+<div id="main-content" style="display:none;">
+    <div id="status-bar" style="background: rgba(0,0,0,0.5); padding: 5px; border-radius: 20px; width: fit-content; margin: 10px auto; border: 1px solid #ff8c00; text-align:center;">
+        <span style="color: #00ff00; animation: blink 1s infinite;">●</span>
+        <span id="user-count" style="color: white; font-family: 'Courier New', monospace; font-size: 13px;">34</span>
+        <span style="color: #ccc; font-size: 12px;">users streaming now</span>
     </div>
-    <button id="logout-btn" onclick="logout()" style="display:none; cursor:pointer; padding:8px 15px; background:#FF4500; color:white; border:none; border-radius:20px; font-weight:bold; font-size:11px;">LOGOUT</button>
-</div>
 
-<div class="hero" id="hero">
-    <div class="hero-info">
-        <h1 id="h-title">Loading...</h1>
-        <p id="h-desc">...</p>
-        <button id="h-btn" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;"><i class="fas fa-play"></i> &nbsp;WATCH NOW</button>
+    <div class="top-bar">
+        <div class="logo">SE7EN</div>
+        <div class="search-box">
+            <i class="fas fa-search" style="color:#444;"></i>
+            <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
+        </div>
+        <button id="logout-btn" onclick="logout()" style="display:block;">LOGOUT</button>
     </div>
-</div>
 
-<div class="main-content">
+    <div class="hero" id="hero">
+        <div class="hero-info">
+            <h1 id="h-title">Loading...</h1>
+            <p id="h-desc">...</p>
+            <button id="h-btn" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;"><i class="fas fa-play"></i> &nbsp;WATCH NOW</button>
+        </div>
+    </div>
+
     <div class="row">
         <h2 id="row-title">🔥 Trending Today</h2>
         <div class="grid" id="main-grid"></div>
     </div>
-</div>
 
-<div class="bottom-nav">
-    <div class="nav-btn active" onclick="location.reload()"><i class="fas fa-home"></i><span>Home</span></div>
-    <div class="nav-btn" onclick="fetchType('movie')"><i class="fas fa-film"></i><span>Movies</span></div>
-    <div class="nav-btn" onclick="fetchType('tv')"><i class="fas fa-tv"></i><span>TV Shows</span></div>
-    <div class="nav-btn" onclick="fetchLang('ko')"><i class="fas fa-heart"></i><span>K-Drama</span></div>
-    <div class="nav-btn" onclick="fetchLang('ja')"><i class="fas fa-dragon"></i><span>Anime</span></div>
-</div>
-
-<div id="player-overlay">
-    <div class="player-header">
-        <span id="p-title" style="font-weight:600; color:var(--accent);">Loading...</span>
-        <i class="fas fa-times" onclick="closePlayer()" style="font-size: 24px; cursor:pointer; color:#fff;"></i>
-    </div>
-    <div class="player-container">
-        <div class="video-section">
-            <div class="video-wrapper">
-                
-                <iframe id="v-frame" src="" allowfullscreen 
-                    sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation">
-                </iframe>
-
-            </div>
-            <div id="server-list" style="display:flex; gap:8px; margin-top:15px; justify-content:center; flex-wrap:wrap;"></div>
-        </div>
-        <div class="episode-section" id="ep-section">
-            <div id="ep-list"></div>
-        </div>
+    <div class="bottom-nav">
+        <div class="nav-btn active" onclick="location.reload()"><i class="fas fa-home"></i><span>Home</span></div>
+        <div class="nav-btn" onclick="fetchType('movie')"><i class="fas fa-film"></i><span>Movies</span></div>
+        <div class="nav-btn" onclick="fetchType('tv')"><i class="fas fa-tv"></i><span>TV Shows</span></div>
+        <div class="nav-btn" onclick="fetchLang('ko')"><i class="fas fa-heart"></i><span>K-Drama</span></div>
+        <div class="nav-btn" onclick="fetchLang('ja')"><i class="fas fa-dragon"></i><span>Anime</span></div>
     </div>
 </div>
 
@@ -534,18 +514,15 @@ async function checkPass() {
 window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const loginScreen = document.getElementById('login-screen');
-    const mainContent = document.querySelector('main'); // O unsa man ang ID sa imong main content
-    const navBar = document.querySelector('.bottom-nav'); // Ang imong menu sa ubos
+    const mainContent = document.getElementById('main-content'); // Gi-fix ang ID diri
 
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
         if (mainContent) mainContent.style.display = 'block';
-        if (navBar) navBar.style.display = 'flex';
+        startMatrix(); // Tawgon ang Matrix effect inig sulod
     } else {
-        // KON WALA PA NAKA-LOGIN: ITAGO ANG TANAN EXCEPT LOGIN
         if (loginScreen) loginScreen.style.display = 'flex';
         if (mainContent) mainContent.style.display = 'none';
-        if (navBar) navBar.style.display = 'none'; // I-hide ang menu sa ubos!
     }
 };
 
@@ -570,44 +547,6 @@ window.onload = () => {
         document.getElementById('row-title').innerText = "Results: " + q;
         render(d.results);
     }
-
-    const dragBtn = document.getElementById("key-nav-btn");
-    let active = false;
-    let currentX, currentY, initialX, initialY;
-    let xOffset = 0, yOffset = 0;
-
-    const dragStart = (e) => {
-        // Mo-detect kung mouse o touch ang gigamit
-        initialX = (e.type === "touchstart" ? e.touches[0].clientX : e.clientX) - xOffset;
-        initialY = (e.type === "touchstart" ? e.touches[0].clientY : e.clientY) - yOffset;
-        if (e.target === dragBtn) active = true;
-    };
-
-    const dragEnd = () => {
-        initialX = currentX;
-        initialY = currentY;
-        active = false;
-    };
-
-    const drag = (e) => {
-        if (active) {
-            e.preventDefault();
-            currentX = (e.type === "touchmove" ? e.touches[0].clientX : e.clientX) - initialX;
-            currentY = (e.type === "touchmove" ? e.touches[0].clientY : e.clientY) - initialY;
-            xOffset = currentX;
-            yOffset = currentY;
-            // Mao ni ang mo-lihok sa button sa screen
-            dragBtn.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-        }
-    };
-
-    // Mga Listeners para sa Mobile ug Desktop
-    document.addEventListener("touchstart", dragStart, false);
-    document.addEventListener("touchend", dragEnd, false);
-    document.addEventListener("touchmove", drag, { passive: false });
-    document.addEventListener("mousedown", dragStart, false);
-    document.addEventListener("mouseup", dragEnd, false);
-    document.addEventListener("mousemove", drag, false);
 
 function showLogin() {
     const loginScreen = document.getElementById('login-screen');
