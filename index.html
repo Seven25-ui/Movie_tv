@@ -557,23 +557,22 @@ async function checkPass() {
     }
 
 window.onload = () => {
-    // 1. KUHAON ANG STATUS GIKAN SA STORAGE
+    // 1. KUHAON ANG DATA (Siguroha nga Number ang makuha sa trial)
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const trialStartRaw = localStorage.getItem('se7en_trial_start');
     const loginScreen = document.getElementById('login-screen');
     const oneHour = 3600000; 
 
-    // 2. PRIORITY #1: CHECK KON NAKA-PREMIUM (PASSCODE)
-    // Kinahanglan kini ang unahon para dili ka ma-block sa trial logic
+    // 2. PRIORITY #1: PASSCODE CHECK (Dili ma-block sa trial)
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
         if (typeof startMatrix === "function") startMatrix();
-        console.log("Welcome back, Premium User!");
-        return; // Hunong na diri, ayaw na i-check ang trial
+        console.log("Premium Access: ON");
+        return; 
     }
 
-    // 3. PRIORITY #2: CHECK KON NAKA-FREE TRIAL
-    if (trialStartRaw && trialStartRaw !== "undefined") {
+    // 3. PRIORITY #2: FREE TRIAL CHECK
+    if (trialStartRaw && trialStartRaw !== "undefined" && trialStartRaw !== "null") {
         const trialStart = parseInt(trialStartRaw);
         const timePassed = Date.now() - trialStart;
         
@@ -583,41 +582,33 @@ window.onload = () => {
             if (typeof startMatrix === "function") startMatrix();
             startCountdown(); 
         } else {
-            // Expired na - Ipakita ang login screen ug i-disable ang Free Box
-            if (loginScreen) loginScreen.style.display = 'flex';
+            // Expired na - I-lock ang trial button pero ayaw i-lock ang passcode input
             const freeBox = document.getElementById('free-trial-box');
             if (freeBox) {
                 freeBox.style.opacity = "0.5";
                 freeBox.innerHTML = "<b>1 Hour</b><br>USED";
-                freeBox.onclick = () => alert("Trial Used na! Buy a key.");
+                freeBox.onclick = () => alert("Trial Used na! Use a Premium Key.");
             }
         }
-    } else {
-        // BAG-ONG USER O WALA PA KA-LOGIN: Ipakita ang login screen
-        if (loginScreen) loginScreen.style.display = 'flex';
     }
 };
 
-// --- KANI NGA FUNCTION ANG I-FIX NATO ---
+// --- GI-FIX NGA CLAIM FUNCTION ---
 function claimFreeTrial() {
+    // I-clear ang karaan nga hugaw sa memory sa dili pa mo-start
     const trialStart = localStorage.getItem('se7en_trial_start');
 
-    // Check kon "null" ba gyud o "undefined"
-    if (!trialStart || trialStart === "undefined") {
-        // BAG-ONG USER: Hatagi og access
+    if (!trialStart || trialStart === "undefined" || trialStart === "null") {
+        // Bag-ong user: Hatagi og timestamp
         localStorage.setItem('se7en_trial_start', Date.now().toString());
-        alert("🎁 1-Hour Free Access Granted! Enjoy, SE7EN User!");
-        location.reload(); // I-reload para mo-trigger ang window.onload condition #2
+        alert("🎁 1-Hour Free Access Granted! Enjoy, Aloy!");
+        location.reload(); 
     } else {
-        // DAAN NGA USER: Check kon expire na ba
         const timePassed = Date.now() - parseInt(trialStart);
-        const oneHour = 3600000;
-
-        if (timePassed >= oneHour) {
-            alert("❌ Sorry, Trial Used na gyud! Please purchase a key.");
+        if (timePassed >= 3600000) {
+            alert("❌ Sorry, used na imong free trial.");
         } else {
-            // Kon naa pa sa sulod sa 1 hour, i-reload lang para mo-login
-            location.reload();
+            location.reload(); // Pasudla kon naa pay oras
         }
     }
 }
