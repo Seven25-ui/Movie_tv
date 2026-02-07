@@ -524,12 +524,12 @@ async function checkPass() {
 window.onload = () => {
     const isAuth = localStorage.getItem('se7en_auth') === 'true';
     const loginScreen = document.getElementById('login-screen');
-    const mainContent = document.getElementById('main-content'); // Gi-fix ang ID diri
+    const mainContent = document.getElementById('main-content'); 
 
     if (isAuth) {
         if (loginScreen) loginScreen.style.display = 'none';
         if (mainContent) mainContent.style.display = 'block';
-        startMatrix(); // Tawgon ang Matrix effect inig sulod
+        startMatrix(); // Mao ni ang mo-load sa movies human sa 3 seconds
     } else {
         if (loginScreen) loginScreen.style.display = 'flex';
         if (mainContent) mainContent.style.display = 'none';
