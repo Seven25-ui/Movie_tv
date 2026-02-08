@@ -467,30 +467,29 @@ async function checkPass() {
         });
     }
 
-// FIX 1: Ang Switcher (Duha na ka server: vidsrc ug embed.su)
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe'); 
-    if(!frame) return console.error("Missing: video-iframe");
+    if(!frame) return;
 
-    // Visual feedback para sa buttons
+    // Highlight para sa Server Buttons
     if(btn) {
         btn.parentElement.querySelectorAll('button').forEach(b => {
-            b.style.background = "#1a1a1a"; // Balik sa itom
-            b.classList.remove('active');
+            b.style.background = "#1a1a1a";
+            b.style.border = "1px solid #333";
         });
-        btn.style.background = "#E95420"; // Highlight ang napili
-        btn.classList.add('active');
+        btn.style.background = "#E95420"; 
+        btn.style.border = "1px solid #ff8c00";
     }
 
     let url = "";
     if(currentType === 'movie') {
-        // SERVER 1: Vidsrc (Nindot) | SERVER 2: Embed.su (Backup)
+        // Gigamit na nato ang vidsrc.cc base sa imong gusto
         url = (server === 'vidsrc_cc') ? 
-            `https://vidsrc.to/embed/movie/${currentID}` : 
+            `https://vidsrc.cc/v2/embed/movie/${currentID}` : 
             `https://embed.su/embed/movie/${currentID}`;
     } else {
         url = (server === 'vidsrc_cc') ? 
-            `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}` : 
+            `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}` : 
             `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
     }
     frame.src = url;
@@ -544,18 +543,45 @@ async function play(id, type, title) {
     }
 }
 
-// FIX 3: loadEpisodes (Gi-sync ang IDs)
 async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
+    if(!data) return;
+    
     episodeList = data.episodes;
     const epG = document.getElementById('episodes-grid'); 
     epG.innerHTML = '';
+
     data.episodes.forEach(ep => {
         const btn = document.createElement('button');
-        btn.className = 'ep-btn' + (ep.episode_number === currentE ? ' active' : '');
-        btn.style = "padding:10px; background:#222; color:#fff; border:1px solid #444; cursor:pointer; border-radius:5px;";
+        const isActive = ep.episode_number === currentE;
+
+        // Base Style sa Episode Button
+        btn.style.padding = "10px";
+        btn.style.background = isActive ? "#E95420" : "#222"; // Highlight kon active
+        btn.style.color = "#fff";
+        btn.style.border = isActive ? "1px solid #ff8c00" : "1px solid #444";
+        btn.style.cursor = "pointer";
+        btn.style.borderRadius = "5px";
+        btn.style.transition = "0.3s"; // Para hamis ang hover
         btn.innerText = ep.episode_number;
-        btn.onclick = () => playEp(sNum, ep.episode_number);
+
+        // HOVER EFFECT (Inig itungod ang mouse)
+        btn.onmouseover = () => { if(ep.episode_number !== currentE) btn.style.background = "#444"; };
+        btn.onmouseout = () => { if(ep.episode_number !== currentE) btn.style.background = "#222"; };
+
+        // CLICK EFFECT
+        btn.onclick = () => {
+            playEp(sNum, ep.episode_number);
+            
+            // I-reset tanan buttons ug highlight-an ang gi-click
+            document.querySelectorAll('#episodes-grid button').forEach(b => {
+                b.style.background = "#222";
+                b.style.border = "1px solid #444";
+            });
+            btn.style.background = "#E95420";
+            btn.style.border = "1px solid #ff8c00";
+        };
+
         epG.appendChild(btn);
     });
 }
@@ -567,10 +593,15 @@ function closePlayer() {
     document.getElementById('video-iframe').src = ''; // Mao ni saktong ID
 }
 
-// FIX 5: playEp (Para mo-refresh ang video inig pindot sa number)
 function playEp(sNum, eNum) {
-    currentS = sNum; currentE = eNum;
-    switchServer('vidsrc_cc'); // Default sa Server 1 inig switch episode
+    currentS = sNum; 
+    currentE = eNum;
+    
+    // Inig click sa episode, mo-play dretso sa vidsrc.cc
+    switchServer('vidsrc_cc'); 
+    
+    // I-scroll pasaka para makita ang video
+    document.getElementById('player-overlay').scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // FIX 6: loadSeason
