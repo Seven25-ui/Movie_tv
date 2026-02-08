@@ -513,36 +513,6 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let currentID, currentType, currentS=1, currentE=1, episodeList = [];
     
-async function securityCheck() {
-    // Kuhaon ang user gikan sa localStorage
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-
-    if (!user) {
-        window.location.href = 'index.html';
-        return;
-    }
-
-    // Gigamit ang imong original 'supabaseClient'
-    const { data, error } = await supabaseClient
-        .from('se7en_users')
-        .select('username')
-        .eq('username', user.username)
-        .single();
-
-    // Kon naay error o wala na sa database, i-kickout
-    if (error || !data) {
-        alert("🚨 Session Expired or Account Deleted. Redirecting to Login...");
-        localStorage.clear();
-        window.location.href = 'index.html';
-    }
-}
-
-// Daganon ang check inig load sa page
-securityCheck();
-
-// Padayon ang check matag 1 ka minuto
-setInterval(securityCheck, 60000);
-
     async function apiCall(endpoint) {
         const API_KEY = "3455ebd9bf16f0b30d2ed31128bf933c";
         const connector = endpoint.includes('?') ? '&' : '?';
