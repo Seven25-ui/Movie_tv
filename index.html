@@ -966,27 +966,47 @@ async function loginUser() {
         return;
     }
 
-    // 1. I-save ang session
-    localStorage.setItem('se7en_auth', 'true');
-    localStorage.setItem('se7en_username', user);
+    // 1. Check kon VVIP (Admin like Aloy)
+    if (data.status === 'active') {
+        localStorage.setItem('se7en_auth', 'true');
+        localStorage.setItem('se7en_username', user);
+        location.reload();
+        return;
+    }
 
-    // 2. TRIAL CHECK: Kon free_trial siya ug nagsugod na, i-trigger ang countdown
+    // 2. Check kon PENDING na daan sa database
+    if (data.status === 'pending') {
+        alert("⚠️ Imong account kay PENDING. Palihog kontak ni Aloy para sa VIP access.");
+        return;
+    }
+
+    // 3. ANTI-ALKANSI: Check sa oras inig Login
     if (data.status === 'free_trial' && data.trial_started_at) {
-        // I-save sa temporary storage para ma-resume inig reload
+        const now = new Date();
+        const start = new Date(data.trial_started_at);
+        const diffInMinutes = Math.floor((now - start) / 1000 / 60);
+
+        // Kon lapas na sa 60 minutes, i-update sa database ug i-block
+        if (diffInMinutes >= 60) {
+            await supabaseClient
+                .from('se7en_users')
+                .update({ status: 'pending' })
+                .eq('username', user);
+                
+            alert("🚫 TRIAL EXPIRED NA! Kontak ni Aloy para sa VIP Access.");
+            return; // Dili pasudlon sa movies.html
+        }
+
+        // Kon wala pa ma-expire, i-save ang start time para sa timer
         localStorage.setItem('se7en_trial_start', data.trial_started_at);
     }
 
-    // 3. I-check kon PENDING na ba (Expired na)
-    if (data.status === 'pending') {
-        alert("⚠️ Imong account kay PENDING. Palihog kontak ni Aloy para sa bayad.");
-        // Pwede ra nimo dili i-login kon pending na
-        return; 
-    }
+    // 4. Kon nakalusot sa tanang checks, i-save ang session
+    localStorage.setItem('se7en_auth', 'true');
+    localStorage.setItem('se7en_username', user);
 
     location.reload();
 }
-
-let trialTimer; // Ibutang ni sa pinakataas gyud sa script kon mahimo
 
 async function startTrialCountdown(startTime) {
     if (trialTimer) clearInterval(trialTimer);
