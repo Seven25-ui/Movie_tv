@@ -222,6 +222,47 @@
     border-radius: 4px;
 }
 
+/* 1. ANIMATED BORDER GLOW - Para dili boring ang box */
+@keyframes borderGlow {
+    0% { border-color: rgba(255, 69, 0, 0.2); }
+    50% { border-color: rgba(255, 69, 0, 0.7); box-shadow: 0 0 20px rgba(255, 69, 0, 0.2); }
+    100% { border-color: rgba(255, 69, 0, 0.2); }
+}
+
+.auth-box {
+    animation: borderGlow 4s infinite ease-in-out; /* Hinay nga siga-siga sa border */
+}
+
+/* 2. BUTTON HOVER SHINE - Para premium feel inig itungod ang mouse */
+.btn-auth {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease !important;
+}
+
+.btn-auth:hover {
+    transform: translateY(-2px); /* Mo-alsa gamay */
+    box-shadow: 0 8px 25px rgba(255, 69, 0, 0.5); /* Siga sa ubos sa button */
+    background: #ff5e1a !important;
+}
+
+/* 3. INPUT FOCUS GLOW - Para techy tan-awon inig type */
+.auth-box input:focus {
+    border-color: #ff4500 !important;
+    background: rgba(45, 45, 45, 0.9) !important;
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.1); /* Gamay nga glow sa input */
+}
+
+/* 4. SMOOTH TRANSITION PARA SA MATA (EYE ICON) */
+.eye-icon {
+    transition: transform 0.2s ease;
+}
+
+.eye-icon:hover {
+    transform: scale(1.2); /* Mo-dako gamay ang mata inig hover */
+    color: #ff4500;
+}
+
     </style>
 </head>
 <body>
