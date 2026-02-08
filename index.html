@@ -1182,5 +1182,57 @@ function showNotification() {
 setInterval(showNotification, 25000);
 </script>
 
+<a href="https://m.me/61580883153632" class="aloy-messenger-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg" alt="Messenger">
+    <span class="messenger-text">Chat Admin</span>
+</a>
+
+<style>
+.aloy-messenger-float {
+    position: fixed;
+    bottom: 30px; /* Gilay-on gikan sa ubos */
+    right: 30px;  /* Gilay-on gikan sa tuo */
+    background-color: #0084FF; /* Messenger Blue */
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 9999; /* Sigurado nga naa sa ibabaw sa tanan */
+    transition: all 0.3s ease;
+}
+
+.aloy-messenger-float img {
+    width: 30px;
+    height: 30px;
+}
+
+.messenger-text {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+.aloy-messenger-float:hover {
+    transform: scale(1.1);
+    background-color: #0073e6;
+}
+
+/* Para sa gagmay nga screen/CP */
+@media screen and (max-width: 480px) {
+    .aloy-messenger-float {
+        bottom: 20px;
+        right: 20px;
+        padding: 8px 12px;
+    }
+    .messenger-text {
+        font-size: 12px;
+    }
+}
+</style>
+
 </body>
 </html>
