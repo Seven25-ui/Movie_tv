@@ -573,6 +573,42 @@ async function checkPass() {
     }
 }
 
+async function verifyUserStatus() {
+    const user = localStorage.getItem('se7en_username');
+
+    // Kon walay user sa storage, pabalikon sa login
+    if (!user) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('se7en_users')
+            .select('status')
+            .eq('username', user)
+            .single();
+
+        // KANI ANG IMPORTANTE:
+        // Kon naay error (gi-delete na nimo sa DB) O kon 'pending'/'expired' ang status
+        if (error || !data || data.status === 'pending') {
+            alert("🚨 ACCESS DENIED: Your account is either deleted, expired, or pending.");
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    } catch (err) {
+        // Kon naay bisan unsang error sa network, i-kickout para sigurado
+        console.error("Security Check Error:", err);
+        window.location.href = "index.html";
+    }
+}
+
+// Daganon dretso
+verifyUserStatus();
+
+// I-check matag 30 segundos para dili gyud sila makalusot
+setInterval(verifyUserStatus, 30000);
+
     function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
 
     async function init() {
