@@ -817,22 +817,77 @@ function togglePass(id) {
 }
 
 // 3. REGISTER FUNCTION
+
 async function registerUser() {
     const user = document.getElementById('reg-user').value.trim();
     const pass = document.getElementById('reg-pass').value.trim();
 
     if(!user || !pass) return alert("Ayaw kalimti ang username ug password!");
 
-    // GI-FIX: supabaseClient na ang gamit diri
+    // Gi-insert nato ang status ug gi-andam ang trial_started_at field
     const { error } = await supabaseClient
         .from('se7en_users')
-        .insert([{ username: user, password: pass, status: 'free_trial' }]);
+        .insert([{ 
+            username: user, 
+            password: pass, 
+            status: 'free_trial',
+            trial_started_at: null // Null pa ni kay wala pa siya nagsugod og tan-aw
+        }]);
 
     if (error) {
         alert("❌ Error: " + error.message);
     } else {
-        alert("✅ Success! Registered na ka. Login na, Master.");
+        alert("✅ Success! Registered na ka. Naa kay 1-hour FREE trial inig start nimo og tan-aw.");
         toggleAuth('login');
+    }
+}
+
+async function checkTrialAndPlay(sNum, eNum) {
+    const username = localStorage.getItem('se7en_username');
+
+    // 1. Kuhaon ang data sa user gikan sa Supabase
+    const { data: user, error } = await supabaseClient
+        .from('se7en_users')
+        .select('*')
+        .eq('username', username)
+        .single();
+
+    if (user.status === 'pending' || user.status === 'expired') {
+        alert("Hurot na imong trial, Aloy! Contact me for VIP access.");
+        return; // Dili na mo-load ang player
+    }
+
+    if (user.status === 'free_trial') {
+        const now = new Date();
+
+        if (!user.trial_started_at) {
+            // FIRST TIME MO-TAN-AW: I-save ang start time sa Supabase
+            await supabaseClient
+                .from('se7en_users')
+                .update({ trial_started_at: now })
+                .eq('username', username);
+            
+            playEp(sNum, eNum); // Sugod tan-aw
+        } else {
+            // NAGSUGOD NA: I-calculate ang oras (bisan laing device)
+            const startTime = new Date(user.trial_started_at);
+            const diffInMinutes = Math.floor((now - startTime) / 1000 / 60);
+
+            if (diffInMinutes >= 60) {
+                // SOBRA NA 1 HOUR: I-set to pending dretso
+                await supabaseClient
+                    .from('se7en_users')
+                    .update({ status: 'pending' })
+                    .eq('username', username);
+                
+                alert("Hurot na ang imong 1-hour trial. Login expired!");
+                location.reload(); // I-kickout dretso sa login
+            } else {
+                playEp(sNum, eNum); // Naa pa'y nabilin nga oras, padayon!
+            }
+        }
+    } else if (user.status === 'active') {
+        playEp(sNum, eNum); // VIP user, no limits!
     }
 }
 
