@@ -496,7 +496,7 @@
         // Broken link check (#)
         if (link === "#") {
             event.preventDefault();
-            alert("Sorry! Free keys are currently out of stock. Check back later.");
+ localStorage.getItemlocalStorage.getItemlocalStorage.getItem           alert("Sorry! Free keys are currently out of stock. Check back later.");
         } else {
             console.log("Redirecting...");
         }
@@ -524,22 +524,50 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         } catch(e) { return null; }
     }
 
+// Kada refresh sa movies page, i-check ang status sa DB
+async function verifyUserStatus() {
+    const user = localStorage.getItem('se7en_username');
+    const { data } = await supabaseClient.from('se7en_users').select('status').eq('username', user).single();
+
+    if (data.status === 'pending') {
+        alert("🚫 EXPIRED NA! Login og balik.");
+        localStorage.clear();
+        window.location.href = "index.html";
+    }
+}
+verifyUserStatus();
+
 async function checkPass() {
     const input = document.getElementById('pass-input').value.trim();
     const loginErr = document.getElementById('login-err');
+    const currentUser = localStorage.getItem('se7en_username'); // Kinahanglan nato ang username
 
-    const { data, error } = await supabaseClient
+    // 1. Check kon ang Passcode (Key) sakto ba sa 'access_keys' table
+    const { data: keyData, error: keyError } = await supabaseClient
         .from('access_keys')
-        .select('key_code, expiry_date')
+        .select('key_code')
         .eq('key_code', input)
         .maybeSingle();
 
-    if (data) {
-        // --- KANI NGA PART ANG IMPORTANTE PARA DILI KA ORASAN ---
+    if (keyData) {
+        // 2. Kon sakto ang passcode, i-update nato ang status sa user sa database ngadto sa 'active'
+        // Mao ni ang "VIP Pass" - dili na siya ma-expire
+        const { error: updateError } = await supabaseClient
+            .from('se7en_users')
+            .update({ status: 'active' }) // Himuon na siyang VIP/Permanent
+            .eq('username', currentUser);
+
+        if (updateError) {
+            console.error("Update failed:", updateError);
+            return alert("Naay problema sa pag-update sa imong account.");
+        }
+
+        // 3. I-save ang session ug limpyohi ang trial data
         localStorage.setItem('se7en_auth', 'true');
-        localStorage.removeItem('se7en_trial_start'); // I-delete ang timer data
-        
-        location.reload(); 
+        localStorage.removeItem('se7en_trial_start'); 
+
+        alert("✅ VIP ACCESS UNLOCKED! Enjoy watching.");
+        location.reload();
     } else {
         loginErr.style.display = 'block';
         loginErr.innerText = "Wrong 🙅‍ Passcode, PM aloy Now!";
