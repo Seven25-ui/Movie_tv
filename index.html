@@ -467,48 +467,71 @@ async function checkPass() {
         });
     }
 
-// FIX 1: switchServer (Gi-usab ang 'v-frame' ngadto sa 'video-iframe')
+// FIX 1: Ang Switcher (Duha na ka server: vidsrc ug embed.su)
 function switchServer(server, btn = null, s = currentS, e = currentE) {
-    const frame = document.getElementById('video-iframe'); // Kani dapat!
-    if(!frame) return console.error("Wala makita ang video-iframe!");
+    const frame = document.getElementById('video-iframe'); 
+    if(!frame) return console.error("Missing: video-iframe");
 
+    // Visual feedback para sa buttons
     if(btn) {
-        btn.parentElement.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+        btn.parentElement.querySelectorAll('button').forEach(b => {
+            b.style.background = "#1a1a1a"; // Balik sa itom
+            b.classList.remove('active');
+        });
+        btn.style.background = "#E95420"; // Highlight ang napili
         btn.classList.add('active');
     }
 
     let url = "";
     if(currentType === 'movie') {
-        // Gigamit nako ang vidsrc.to kay mas stable para sa imong setup
-        url = (server === 'vidsrc_cc') ? `https://vidsrc.to/embed/movie/${currentID}` : `https://embed.su/embed/movie/${currentID}`;
+        // SERVER 1: Vidsrc (Nindot) | SERVER 2: Embed.su (Backup)
+        url = (server === 'vidsrc_cc') ? 
+            `https://vidsrc.to/embed/movie/${currentID}` : 
+            `https://embed.su/embed/movie/${currentID}`;
     } else {
-        url = (server === 'vidsrc_cc') ? `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}` : `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
+        url = (server === 'vidsrc_cc') ? 
+            `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}` : 
+            `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
     }
     frame.src = url;
 }
 
-// FIX 2: play function (Gi-sync ang IDs sa imong HTML)
+// FIX 2: Play Function (Gi-update ang server buttons container)
 async function play(id, type, title) {
     currentID = id; currentType = type; currentS = 1; currentE = 1;
-    
+
     const overlay = document.getElementById('player-overlay');
     overlay.style.display = 'block';
     document.body.style.overflow = 'hidden';
     document.getElementById('p-title').innerText = title;
+    document.getElementById('video-iframe').src = ''; // Clear para dili saba
 
-    // Kinahanglan nimo i-clear ang iframe src una para dili mo-play ang karaan
-    document.getElementById('video-iframe').src = '';
+    // Diri nato ibutang ang duha ka Server Buttons sa ibabaw sa episodes
+    const epBox = document.getElementById('episode-area'); 
+    const serverSelectionHTML = `
+        <div id="server-selector" style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
+            <button onclick="switchServer('vidsrc_cc', this)" style="padding:10px; background:#E95420; color:#fff; border:none; border-radius:5px; cursor:pointer; flex:1;">🚀 SERVER 1</button>
+            <button onclick="switchServer('embed_su', this)" style="padding:10px; background:#1a1a1a; color:#fff; border:none; border-radius:5px; cursor:pointer; flex:1;">🛡️ SERVER 2</button>
+        </div>
+    `;
 
-    const epBox = document.getElementById('episode-area'); // Gi-sync sa imong HTML ID
     if(type === 'movie') {
-        epBox.style.display = 'none';
+        // Ipakita ra ang server buttons kon movie
+        epBox.style.display = 'block'; 
+        epBox.innerHTML = serverSelectionHTML + '<p style="text-align:center; color:#555;">Movie Mode: Enjoy watching!</p>';
         switchServer('vidsrc_cc');
     } else {
         epBox.style.display = 'block';
         const data = await apiCall(`/tv/${id}`);
+        
+        // I-set ang UI para sa TV shows (Seasons + Server buttons)
+        let html = serverSelectionHTML;
+        html += `<select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px;"></select>`;
+        html += `<div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap:10px;"></div>`;
+        epBox.innerHTML = html;
+
         const select = document.getElementById('season-select');
-        select.innerHTML = '';
-        data.seasons.forEach(s => { 
+        data.seasons.forEach(s => {
             if(s.season_number > 0) {
                 const opt = document.createElement('option');
                 opt.value = s.season_number;
@@ -517,15 +540,15 @@ async function play(id, type, title) {
             }
         });
         await loadEpisodes(id, 1);
-        switchServer('vidsrc_cc', null, 1, 1);
+        switchServer('vidsrc_cc');
     }
 }
 
-// FIX 3: loadEpisodes (Para sa grid)
+// FIX 3: loadEpisodes (Gi-sync ang IDs)
 async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
     episodeList = data.episodes;
-    const epG = document.getElementById('episodes-grid'); // Gi-sync sa imong HTML ID
+    const epG = document.getElementById('episodes-grid'); 
     epG.innerHTML = '';
     data.episodes.forEach(ep => {
         const btn = document.createElement('button');
@@ -535,9 +558,26 @@ async function loadEpisodes(id, sNum) {
         btn.onclick = () => playEp(sNum, ep.episode_number);
         epG.appendChild(btn);
     });
-}    
+}
 
-    function closePlayer() { document.getElementById('player-overlay').style.display = 'none'; document.body.style.overflow = 'auto'; document.getElementById('v-frame').src = ''; }
+// FIX 4: closePlayer (Gi-fix ang 'v-frame' error)
+function closePlayer() { 
+    document.getElementById('player-overlay').style.display = 'none'; 
+    document.body.style.overflow = 'auto'; 
+    document.getElementById('video-iframe').src = ''; // Mao ni saktong ID
+}
+
+// FIX 5: playEp (Para mo-refresh ang video inig pindot sa number)
+function playEp(sNum, eNum) {
+    currentS = sNum; currentE = eNum;
+    switchServer('vidsrc_cc'); // Default sa Server 1 inig switch episode
+}
+
+// FIX 6: loadSeason
+async function loadSeason(sNum) {
+    currentS = sNum;
+    await loadEpisodes(currentID, sNum);
+}
 
     function startMatrix() {
         const canvas = document.getElementById('matrix-canvas');
