@@ -509,39 +509,37 @@
     const TMDB = 'https://api.themoviedb.org/3';
     const IMG = 'https://image.tmdb.org/t/p/w500';
     const SB_URL = "https://sshdwibenypcekgczpgc.supabase.co";
-const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
-const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
+    
+    // GI-FIX: Gihimo nakong 'supabase' ang ngalan para mag-match sa ubos
+    const supabase = supabase.createClient(SB_URL, SB_KEY);
 
     let currentID, currentType, currentS=1, currentE=1, episodeList = [];
 
-async function securityCheck() {
-    const user = JSON.parse(localStorage.getItem('currentUser')); // Base sa imong login storage
+    async function securityCheck() {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
 
-    if (!user) {
-        window.location.href = 'index.html';
-        return;
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // Karon, kaila na ang script kon unsa ni nga 'supabase'
+        const { data, error } = await supabase
+            .from('se7en_users')
+            .select('username')
+            .eq('username', user.username)
+            .single();
+
+        if (error || !data) {
+            alert("🚨 Access Denied! Your session has expired or account was deleted. Please contact support.");
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
     }
 
-    // I-check sa Supabase kon naa pa ba ang user
-    const { data, error } = await supabase
-        .from('se7en_users')
-        .select('username')
-        .eq('username', user.username)
-        .single();
-
-    // Kon naay error (wala na sa DB) o wala nay data
-    if (error || !data) {
-        alert("🚨 Access Denied! Your session has expired or account was deleted. Please contact support.");
-        localStorage.clear(); // Limpyohan ang browser cache
-        window.location.href = 'index.html'; // I-kickout balik sa login
-    }
-}
-
-// Daganon ang check inig load sa page
-securityCheck();
-
-// Opsyonal: I-check matag 1 ka minuto para sigurado gyud
-setInterval(securityCheck, 60000);
+    securityCheck();
+    setInterval(securityCheck, 60000);
 
     async function apiCall(endpoint) {
         const API_KEY = "3455ebd9bf16f0b30d2ed31128bf933c";
