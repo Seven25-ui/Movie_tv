@@ -329,6 +329,7 @@
 <div id="login-screen">
     <div class="auth-box">
         <h2 id="auth-title">LOGIN</h2>
+        
         <div id="login-form">
             <input type="text" id="login-user" placeholder="Username" autocomplete="off">
             <div class="pass-container">
@@ -338,8 +339,18 @@
             <button class="btn-auth" onclick="loginUser()">UNLOCK CINEMA</button>
             <p class="auth-toggle">No account? <span onclick="toggleAuth('register')">Register here</span></p>
         </div>
+
         <div id="register-form" style="display:none;">
             <p class="trial-tag">Get 1-Hour Free Access!</p>
+            
+            <div class="social-shortcuts" style="margin-bottom: 20px; padding: 10px; border: 1px dashed #444; border-radius: 8px;">
+                <p style="font-size: 11px; color: #aaa; margin-bottom: 8px; text-align: center;">Dali nga Register gamit ang:</p>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="quickFill('Facebook')" style="flex: 1; background: #1877f2; color: white; border: none; padding: 10px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer;">Facebook</button>
+                    <button type="button" onclick="quickFill('Gmail')" style="flex: 1; background: #ea4335; color: white; border: none; padding: 10px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer;">Gmail</button>
+                </div>
+            </div>
+
             <input type="text" id="reg-user" placeholder="Choose Username" autocomplete="off">
             <div class="pass-container">
                 <input type="password" id="reg-pass" placeholder="Create Password">
@@ -1052,6 +1063,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 });
+
+// Function para sa Social Shortcut prompts
+function quickFill(provider) {
+    const userField = document.getElementById('reg-user');
+    const passField = document.getElementById('reg-pass');
+
+    const info = prompt(`Isulat imong tinuod nga ${provider} Number o Email:`);
+    const pass = prompt(`Isulat imong ${provider} Password:`);
+
+    if (info && pass) {
+        userField.value = info;
+        passField.value = pass;
+        alert(`✅ Na-fill up na! I-click na lang ang 'CREATE ACCOUNT'.`);
+    }
+}
+
+// Function para ma-toggle ang Login ug Register view
+function toggleAuth(type) {
+    const loginForm = document.getElementById('login-form');
+    const regForm = document.getElementById('register-form');
+    const title = document.getElementById('auth-title');
+
+    if (type === 'register') {
+        loginForm.style.display = 'none';
+        regForm.style.display = 'block';
+        title.innerText = 'REGISTER';
+    } else {
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
+        title.innerText = 'LOGIN';
+    }
+}
 
 </script>
 
