@@ -263,6 +263,57 @@
     color: #ff4500;
 }
 
+/* --- TRIAL NOTIFICATION POP-UP --- */
+#trial-notif {
+    position: fixed;
+    top: 20px;
+    right: -350px; /* Tago una sa kilid */
+    width: 320px;
+    background: rgba(20, 20, 20, 0.85); /* Dark transparent */
+    backdrop-filter: blur(12px); /* Glass blur effect */
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border-left: 6px solid #ff4500; /* Orange signature ni Aloy */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 99999; /* Siguroha nga naa sa pinakataas */
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Smooth bounce effect */
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Inig gawas sa notification */
+#trial-notif.show {
+    right: 20px;
+}
+
+#trial-notif h4 {
+    margin: 0 0 5px 0;
+    color: #ff4500;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#trial-notif p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+/* Optional: Gamay nga siga sa luyo para premium feel */
+#trial-notif::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(255, 69, 0, 0.1), transparent);
+    pointer-events: none;
+}
+
     </style>
 </head>
 <body>
@@ -852,42 +903,47 @@ async function checkTrialAndPlay(sNum, eNum) {
         .eq('username', username)
         .single();
 
+    if (error || !user) return alert("Error loading user data.");
+
+    // 2. Check kon Blocked na ba
     if (user.status === 'pending' || user.status === 'expired') {
         alert("Hurot na imong trial, Aloy! Contact me for VIP access.");
-        return; // Dili na mo-load ang player
+        return; 
     }
 
+    // 3. Trial Logic
     if (user.status === 'free_trial') {
         const now = new Date();
-
+        
         if (!user.trial_started_at) {
-            // FIRST TIME MO-TAN-AW: I-save ang start time sa Supabase
+            // FIRST TIME: I-save ang oras ug sugdi ang countdown
             await supabaseClient
                 .from('se7en_users')
                 .update({ trial_started_at: now })
                 .eq('username', username);
-            
-            playEp(sNum, eNum); // Sugod tan-aw
+
+            startTrialCountdown(now);
+            playEp(sNum, eNum);
         } else {
-            // NAGSUGOD NA: I-calculate ang oras (bisan laing device)
+            // NAGSUGOD NA: Check kon lapas na ba og 60 mins
             const startTime = new Date(user.trial_started_at);
             const diffInMinutes = Math.floor((now - startTime) / 1000 / 60);
 
             if (diffInMinutes >= 60) {
-                // SOBRA NA 1 HOUR: I-set to pending dretso
                 await supabaseClient
                     .from('se7en_users')
                     .update({ status: 'pending' })
                     .eq('username', username);
-                
+
                 alert("Hurot na ang imong 1-hour trial. Login expired!");
-                location.reload(); // I-kickout dretso sa login
+                location.reload();
             } else {
-                playEp(sNum, eNum); // Naa pa'y nabilin nga oras, padayon!
+                startTrialCountdown(user.trial_started_at); // I-resume ang timer
+                playEp(sNum, eNum);
             }
         }
     } else if (user.status === 'active') {
-        playEp(sNum, eNum); // VIP user, no limits!
+        playEp(sNum, eNum); // VIP user, walay limit
     }
 }
 
@@ -898,23 +954,84 @@ async function loginUser() {
 
     if(!user || !pass) return alert("Isulat imong login details!");
 
-    // GI-FIX: supabaseClient na ang gamit diri
     const { data, error } = await supabaseClient
         .from('se7en_users')
         .select('*')
         .eq('username', user)
         .eq('password', pass)
-        .maybeSingle(); // 'maybeSingle' para dili mo-error kon walay nakit-an
+        .maybeSingle();
 
     if (error || !data) {
         alert("❌ Invalid Login! Check imong username o password.");
         return;
     }
 
+    // 1. I-save ang session
     localStorage.setItem('se7en_auth', 'true');
     localStorage.setItem('se7en_username', user);
+
+    // 2. TRIAL CHECK: Kon free_trial siya ug nagsugod na, i-trigger ang countdown
+    if (data.status === 'free_trial' && data.trial_started_at) {
+        // I-save sa temporary storage para ma-resume inig reload
+        localStorage.setItem('se7en_trial_start', data.trial_started_at);
+    }
+
+    // 3. I-check kon PENDING na ba (Expired na)
+    if (data.status === 'pending') {
+        alert("⚠️ Imong account kay PENDING. Palihog kontak ni Aloy para sa bayad.");
+        // Pwede ra nimo dili i-login kon pending na
+        return; 
+    }
+
     location.reload();
 }
+
+let trialTimer; // Ibutang ni sa pinakataas gyud sa script kon mahimo
+
+async function startTrialCountdown(startTime) {
+    if (trialTimer) clearInterval(trialTimer);
+
+    trialTimer = setInterval(async () => {
+        const now = new Date();
+        const start = new Date(startTime);
+        const diffInMinutes = Math.floor((now - start) / 1000 / 60);
+
+        // 58 minutes = 2 minute warning
+        if (diffInMinutes === 58) {
+            showTrialPopUp("⚠️ 2 MINUTES Nabilin! Register as VIP para dili maputol imong gitan-aw!");
+        }
+
+        // 60 minutes = Kickout
+        if (diffInMinutes >= 60) {
+            clearInterval(trialTimer);
+            const user = localStorage.getItem('se7en_username');
+            await supabaseClient.from('se7en_users').update({ status: 'pending' }).eq('username', user);
+            alert("🚫 TRIAL EXPIRED! Kontak ni Aloy para sa VIP Access.");
+            location.reload();
+        }
+    }, 60000); // Check kada minuto
+}
+
+function showTrialPopUp(msg) {
+    let notif = document.getElementById('trial-notif') || document.createElement('div');
+    notif.id = 'trial-notif';
+    notif.className = 'show'; // Siguroha naay CSS ni (katong gihatag nako ganiha)
+    notif.innerHTML = `<h4>SE7EN CINEMA</h4><p>${msg}</p>`;
+    if (!document.getElementById('trial-notif')) document.body.appendChild(notif);
+    setTimeout(() => notif.classList.remove('show'), 10000);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = localStorage.getItem('se7en_username');
+    const auth = localStorage.getItem('se7en_auth');
+    
+    if (user && auth === 'true') {
+        const { data } = await supabaseClient.from('se7en_users').select('status, trial_started_at').eq('username', user).single();
+        if (data && data.status === 'free_trial' && data.trial_started_at) {
+            startTrialCountdown(data.trial_started_at); // Ipadayon ang ihap maski gi-refresh
+        }
+    }
+});
 
 </script>
 
