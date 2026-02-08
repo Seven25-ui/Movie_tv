@@ -576,9 +576,13 @@ async function checkPass() {
 async function verifyUserStatus() {
     const user = localStorage.getItem('se7en_username');
 
-    // Kon walay user sa storage, pabalikon sa login
+    // 1. Kon naa na sa login page, hunong na dretso ang script
+    if (window.location.href.includes("index.html")) {
+        return;
+    }
+
     if (!user) {
-        window.location.href = "index.html";
+        window.location.replace("index.html");
         return;
     }
 
@@ -589,25 +593,33 @@ async function verifyUserStatus() {
             .eq('username', user)
             .single();
 
-        // KANI ANG IMPORTANTE:
-        // Kon naay error (gi-delete na nimo sa DB) O kon 'pending'/'expired' ang status
+        // 2. Kon wala na sa DB (gi-delete) o pending
         if (error || !data || data.status === 'pending') {
-            alert("🚨 ACCESS DENIED: Your account is either deleted, expired, or pending.");
+            
+            // Limpyohan ang storage
             localStorage.clear();
-            window.location.href = "index.html";
+
+            // STOP ALL INTERVALS - Mao ni ang mopahunong sa sige og loading
+            let highestTimeoutId = setTimeout(";");
+            for (let i = 0 ; i < highestTimeoutId ; i++) {
+                clearTimeout(i); 
+                clearInterval(i);
+            }
+
+            // Gamit og replace para dili mo-loop ang address bar
+            window.location.replace("index.html");
         }
     } catch (err) {
-        // Kon naay bisan unsang error sa network, i-kickout para sigurado
-        console.error("Security Check Error:", err);
-        window.location.href = "index.html";
+        // Kon naay error sa net, ayaw lang sa i-redirect para dili ma-stuck
+        console.log("Checking status...");
     }
 }
 
 // Daganon dretso
 verifyUserStatus();
 
-// I-check matag 30 segundos para dili gyud sila makalusot
-setInterval(verifyUserStatus, 30000);
+// I-check matag 30 segundos
+const checker = setInterval(verifyUserStatus, 30000);
 
     function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
 
