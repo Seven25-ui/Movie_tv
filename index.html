@@ -959,12 +959,12 @@ async function checkTrialAndPlay(sNum, eNum) {
 }
 
 // 4. LOGIN FUNCTION
+
 async function loginUser() {
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value.trim();
 
-    if(!user || !pass) return alert("Isulat imong login details!");
-
+    // 1. Kuhaa ang user details sa Supabase
     const { data, error } = await supabaseClient
         .from('se7en_users')
         .select('*')
@@ -973,49 +973,36 @@ async function loginUser() {
         .maybeSingle();
 
     if (error || !data) {
-        alert("❌ Invalid Login! Check imong username o password.");
-        return;
+        return alert("❌ Invalid Login!");
     }
 
-    // 1. Check kon VVIP (Admin like Aloy)
-    if (data.status === 'active') {
-        localStorage.setItem('se7en_auth', 'true');
-        localStorage.setItem('se7en_username', user);
-        location.reload();
-        return;
-    }
-
-    // 2. Check kon PENDING na daan sa database
-    if (data.status === 'pending') {
-        alert("⚠️ Imong account kay PENDING. Palihog kontak ni Aloy para sa VIP access.");
-        return;
-    }
-
-    // 3. ANTI-ALKANSI: Check sa oras inig Login
+    // 2. PROTEKSYON: Check kon ang 'free_trial' nilapas na sa 1 ka oras
     if (data.status === 'free_trial' && data.trial_started_at) {
-        const now = new Date();
-        const start = new Date(data.trial_started_at);
-        const diffInMinutes = Math.floor((now - start) / 1000 / 60);
+        const startTime = new Date(data.trial_started_at).getTime();
+        const currentTime = new Date().getTime();
+        const oneHour = 60 * 60 * 1000; // 1 hour in ms
 
-        // Kon lapas na sa 60 minutes, i-update sa database ug i-block
-        if (diffInMinutes >= 60) {
+        if (currentTime - startTime >= oneHour) {
+            // EXPIRED NA! I-update dretso ang status sa Supabase para dili na kabalik
             await supabaseClient
                 .from('se7en_users')
                 .update({ status: 'pending' })
                 .eq('username', user);
-                
-            alert("🚫 TRIAL EXPIRED NA! Kontak ni Aloy para sa VIP Access.");
-            return; // Dili pasudlon sa movies.html
+            
+            alert("🚫 EXPIRED NA IMONG TRIAL! Kontak ni Aloy para sa VIP.");
+            return; // STOP! Dili pasudlon
         }
-
-        // Kon wala pa ma-expire, i-save ang start time para sa timer
-        localStorage.setItem('se7en_trial_start', data.trial_started_at);
     }
 
-    // 4. Kon nakalusot sa tanang checks, i-save ang session
+    // 3. Check kon 'pending' na ba ang status
+    if (data.status === 'pending') {
+        alert("⚠️ ACCOUNT PENDING! Please pay Aloy for access.");
+        return; // STOP!
+    }
+
+    // Kon 'active' o sulod pa sa 1 hour, pasudla
     localStorage.setItem('se7en_auth', 'true');
     localStorage.setItem('se7en_username', user);
-
     location.reload();
 }
 
