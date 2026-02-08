@@ -1022,6 +1022,8 @@ function showTrialPopUp(msg) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+showTrialPopUp("👋 TEST: Fullstack na ta, Aloy! Working ang Notification!");
     const user = localStorage.getItem('se7en_username');
     const auth = localStorage.getItem('se7en_auth');
     
@@ -1032,12 +1034,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 });
-
-// TESTER FUNCTION
-function forceShowTest() {
-    alert("Function is working!"); // Simple alert para mahibalo ta kon mo-andar ang JS
-    showTrialPopUp("TESTING CSS POPUP");
-}
 
 </script>
 
