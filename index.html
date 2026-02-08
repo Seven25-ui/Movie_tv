@@ -1182,57 +1182,98 @@ function showNotification() {
 setInterval(showNotification, 25000);
 </script>
 
-<a href="https://m.me/61580883153632" class="aloy-messenger-float" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg" alt="Messenger">
-    <span class="messenger-text">Chat Admin</span>
-</a>
+<div id="loginMessenger" class="draggable-btn">
+    <a href="https://m.me/61580883153632" target="_blank" class="messenger-link">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg" alt="Support">
+        <span class="chat-label">Contact Support</span>
+    </a>
+</div>
 
 <style>
-.aloy-messenger-float {
+.draggable-btn {
     position: fixed;
-    bottom: 30px; /* Gilay-on gikan sa ubos */
-    right: 30px;  /* Gilay-on gikan sa tuo */
-    background-color: #0084FF; /* Messenger Blue */
-    color: white;
+    bottom: 120px; 
+    right: 20px;
+    background-color: #0084FF;
+    border-radius: 30px; 
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    z-index: 10000;
+    touch-action: none;
+    cursor: grab;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.messenger-link {
     text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 9999; /* Sigurado nga naa sa ibabaw sa tanan */
-    transition: all 0.3s ease;
 }
 
-.aloy-messenger-float img {
-    width: 30px;
-    height: 30px;
+.draggable-btn img {
+    width: 26px;
+    height: 26px;
+    pointer-events: none;
 }
 
-.messenger-text {
-    font-size: 14px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
+.chat-label {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
 }
 
-.aloy-messenger-float:hover {
-    transform: scale(1.1);
-    background-color: #0073e6;
-}
-
-/* Para sa gagmay nga screen/CP */
-@media screen and (max-width: 480px) {
-    .aloy-messenger-float {
-        bottom: 20px;
-        right: 20px;
-        padding: 8px 12px;
-    }
-    .messenger-text {
-        font-size: 12px;
-    }
+.draggable-btn:active {
+    cursor: grabbing;
+    transform: scale(1.05);
 }
 </style>
 
+<script>
+    const el = document.querySelector("#loginMessenger");
+    let isDragging = false;
+    let xOffset = 0;
+    let yOffset = 0;
+    let startX, startY;
+
+    // Touch Events for Mobile
+    el.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX - xOffset;
+        startY = e.touches[0].clientY - yOffset;
+    }, {passive: false});
+
+    el.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        xOffset = e.touches[0].clientX - startX;
+        yOffset = e.touches[0].clientY - startY;
+        el.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0)`;
+    }, {passive: false});
+
+    el.addEventListener("touchend", () => { isDragging = false; });
+
+    // Mouse Events for Desktop
+    el.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX - xOffset;
+        startY = e.clientY - yOffset;
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        xOffset = e.clientX - startX;
+        yOffset = e.clientY - startY;
+        el.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0)`;
+    });
+
+    document.addEventListener("mouseup", () => { isDragging = false; });
+</script>
 </body>
 </html>
