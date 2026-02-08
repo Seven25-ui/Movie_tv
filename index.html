@@ -107,73 +107,71 @@
         .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
         @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-/* KANI ANG MO-COVER SA TIBUOK SCREEN */
+/* 1. LOGIN SCREEN - Butangan og # kay ID man ni sa imong JS */
 #login-screen {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100vh;
-    background: #000;
-    display: flex; 
+    /* Transparent Background nga naay poster sa luyo */
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
     padding: 20px;
 }
 
+/* 2. AUTH BOX - Himoon natong Glassmorphism */
 .auth-box {
-    background: #111;
+    background: rgba(17, 17, 17, 0.6); /* Transparent base */
+    backdrop-filter: blur(15px);       /* Blur effect sa luyo */
+    -webkit-backdrop-filter: blur(15px);
     padding: 30px;
     border-radius: 15px;
-    border: 1px solid #333;
+    border: 1px solid rgba(255, 69, 0, 0.3); /* Orange tint border */
     width: 100%;
-    max-width: 380px; /* Fixed width sa center */
+    max-width: 380px; 
     text-align: center;
-    box-shadow: 0 0 30px rgba(233, 84, 32, 0.2);
-}
-
-/* PARA SA MATA (EYE ICON) PARA DILI MAG-AWAS */
-.pass-container {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.eye-icon {
-    position: absolute;
-    right: 15px;
-    cursor: pointer;
-    color: #888;
-    z-index: 10;
-}
-
-.auth-box h2 {
-    color: #ff4500;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
+    box-shadow: 0 0 30px rgba(233, 84, 32, 0.3);
 }
 
 /* 3. INPUTS UG WRAPPERS */
 .pass-container {
     position: relative;
     width: 100%;
+    display: flex; /* Gi-usa ang duha ka pass-container definitions */
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-input {
+.auth-box input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
-    background: #222;
+    background: rgba(34, 34, 34, 0.8); /* Medyo transparent input */
     border: 1px solid #444;
     color: white;
     border-radius: 8px;
-    box-sizing: border-box; /* Importante para dili molapas ang width */
-    font-size: 16px; /* Para dili mo-auto-zoom sa iPhone/Brave */
+    box-sizing: border-box; 
+    font-size: 16px; 
 }
 
-input:focus {
+.auth-box input:focus {
     border-color: #ff4500;
     outline: none;
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.2);
+}
+
+/* 4. EYE ICON POSITIONING */
+.eye-icon {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: #888;
+    z-index: 10;
+    user-select: none;
 }
 
 /* 5. BUTTONS */
@@ -188,6 +186,7 @@ input:focus {
     cursor: pointer;
     transition: 0.3s;
     margin-top: 10px;
+    text-transform: uppercase;
 }
 
 .btn-auth:hover {
