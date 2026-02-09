@@ -425,8 +425,8 @@
 
 <footer>
     <div class="footer-glow-line"></div>
-    
-    <div style="margin-bottom: 15px;">
+
+    <div style="margin-bottom: 20px;">
         <a href="#" id="footer-stealth-link" onclick="handleFooterAction(event)" style="
             text-decoration: none;
             display: inline-flex;
@@ -438,7 +438,6 @@
             border: 1px solid #FF4500;
             transition: 0.3s;
             animation: pulseGlow 2s infinite;">
-            
             <span style="font-size: 14px;">🎁</span>
             <span style="color: #FF4500; font-weight: bold; font-size: 12px; letter-spacing: 1px;">
                 GET 24H FREE PREMIUM KEY
@@ -446,63 +445,56 @@
         </a>
     </div>
 
-    <p>© 2026 SE7EN CINEMA | <span style="color:#FF4500">POWERED BY ALOYGENEX</span></p>
+    <div style="margin-bottom: 20px; background: rgba(0, 123, 255, 0.05); padding: 15px; border-radius: 15px; border: 1px solid rgba(0, 123, 255, 0.2); display: inline-block;">
+        <p style="color: #bbb; font-size: 11px; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 1px;">Support SE7EN Cinema 🍿</p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <div style="background: #007bff; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 12px;">GCASH</div>
+            <span style="color: #fff; font-family: monospace; font-size: 16px; font-weight: bold; letter-spacing: 1px;">09489108928</span>
+            <button onclick="copyGcash()" style="background: transparent; border: 1px solid #555; color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px;">COPY</button>
+        </div>
+        <p style="font-size: 10px; color: #666; margin-top: 8px;">Buy me a coffee for server maintenance ☕</p>
+    </div>
+
+    <p style="font-size: 12px; color: #888;">© 2026 SE7EN CINEMA | <span style="color:#FF4500">POWERED BY ALOYGENEX</span></p>
 
     <style>
-    /* Pulse Animation para Catchy gyud siya */
     @keyframes pulseGlow {
         0% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
         50% { box-shadow: 0 0 15px rgba(255, 69, 0, 0.7); transform: scale(1.05); }
         100% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
     }
-    
-    footer {
-        text-align: center;
-        padding: 30px 10px;
-        background: #000;
-        position: relative;
-    }
 
-    .footer-glow-line {
-        height: 1px;
-        width: 100%;
-        background: linear-gradient(90deg, transparent, #FF4500, transparent);
-        margin-bottom: 20px;
-    }
+    footer { text-align: center; padding: 30px 10px; background: #000; position: relative; font-family: sans-serif; }
+    .footer-glow-line { height: 1px; width: 100%; background: linear-gradient(90deg, transparent, #FF4500, transparent); margin-bottom: 20px; }
     </style>
 
-<div id="notification-area" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;"></div>
-
-<style>
-@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.toast {
-    background: #1a1a1a;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 8px;
-    border-left: 5px solid #ff8c00;
-    margin-top: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    font-family: sans-serif;
-    font-size: 13px;
-    animation: slideUp 0.5s ease-out;
-}
-</style>
+    <div id="notification-area" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;"></div>
 
     <script>
     function handleFooterAction(event) {
         var link = document.getElementById('footer-stealth-link').getAttribute('href');
-        
-        // Broken link check (#)
         if (link === "#") {
             event.preventDefault();
- localStorage.getItemlocalStorage.getItemlocalStorage.getItem           alert("Sorry! Free keys are currently out of stock. Check back later.");
-        } else {
-            console.log("Redirecting...");
+            alert("Sorry! Free keys are currently out of stock. Check back later.");
         }
+    }
+
+    // FUNCTION PARA SA COPY GCASH
+    function copyGcash() {
+        navigator.clipboard.writeText("09489108928");
+        
+        // Show Toast Notification
+        const area = document.getElementById('notification-area');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = "📋 GCash Number Copied! Salamat, Aloy!";
+        area.appendChild(toast);
+        
+        setTimeout(() => { toast.remove(); }, 3000);
     }
     </script>
 </footer>
+
 <script>
 const _mask = "ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKaGRXUWlPaUl6TkRVMVpXSmtPV0ptTVRaaU1HSXpNR1JlWldRel1URXlPR0ptT1RNell5SXNJbTVpWmlJNk1UYzJOVGczTVRnd05TNDVNeklpSW5OMVlpSTZJakU1TkRFeE1HSmtPREJsTmpkaFpqVmtNalpqWVRJNE1TSXNJbk5qYjNCbGNpSTZXYmxoY0dsZmNtVmhaQ0pkTENKMmZYTnphVzl1SWpveE1YMC5QdkQ2WjhaREN6ck9FeHRJYlpuRldjcTAxU1JIM3ZuUkp4dlN6cUxJQmdr";
     const TMDB = 'https://api.themoviedb.org/3';
