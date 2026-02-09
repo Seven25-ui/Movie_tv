@@ -430,11 +430,9 @@
         <a href="#" id="footer-stealth-link" onclick="handleFooterAction(event)" style="
             text-decoration: none;
             display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            align-items: center; gap: 8px;
             background: rgba(255, 69, 0, 0.1);
-            padding: 8px 15px;
-            border-radius: 50px;
+            padding: 8px 15px; border-radius: 50px;
             border: 1px solid #FF4500;
             transition: 0.3s;
             animation: pulseGlow 2s infinite;">
@@ -446,18 +444,12 @@
     </div>
 
     <div style="margin-bottom: 20px;">
-        <button onclick="openDonation()" style="
-            background: #FFDD00; 
-            color: #000; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 50px; 
-            font-weight: bold; 
-            font-size: 13px; 
-            cursor: pointer; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px;
+        <button type="button" onclick="openDonation()" style="
+            background: #FFDD00; color: #000;
+            border: none; padding: 10px 20px;
+            border-radius: 50px; font-weight: bold;
+            font-size: 13px; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
             box-shadow: 0 4px 15px rgba(255, 221, 0, 0.3);
             transition: 0.3s;">
             <span>☕</span> Buy me a coffee
@@ -470,50 +462,51 @@
         <div style="background: #111; padding: 25px; border-radius: 20px; border: 1px solid #FFDD00; text-align: center; position: relative; max-width: 90%;">
             <span onclick="closeDonation()" style="position: absolute; top: 10px; right: 15px; color: #fff; font-size: 24px; cursor: pointer;">&times;</span>
             <p style="color: #FFDD00; font-weight: bold; margin-bottom: 15px;">SCAN TO SUPPORT SE7EN 🎬</p>
-            
             <img src="https://i.ibb.co/pBTX7pX/image-5b88e2.jpg" alt="GCash QR" style="width: 250px; height: auto; border-radius: 10px; margin-bottom: 15px;">
-            
             <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px;">
                 <p style="color: #fff; font-size: 14px; font-family: monospace; margin: 0;">GCash: 09489108928</p>
-                <button onclick="copyGcash()" style="background: #FFDD00; border: none; padding: 5px 15px; border-radius: 5px; margin-top: 10px; font-size: 11px; font-weight: bold; cursor: pointer;">COPY NUMBER</button>
+                <button type="button" onclick="copyGcash()" style="background: #FFDD00; border: none; padding: 5px 15px; border-radius: 5px; margin-top: 10px; font-size: 11px; font-weight: bold; cursor: pointer;">COPY NUMBER</button>
             </div>
         </div>
     </div>
 
     <style>
-    @keyframes pulseGlow {
-        0% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
-        50% { box-shadow: 0 0 15px rgba(255, 69, 0, 0.7); transform: scale(1.05); }
-        100% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
-    }
-    footer { text-align: center; padding: 30px 10px; background: #000; position: relative; font-family: sans-serif; }
-    .footer-glow-line { height: 1px; width: 100%; background: linear-gradient(90deg, transparent, #FF4500, transparent); margin-bottom: 20px; }
-    .toast { background: #FFDD00; color: #000; padding: 10px 20px; border-radius: 5px; font-weight: bold; animation: slideUp 0.3s; }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
+            50% { box-shadow: 0 0 15px rgba(255, 69, 0, 0.7); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
+        }
+        footer { text-align: center; padding: 30px 10px; background: #000; position: relative; font-family: sans-serif; }
+        .footer-glow-line { height: 1px; width: 100%; background: linear-gradient(90deg, transparent, #FF4500, transparent); margin-bottom: 20px; }
+        .toast { background: #FFDD00; color: #000; padding: 10px 20px; border-radius: 5px; font-weight: bold; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10001; }
     </style>
 
-    <div id="notification-area" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000;"></div>
+    <div id="notification-area"></div>
 
     <script>
-    function openDonation() { document.getElementById('donationModal').style.display = 'flex'; }
-    function closeDonation() { document.getElementById('donationModal').style.display = 'none'; }
-    
-    function copyGcash() {
-        navigator.clipboard.writeText("09489108928");
-        const area = document.getElementById('notification-area');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = "📋 Number Copied! Salamat, Aloy!";
-        area.appendChild(toast);
-        setTimeout(() => { toast.remove(); }, 3000);
-    }
-
-    function handleFooterAction(event) {
-        var link = document.getElementById('footer-stealth-link').getAttribute('href');
-        if (link === "#") {
-            event.preventDefault();
-            alert("Sorry! Free keys are currently out of stock. Check back later.");
+        function openDonation() { 
+            document.getElementById('donationModal').style.display = 'flex'; 
         }
-    }
+        function closeDonation() { 
+            document.getElementById('donationModal').style.display = 'none'; 
+        }
+        function copyGcash() {
+            navigator.clipboard.writeText("09489108928").then(() => {
+                const area = document.getElementById('notification-area');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = "📋 Number Copied! Salamat, Aloy!";
+                area.appendChild(toast);
+                setTimeout(() => { toast.remove(); }, 3000);
+            });
+        }
+        function handleFooterAction(event) {
+            var link = document.getElementById('footer-stealth-link').getAttribute('href');
+            if (link === "#") {
+                event.preventDefault();
+                alert("Sorry! Free keys are currently out of stock. Check back later.");
+            }
+        }
     </script>
 </footer>
 
