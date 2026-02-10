@@ -1324,5 +1324,45 @@ setInterval(showNotification, 25000);
     document.addEventListener("mouseup", () => { isDragging = false; });
 </script>
 
+<script>
+    // 2. Imong tinuod nga Supabase Credentials
+    const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
+    
+    // I-initialize ang client
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+    async function trackVisitor() {
+        try {
+            // 3. Kuhaon ang IP sa visitor gamit ang ipify
+            const response = await fetch('https://api.ipify.org?format=json');
+            const ipData = await response.json();
+            const visitorIP = ipData.ip;
+
+            // 4. I-insert ang data sa 'visitor_logs' table
+            const { data, error } = await supabaseClient
+                .from('visitor_logs')
+                .insert([
+                    { 
+                        ip_address: visitorIP, 
+                        user_agent: navigator.userAgent 
+                    }
+                ]);
+
+            if (error) {
+                console.error("Supabase Error:", error.message);
+            } else {
+                console.log("Success! Visitor IP (" + visitorIP + ") logged to Supabase.");
+            }
+
+        } catch (err) {
+            console.error("System Error:", err.message);
+        }
+    }
+
+    // Padaganon ang tracker
+    trackVisitor();
+</script>
+
 </body>
 </html>
