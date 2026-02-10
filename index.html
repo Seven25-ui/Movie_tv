@@ -1324,36 +1324,41 @@ setInterval(showNotification, 25000);
     document.addEventListener("mouseup", () => { isDragging = false; });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
-    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
-    
-    // Check nato kung na-load ba ang library
-    if (typeof supabase === 'undefined') {
-        console.error("Supabase library not loaded!");
-    } else {
+    (function() {
+        const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
+
+        if (typeof supabase === 'undefined') {
+            console.error("Supabase library missing!");
+            return;
+        }
+
         const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
         async function trackVisitor() {
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
                 const ipData = await response.json();
-                const visitorIP = ipData.ip;
-
+                
                 const { error } = await supabaseClient
                     .from('visitor_logs')
-                    .insert([{ ip_address: visitorIP, user_agent: navigator.userAgent }]);
+                    .insert([{ 
+                        ip_address: ipData.ip, 
+                        user_agent: navigator.userAgent 
+                    }]);
 
-                if (error) console.error("Supabase Error:", error.message);
-                else console.log("Success! Logged IP: " + visitorIP);
+                if (error) console.error("DB Error:", error.message);
+                else console.log("Visitor Logged:", ipData.ip);
             } catch (err) {
-                console.error("System Error:", err.message);
+                console.error("Fetch Error:", err.message);
             }
         }
+
         trackVisitor();
-    }
+    })();
 </script>
 
 </body>
