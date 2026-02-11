@@ -655,29 +655,32 @@ const checker = setInterval(verifyUserStatus, 30000);
     }
 
 function switchServer(server, btn = null, s = currentS, e = currentE) {
-    const frame = document.getElementById('video-iframe'); 
+    const frame = document.getElementById('video-iframe');
     if(!frame) return;
 
-    // Highlight para sa Server Buttons
     if(btn) {
         btn.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = "#1a1a1a";
             b.style.border = "1px solid #333";
         });
-        btn.style.background = "#E95420"; 
+        btn.style.background = "#E95420";
         btn.style.border = "1px solid #ff8c00";
     }
 
     let url = "";
     if(currentType === 'movie') {
-        // Gigamit na nato ang vidsrc.cc base sa imong gusto
-        url = (server === 'vidsrc_cc') ? 
-            `https://vidsrc.cc/v2/embed/movie/${currentID}` : 
-            `https://embed.su/embed/movie/${currentID}`;
+        // I-update nato ang mga links sa mas stable nga providers
+        if (server === 'vidsrc_cc') {
+            url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`; // Mas stable nga vidsrc
+        } else {
+            url = `https://vidsrc.to/embed/movie/${currentID}`; // Lig-on nga alternative
+        }
     } else {
-        url = (server === 'vidsrc_cc') ? 
-            `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}` : 
-            `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
+        if (server === 'vidsrc_cc') {
+            url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&sea=${s}&epi=${e}`;
+        } else {
+            url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
+        }
     }
     frame.src = url;
 }
