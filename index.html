@@ -326,7 +326,7 @@
     <span style="color: #ccc; font-size: 12px;">users streaming now</span>
 </div>
 
-<div id="login-screen">
+<!--<div id="login-screen">
     <div class="auth-box">
         <h2 id="auth-title">LOGIN</h2>
         
@@ -360,7 +360,7 @@
             <p class="auth-toggle">Have an account? <span onclick="toggleAuth('login')">Login here</span></p>
         </div>
     </div>
-</div>
+</div>-->
 
 <div id="hack-overlay" style="display:none;">
     <canvas id="matrix-canvas"></canvas>
@@ -438,7 +438,7 @@
             animation: pulseGlow 2s infinite;">
             <span style="font-size: 14px;">🎁</span>
             <span style="color: #FF4500; font-weight: bold; font-size: 12px; letter-spacing: 1px;">
-                GET 24H FREE PREMIUM KEY
+                SHOP NOW! THE CHEAPEST GADGET STORE
             </span>
         </a>
     </div>
@@ -530,7 +530,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     }
 
 // Kada refresh sa movies page, i-check ang status sa DB
-async function verifyUserStatus() {
+/*async function verifyUserStatus() {
     const user = localStorage.getItem('se7en_username');
     const { data } = await supabaseClient.from('se7en_users').select('status').eq('username', user).single();
 
@@ -628,7 +628,7 @@ verifyUserStatus();
 const checker = setInterval(verifyUserStatus, 30000);
 
     function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
-
+*/
     async function init() {
         const data = await apiCall('/trending/all/day');
         if(!data) return;
@@ -857,7 +857,7 @@ window.onload = () => {
         render(d.results);
     }
 
-function showLogin() {
+/* function showLogin() {
     const loginScreen = document.getElementById('login-screen');
     // Ipakita ang login screen bisan pa og naa sa free trial
     loginScreen.style.display = 'flex';
@@ -865,7 +865,7 @@ function showLogin() {
     // Optional: I-focus dayon ang input field para type na lang dretso
     const passInput = document.getElementById('pass-input');
     if(passInput) passInput.focus();
-}
+} */
 
 // --- RANDOM LIVE COUNTER ---
 function updateLiveUsers() {
@@ -884,7 +884,7 @@ function updateLiveUsers() {
     el.innerText = newCount;
 }
 // Mo-lihok ang number matag 5 ka segundo
-setInterval(updateLiveUsers, 5000); 
+/* setInterval(updateLiveUsers, 5000); 
 
 // --- VIP NOTIFICATION (Paspas nga Test) ---
 const buyers = ["Jojo_Dvo", "Gardo_99", "Liza_VIP", "Master_K", "User_772", "Davao_Boy", "Admin_01", "Cebu_Queen", "Samal_Dev"];
@@ -920,7 +920,7 @@ function startPopups() {
 }
 
 // Start the engine
-startPopups();
+startPopups(); */
 
 // --- LIVE SEARCH TRIGGER PARA SA CLASS "search-box" ---
 let typingTimer; 
@@ -949,7 +949,7 @@ if (searchInputField) {
 }
 
 // 1. TOGGLE LOGIN/REGISTER
-function toggleAuth(mode) {
+/* function toggleAuth(mode) {
     const isReg = mode === 'register';
     document.getElementById('auth-title').innerText = isReg ? 'REGISTER' : 'LOGIN';
     document.getElementById('login-form').style.display = isReg ? 'none' : 'block';
@@ -1133,7 +1133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             startTrialCountdown(data.trial_started_at); // Ipadayon ang ihap maski gi-refresh
         }
     }
-});
+}); */
 
 // Function para sa Social Shortcut prompts
 function quickFill(provider) {
@@ -1151,7 +1151,7 @@ function quickFill(provider) {
 }
 
 // Function para ma-toggle ang Login ug Register view
-function toggleAuth(type) {
+/* function toggleAuth(type) {
     const loginForm = document.getElementById('login-form');
     const regForm = document.getElementById('register-form');
     const title = document.getElementById('auth-title');
@@ -1236,7 +1236,7 @@ function showNotification() {
 
 // Trigger matag 25 seconds
 setInterval(showNotification, 25000);
-</script>
+</script> */
 
 <div id="loginMessenger" class="draggable-btn">
     <a href="https://m.me/61573130129204" target="_blank" class="messenger-link">
