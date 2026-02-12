@@ -1372,41 +1372,61 @@ setInterval(showNotification, 25000);
     })();
 </script>
 
+<style>
+  #greeting-modal {
+    display: none; 
+    position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.85); 
+    backdrop-filter: blur(5px);
+  }
+  .modal-content {
+    background: linear-gradient(135deg, #e91e63, #ff4081);
+    color: white; margin: 15% auto; padding: 30px; border-radius: 20px;
+    width: 85%; max-width: 450px; text-align: center; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    font-family: sans-serif;
+  }
+</style>
+
+<div id="greeting-modal">
+  <div class="modal-content">
+    <h2 id="greet-title">Happy Valentine's Day! ❤️</h2>
+    <p id="greet-msg">Welcome to seven25.click! Enjoy your movies.</p>
+    <button style="background: white; color: #e91e63; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 15px;" onclick="closeModal()">Continue Watching</button>
+  </div>
+</div>
+
 <script>
-  // --- CONFIGURATION ---
   const isEnabled = true; 
-  const delayInSeconds = 3; // 3 ka segundo una mo pop-up
-  const title = "Happy Valentine's Day! ❤️";
-  const message = "Welcome to our global community! Enjoy the best movie experience here at seven25.click.";
+  const delayInSeconds = 3; 
 
   if (isEnabled) {
-    // Timer para sa pop-up delay
     setTimeout(() => {
       const modal = document.getElementById('greeting-modal');
-      modal.style.display = 'block';
-      document.getElementById('greet-title').innerText = title;
-      document.getElementById('greet-msg').innerText = message;
+      if (modal) {
+        modal.style.display = 'block';
 
-      // Logic para ma-close inig touch bisan asa sa screen
-      window.onclick = function(event) {
-        if (event.target == modal) {
-          closeModal();
-        }
-      };
-      
-      // Para sa mobile touch events
-      window.ontouchstart = function(event) {
-        if (event.target == modal) {
-          closeModal();
-        }
-      };
+        // Mopiyong (close) bisan asa itouch sa screen
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            closeModal();
+          }
+        };
+        window.ontouchstart = function(event) {
+          if (event.target == modal) {
+            closeModal();
+          }
+        };
+      }
     }, delayInSeconds * 1000);
   }
 
   function closeModal() {
-    document.getElementById('greeting-modal').style.display = 'none';
+    const modal = document.getElementById('greeting-modal');
+    if (modal) modal.style.display = 'none';
   }
 </script>
+  
 
 </body>
 </html>
