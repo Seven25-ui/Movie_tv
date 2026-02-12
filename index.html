@@ -530,7 +530,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     }
 
 // Kada refresh sa movies page, i-check ang status sa DB
-/*async function verifyUserStatus() {
+//async function verifyUserStatus() {
     const user = localStorage.getItem('se7en_username');
     const { data } = await supabaseClient.from('se7en_users').select('status').eq('username', user).single();
 
@@ -542,7 +542,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 }
 verifyUserStatus();
 
-async function checkPass() {
+/* //async function checkPass() {
     const input = document.getElementById('pass-input').value.trim();
     const loginErr = document.getElementById('login-err');
     const currentUser = localStorage.getItem('se7en_username'); // Kinahanglan nato ang username
@@ -578,8 +578,9 @@ async function checkPass() {
         loginErr.innerText = "Wrong 🙅‍ Passcode, PM aloy Now!";
     }
 }
+*/
 
-async function verifyUserStatus() {
+*/ async function verifyUserStatus() {
     const user = localStorage.getItem('se7en_username');
 
     // 1. Kon naa na sa login page, hunong na dretso ang script
@@ -623,11 +624,11 @@ async function verifyUserStatus() {
 
 // Daganon dretso
 verifyUserStatus();
-
+*/
 // I-check matag 30 segundos
-const checker = setInterval(verifyUserStatus, 30000);
+/* const checker = setInterval(verifyUserStatus, 30000); */
 
-    function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
+   /*  function logout() { localStorage.removeItem('se7en_auth'); location.reload(); }
 */
     async function init() {
         const data = await apiCall('/trending/all/day');
@@ -865,7 +866,8 @@ window.onload = () => {
     // Optional: I-focus dayon ang input field para type na lang dretso
     const passInput = document.getElementById('pass-input');
     if(passInput) passInput.focus();
-} */
+}
+ */
 
 // --- RANDOM LIVE COUNTER ---
 function updateLiveUsers() {
@@ -884,13 +886,13 @@ function updateLiveUsers() {
     el.innerText = newCount;
 }
 // Mo-lihok ang number matag 5 ka segundo
-/* setInterval(updateLiveUsers, 5000); 
+/* setInterval(updateLiveUsers, 5000); */ 
 
 // --- VIP NOTIFICATION (Paspas nga Test) ---
-const buyers = ["Jojo_Dvo", "Gardo_99", "Liza_VIP", "Master_K", "User_772", "Davao_Boy", "Admin_01", "Cebu_Queen", "Samal_Dev"];
-const packages = ["7 Days Premium", "30 Days VIP", "Unlimited Access"];
+/* const buyers = ["Jojo_Dvo", "Gardo_99", "Liza_VIP", "Master_K", "User_772", "Davao_Boy", "Admin_01", "Cebu_Queen", "Samal_Dev"]; */
+/* const packages = ["7 Days Premium", "30 Days VIP", "Unlimited Access"]; */
 
-function showSale() {
+/* function showSale() {
     const area = document.getElementById('notification-area');
     if (!area) return;
 
@@ -908,19 +910,20 @@ function showSale() {
         toast.style.opacity = '0'; 
         setTimeout(() => toast.remove(), 500); 
     }, 6000);
-}
+} */
 
 // I-set nato ang delay para matag 10-20 seconds naay mogawas
-function startPopups() {
+/* function startPopups() {
     let randomDelay = Math.floor(Math.random() * 10000) + 10000; // 10s to 20s
     setTimeout(() => {
         showSale();
         startPopups(); // Repeat the cycle
     }, randomDelay);
 }
+*/
 
 // Start the engine
-startPopups(); */
+/* startPopups(); */
 
 // --- LIVE SEARCH TRIGGER PARA SA CLASS "search-box" ---
 let typingTimer; 
@@ -955,16 +958,17 @@ if (searchInputField) {
     document.getElementById('login-form').style.display = isReg ? 'none' : 'block';
     document.getElementById('register-form').style.display = isReg ? 'block' : 'none';
 }
+*/
 
 // 2. SHOW/HIDE PASSWORD
-function togglePass(id) {
+/* function togglePass(id) {
     const input = document.getElementById(id);
     if(input) input.type = input.type === "password" ? "text" : "password";
 }
-
+*/
 // 3. REGISTER FUNCTION
 
-async function registerUser() {
+/* async function registerUser() {
     const user = document.getElementById('reg-user').value.trim();
     const pass = document.getElementById('reg-pass').value.trim();
 
@@ -987,8 +991,9 @@ async function registerUser() {
         toggleAuth('login');
     }
 }
+*/
 
-async function checkTrialAndPlay(sNum, eNum) {
+/* async function checkTrialAndPlay(sNum, eNum) {
     const username = localStorage.getItem('se7en_username');
 
     // 1. Kuhaon ang data sa user gikan sa Supabase
@@ -1041,10 +1046,10 @@ async function checkTrialAndPlay(sNum, eNum) {
         playEp(sNum, eNum); // VIP user, walay limit
     }
 }
-
+*/
 // 4. LOGIN FUNCTION
 
-async function loginUser() {
+/* async function loginUser() {
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value.trim();
 
@@ -1089,6 +1094,7 @@ async function loginUser() {
     localStorage.setItem('se7en_username', user);
     location.reload();
 }
+*/
 
 async function startTrialCountdown(startTime) {
     if (trialTimer) clearInterval(trialTimer);
@@ -1114,7 +1120,7 @@ async function startTrialCountdown(startTime) {
     }, 60000); // Check kada minuto
 }
 
-function showTrialPopUp(msg) {
+/* function showTrialPopUp(msg) {
     let notif = document.getElementById('trial-notif') || document.createElement('div');
     notif.id = 'trial-notif';
     notif.className = 'show'; // Siguroha naay CSS ni (katong gihatag nako ganiha)
@@ -1133,7 +1139,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             startTrialCountdown(data.trial_started_at); // Ipadayon ang ihap maski gi-refresh
         }
     }
-}); */
+});
+ */
 
 // Function para sa Social Shortcut prompts
 function quickFill(provider) {
@@ -1166,10 +1173,11 @@ function quickFill(provider) {
         title.innerText = 'LOGIN';
     }
 }
+*/
 
 </script>
 
-<div id="notif-toast" style="
+<!-- <div id="notif-toast" style="
     position: fixed; 
     bottom: 25px; /* Adjust ni depende sa gihabugon sa imong I HAVE A KEY button */
     right: 20px;  
@@ -1205,7 +1213,7 @@ function quickFill(provider) {
         <strong id="notif-user" style="color: #f8f9fa;">Someone</strong> <br>
         <span style="color: #28a745; font-weight: bold; text-transform: uppercase; font-size: 11px;">Claimed 1-Hour Free Access</span>
     </div>
-</div>
+</div> -->
 
 <style>
 @keyframes slideInRight {
@@ -1214,7 +1222,7 @@ function quickFill(provider) {
 }
 </style>
 
-<script>
+/* <script>
 function showNotification() {
     const users = [
         "Ali_Matrix", "skylit", "micheal", "rachhel90", "Juan23", "Cebu_User", "Davao_Master", "Manila_Watcher", 
