@@ -376,6 +376,49 @@
     100% { transform: scale(1); }
 }
 
+/* FIXED SEARCH BOX - MODERN & VISIBLE */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1); /* Glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px; /* Adjust base sa imong layout */
+}
+
+/* Mao ni ang mo-fix sa text color para makita ang imong gi-type */
+.search-box input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: #ffffff !important; /* Sigurado nga puti ang text */
+    font-size: 14px;
+    padding: 8px 5px;
+    width: 100%;
+}
+
+/* Placeholder color (ang "Search..." nga text) */
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Inig i-click nimo ang search box (Focus effect) */
+.search-box:focus-within {
+    border-color: #E95420; /* Orange highlight same sa imong theme */
+    box-shadow: 0 0 10px rgba(233, 84, 32, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Search Icon color */
+.search-box i, .search-box svg {
+    color: #E95420;
+    margin-right: 10px;
+}
+
     </style>
 </head>
 <body>
