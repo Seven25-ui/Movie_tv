@@ -665,38 +665,55 @@ async function loadSeason(sNum) {
 }
 
     function startMatrix() {
-        const canvas = document.getElementById('matrix-canvas');
-        document.getElementById('hack-overlay').style.display = 'flex';
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const chars = "0101010101010101ALOYGENEX";
-        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
-        const draw = () => {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0f0"; ctx.font = "16px monospace";
-            drops.forEach((y, i) => {
-                ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 16, y * 16);
-                if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        };
-        const int = setInterval(draw, 40);
-        setTimeout(() => { document.getElementById('hack-overlay').style.display = "none"; init(); clearInterval(int); }, 3000);
+    const canvas = document.getElementById('matrix-canvas');
+    const overlay = document.getElementById('hack-overlay');
+    
+    // Check kung naa ba ang elements para dili mo-error ang script
+    if (!canvas || !overlay) {
+        init(); // Load dritso movies kung wala ang matrix elements
+        return;
     }
 
+    overlay.style.display = 'flex';
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; 
+    canvas.height = window.innerHeight;
+    
+    const chars = "0101010101010101ALOYGENEX";
+    const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+    
+    const draw = () => {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0f0"; 
+        ctx.font = "16px monospace";
+        
+        drops.forEach((y, i) => {
+            ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 16, y * 16);
+            if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
+    };
+
+    const int = setInterval(draw, 40);
+
+    setTimeout(() => { 
+        overlay.style.display = "none"; 
+        init(); // Mao ni ang mo-load sa trending movies
+        clearInterval(int); 
+    }, 3000);
+}
+
+// KANI ANG IMPORTANTE: Pulihi ang imong karaan nga window.onload ani
 window.onload = () => {
-    const isAuth = localStorage.getItem('se7en_auth') === 'true';
-    const loginScreen = document.getElementById('login-screen');
-    const mainContent = document.getElementById('main-content'); 
-
-    if (isAuth) {
-        if (loginScreen) loginScreen.style.display = 'none';
-        if (mainContent) mainContent.style.display = 'block';
-        startMatrix(); // Mao ni ang mo-load sa movies human sa 3 seconds
-    } else {
-        if (loginScreen) loginScreen.style.display = 'flex';
-        if (mainContent) mainContent.style.display = 'none';
+    // Ipakita ang main content dritso kay wala naman kay login screen
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.style.display = 'block';
     }
+    
+    // Sugdan ang matrix effect
+    startMatrix();
 };
 
     // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
