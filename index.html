@@ -1372,5 +1372,41 @@ setInterval(showNotification, 25000);
     })();
 </script>
 
+<script>
+  // --- CONFIGURATION ---
+  const isEnabled = true; 
+  const delayInSeconds = 3; // 3 ka segundo una mo pop-up
+  const title = "Happy Valentine's Day! ❤️";
+  const message = "Welcome to our global community! Enjoy the best movie experience here at seven25.click.";
+
+  if (isEnabled) {
+    // Timer para sa pop-up delay
+    setTimeout(() => {
+      const modal = document.getElementById('greeting-modal');
+      modal.style.display = 'block';
+      document.getElementById('greet-title').innerText = title;
+      document.getElementById('greet-msg').innerText = message;
+
+      // Logic para ma-close inig touch bisan asa sa screen
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
+      
+      // Para sa mobile touch events
+      window.ontouchstart = function(event) {
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
+    }, delayInSeconds * 1000);
+  }
+
+  function closeModal() {
+    document.getElementById('greeting-modal').style.display = 'none';
+  }
+</script>
+
 </body>
 </html>
