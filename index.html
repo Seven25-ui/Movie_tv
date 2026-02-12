@@ -314,6 +314,74 @@
     pointer-events: none;
 }
 
+.premium-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #ff4d00 0%, #ff8c00 100%); /* Orange theme nimo */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(233, 84, 32, 0.4);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Catchy Hover Effect */
+.premium-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 84, 32, 0.6);
+    filter: brightness(1.1);
+}
+
+.btn-icon {
+    font-size: 16px;
+    animation: pulseIcon 2s infinite;
+}
+
+/* Shimmer Animation Effect */
+.shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: none;
+    animation: shimmerEffect 3s infinite;
+}
+
+/* Keyframes para sa Animation */
+@keyframes shimmerEffect {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+@keyframes pulseIcon {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Para sa Modern Look sa Search Bar (Optional update) */
+.search-box {
+    border-radius: 15px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
     </style>
 </head>
 <body>
@@ -362,7 +430,11 @@
             <i class="fas fa-search" style="color:#444;"></i>
             <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
         </div>
-        <button id="logout-btn" onclick="logout()" style="display:block;">FREE</button>
+        <button class="premium-btn">
+    <span class="btn-icon">📽️</span>
+    <span class="btn-text">PREMIUM ACCESS</span>
+    <div class="shimmer"></div>
+</button>
     </div>
 
     <div class="hero" id="hero">
