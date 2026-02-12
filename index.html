@@ -376,47 +376,49 @@
     100% { transform: scale(1); }
 }
 
-/* FIXED SEARCH BOX - MODERN & VISIBLE */
+/* FIXED SEARCH BOX - DESKTOP & MOBILE COMPATIBLE */
 .search-box {
     position: relative;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.1); /* Glass effect */
+    background: rgba(255, 255, 255, 0.1) !important; 
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
-    padding: 5px 15px;
+    padding: 0 15px; /* Gi-adjust gamay */
     transition: all 0.3s ease;
     width: 100%;
-    max-width: 300px; /* Adjust base sa imong layout */
+    /* Siguruha nga dili siya gamay kaayo sa mobile */
+    min-width: 150px; 
+    max-width: 300px;
+    z-index: 999; /* Para dili matabunan sa uban elements */
 }
 
-/* Mao ni ang mo-fix sa text color para makita ang imong gi-type */
 .search-box input {
-    background: transparent !important;
+    background: none !important;
     border: none !important;
     outline: none !important;
-    color: #ffffff !important; /* Sigurado nga puti ang text */
-    font-size: 14px;
-    padding: 8px 5px;
-    width: 100%;
+    color: #ffffff !important; /* Puti gyud dapat */
+    font-size: 16px !important; /* Likay sa auto-zoom sa iPhone (dapat at least 16px) */
+    padding: 10px 5px !important;
+    width: 100% !important;
+    
+    /* KANI ANG SOLUSYON PARA SA MOBILE */
+    -webkit-appearance: none; /* Tangtangon ang default Safari/Chrome style */
+    appearance: none;
+    caret-color: #E95420; /* Kolor sa cursor inig type nimo */
 }
 
-/* Placeholder color (ang "Search..." nga text) */
+/* Para makita gyud ang placeholder sa mobile */
 .search-box input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1; /* Para sa Firefox mobile */
 }
 
-/* Inig i-click nimo ang search box (Focus effect) */
+/* Focus effect */
 .search-box:focus-within {
-    border-color: #E95420; /* Orange highlight same sa imong theme */
-    box-shadow: 0 0 10px rgba(233, 84, 32, 0.3);
-    background: rgba(255, 255, 255, 0.15);
-}
-
-/* Search Icon color */
-.search-box i, .search-box svg {
-    color: #E95420;
-    margin-right: 10px;
+    border-color: #E95420;
+    box-shadow: 0 0 12px rgba(233, 84, 32, 0.4);
+    background: rgba(40, 40, 40, 0.9) !important; /* Mas itom gamay inig type para klaro */
 }
 
     </style>
