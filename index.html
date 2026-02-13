@@ -314,56 +314,98 @@
     pointer-events: none;
 }
 
+/* --- TOP BAR LAYOUT --- */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: #000; /* Sigurado nga black ang background */
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    color: #E95420; /* Imong signature orange */
+    letter-spacing: 2px;
+}
+
+/* --- MODERN SEARCH BOX (FIXED FOR MOBILE) --- */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px; /* Mas lingin, mas modern */
+    padding: 0 12px;
+    flex-grow: 1; /* Para mo-expand ang search box */
+    max-width: 400px;
+    transition: all 0.3s ease;
+}
+
+.search-box i {
+    color: #E95420 !important; /* Gi-orange nako ang icon para catchy */
+    font-size: 14px;
+}
+
+#mSearch {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: #ffffff !important; /* Kani ang mo-fix sa "invisible" text */
+    font-size: 16px !important; /* Importante sa mobile para dili mo-auto zoom */
+    padding: 8px 10px !important;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#mSearch::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.search-box:focus-within {
+    border-color: #ff4d00;
+    box-shadow: 0 0 8px rgba(255, 77, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* --- PREMIUM BUTTON (MODERN LOOK) --- */
 .premium-btn {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #ff4d00 0%, #ff8c00 100%); /* Orange theme nimo */
+    gap: 6px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #ff4d00 0%, #ff8c00 100%);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 13px;
+    border-radius: 10px;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.5px;
     cursor: pointer;
     overflow: hidden;
+    white-space: nowrap; /* Para dili mabungkag ang text sa gamay nga screen */
     box-shadow: 0 4px 15px rgba(233, 84, 32, 0.4);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Catchy Hover Effect */
-.premium-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(233, 84, 32, 0.6);
-    filter: brightness(1.1);
 }
 
 .btn-icon {
-    font-size: 16px;
+    font-size: 14px;
     animation: pulseIcon 2s infinite;
 }
 
-/* Shimmer Animation Effect */
+/* Shimmer Animation */
 .shimmer {
     position: absolute;
     top: 0;
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-    );
-    transition: none;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     animation: shimmerEffect 3s infinite;
 }
 
-/* Keyframes para sa Animation */
 @keyframes shimmerEffect {
     0% { left: -100%; }
     20% { left: 100%; }
@@ -376,51 +418,12 @@
     100% { transform: scale(1); }
 }
 
-/* FIXED SEARCH BOX - DESKTOP & MOBILE COMPATIBLE */
-.search-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.1) !important; 
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 0 15px; /* Gi-adjust gamay */
-    transition: all 0.3s ease;
-    width: 100%;
-    /* Siguruha nga dili siya gamay kaayo sa mobile */
-    min-width: 150px; 
-    max-width: 300px;
-    z-index: 999; /* Para dili matabunan sa uban elements */
+/* --- RESPONSIVE ADJUSTMENT --- */
+@media (max-width: 480px) {
+    .logo { font-size: 18px; }
+    .btn-text { display: none; } /* Sa mobile, icon na lang ang ipakita para dili huot */
+    .premium-btn { padding: 8px 10px; }
 }
-
-.search-box input {
-    background: none !important;
-    border: none !important;
-    outline: none !important;
-    color: #ffffff !important; /* Puti gyud dapat */
-    font-size: 16px !important; /* Likay sa auto-zoom sa iPhone (dapat at least 16px) */
-    padding: 10px 5px !important;
-    width: 100% !important;
-    
-    /* KANI ANG SOLUSYON PARA SA MOBILE */
-    -webkit-appearance: none; /* Tangtangon ang default Safari/Chrome style */
-    appearance: none;
-    caret-color: #E95420; /* Kolor sa cursor inig type nimo */
-}
-
-/* Para makita gyud ang placeholder sa mobile */
-.search-box input::placeholder {
-    color: rgba(255, 255, 255, 0.6) !important;
-    opacity: 1; /* Para sa Firefox mobile */
-}
-
-/* Focus effect */
-.search-box:focus-within {
-    border-color: #E95420;
-    box-shadow: 0 0 12px rgba(233, 84, 32, 0.4);
-    background: rgba(40, 40, 40, 0.9) !important; /* Mas itom gamay inig type para klaro */
-}
-
     </style>
 </head>
 <body>
