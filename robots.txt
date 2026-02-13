@@ -1,32 +1,8 @@
 User-agent: *
-Content-Signal: search=yes,ai-train=no
-Allow: /
-
-# Gitangtang nato ang Meta sa Disallow list
-User-agent: Amazonbot
-Disallow: /
-
-User-agent: Applebot-Extended
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: ClaudeBot
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: GPTBot
-Disallow: /
-
-# Gi-allow na nato ang Facebook/Meta agents
-User-agent: meta-externalagent
 Allow: /
 
 User-agent: facebookexternalhit
+Allow: /
+
+User-agent: meta-externalagent
 Allow: /
