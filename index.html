@@ -1104,8 +1104,6 @@ if (searchInputField) {
 
 <script src="https://pl28702340.effectivegatecpm.com/98/41/b8/9841b8bf09616a7e6e27a07353d77759.js"></script>  
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <div id="toast-container" style="position: fixed; bottom: 30px; right: 20px; z-index: 10005; display: flex; flex-direction: column-reverse; gap: 12px; pointer-events: none;"></div>
 
 <style>
@@ -1201,15 +1199,16 @@ toastChannel
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 // --- LIVE COUNTER ---
 
-// 1. Initialize Supabase (imong existing code)
+// 1. Initialize Supabase (Siguroha nga na-load na ang script sa taas)
 const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
 const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-// 2. Ang Real-time Function (I-replace ang karaan nga random counter)
+// 2. Ang Real-time Function
 function startRealtimeCount() {
     const channel = supabaseClient.channel('online-viewers', {
         config: {
@@ -1222,12 +1221,12 @@ function startRealtimeCount() {
     channel
         .on('presence', { event: 'sync' }, () => {
             const newState = channel.presenceState();
-            const count = Object.keys(newState).length; // Tinuod nga ihap sa users online
+            const count = Object.keys(newState).length; 
 
             const countElement = document.getElementById('user-count');
             if (countElement) {
-                // Kon ikaw ra usa, '1' ang mugawas
-                countElement.innerText = count;
+                // I-set og 1 kon ikaw ra usa para dili "--" ang mugawas
+                countElement.innerText = count > 0 ? count : "1"; 
             }
         })
         .subscribe(async (status) => {
