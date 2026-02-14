@@ -880,44 +880,6 @@ window.onload = () => {
         render(d.results);
     }
 
-// --- LIVE COUNTER ---
-  
-// 1. Initialize Supabase (imong existing code)
-const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
-const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
-const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
-
-// 2. Ang Real-time Function (I-replace ang karaan nga random counter)
-function startRealtimeCount() {
-    const channel = supabaseClient.channel('online-viewers', {
-        config: {
-            presence: {
-                key: 'user',
-            },
-        },
-    });
-
-    channel
-        .on('presence', { event: 'sync' }, () => {
-            const newState = channel.presenceState();
-            const count = Object.keys(newState).length; // Tinuod nga ihap sa users online
-            
-            const countElement = document.getElementById('user-count');
-            if (countElement) {
-                // Kon ikaw ra usa, '1' ang mugawas
-                countElement.innerText = count; 
-            }
-        })
-        .subscribe(async (status) => {
-            if (status === 'SUBSCRIBED') {
-                await channel.track({ online_at: new Date().toISOString() });
-            }
-        });
-}
-
-// 3. Pag-run sa Function
-startRealtimeCount();
-
 // --- LIVE SEARCH TRIGGER PARA SA CLASS "search-box" ---
 let typingTimer; 
 const doneTypingInterval = 500; 
@@ -1236,6 +1198,47 @@ toastChannel
             await toastChannel.track({ online_at: new Date().toISOString() });
         }
     });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// --- LIVE COUNTER ---
+
+// 1. Initialize Supabase (imong existing code)
+const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
+const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+// 2. Ang Real-time Function (I-replace ang karaan nga random counter)
+function startRealtimeCount() {
+    const channel = supabaseClient.channel('online-viewers', {
+        config: {
+            presence: {
+                key: 'user',
+            },
+        },
+    });
+
+    channel
+        .on('presence', { event: 'sync' }, () => {
+            const newState = channel.presenceState();
+            const count = Object.keys(newState).length; // Tinuod nga ihap sa users online
+
+            const countElement = document.getElementById('user-count');
+            if (countElement) {
+                // Kon ikaw ra usa, '1' ang mugawas
+                countElement.innerText = count;
+            }
+        })
+        .subscribe(async (status) => {
+            if (status === 'SUBSCRIBED') {
+                await channel.track({ online_at: new Date().toISOString() });
+            }
+        });
+}
+
+// 3. Pag-run sa Function
+startRealtimeCount();
 </script>
 
 </body>
