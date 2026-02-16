@@ -551,6 +551,37 @@ html {
 #side-menu {
     overflow-y: auto;
 }
+
+/* Special Styling for GitHub Projects */
+.special-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: 0.3s !important;
+}
+
+.special-link i {
+    width: 25px;
+    text-align: center;
+    filter: drop-shadow(0 0 5px currentColor); /* Mo-glow ang icon base sa iyang color */
+}
+
+/* Badge for "Live" or "New" */
+.badge-new {
+    background: #FF0000;
+    color: white;
+    font-size: 8px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: bold;
+    animation: blinker 1s linear infinite;
+}
+
+/* Icon Animation on Hover */
+.special-link:hover i {
+    transform: scale(1.3) rotate(10deg);
+}
     </style>
 </head>
 <body>
@@ -572,6 +603,35 @@ html {
   <li><a href="https://seven25-ui.github.io/" target="_blank" style="color: #ffaa00; font-weight: bold;">
     <i class="fa-solid fa-fire-flame-curved"></i> Movie Gadgets
   </a></li>
+  
+  <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
+<p style="color: #888; font-size: 10px; padding-left: 20px; text-transform: uppercase; letter-spacing: 2px;">Se7en Suite (Mini Apps)</p>
+
+<li><a href="https://seven25-ui.github.io/Yt7_clone/" target="_blank" class="special-link">
+    <i class="fa-brands fa-youtube" style="color: #FF0000;"></i> 
+    <span>YouTube Clone</span>
+    <span class="badge-new">Live</span>
+</a></li>
+
+<li><a href="https://seven25-ui.github.io/My-livetv/" target="_blank" class="special-link">
+    <i class="fa-solid fa-satellite-dish" style="color: #00d4ff;"></i> 
+    <span>My Live TV</span>
+</a></li>
+
+<li><a href="https://seven25-ui.github.io/My_music/" target="_blank" class="special-link">
+    <i class="fa-solid fa-compact-disc fa-spin" style="--fa-animation-duration: 3s; color: #ff00ff;"></i> 
+    <span>Se7en Music</span>
+</a></li>
+
+<li><a href="https://seven25-ui.github.io/Weather-app" target="_blank" class="special-link">
+    <i class="fa-solid fa-cloud-sun-rain" style="color: #ffaa00;"></i> 
+    <span>Weather Update</span>
+</a></li>
+
+<li><a href="https://flask-blog-v2.onrender.com/" target="_blank" class="special-link">
+    <i class="fa-solid fa-feather-pointed" style="color: #2ecc71;"></i> 
+    <span>Community Blog</span>
+</a></li>
   
   <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
 
