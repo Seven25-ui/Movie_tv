@@ -524,6 +524,33 @@ html {
     color: #ffaa00;
     transform: scale(1.2); /* Mo-dako ang icon */
 }
+
+/* --- OVERRIDE FOR STICKY MENU --- */
+.menu-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 15px 20px; 
+    color: #ff5500; 
+    /* Kani ang mo-fix sa menu sa taas */
+    position: sticky; 
+    top: 0; 
+    background: #000; 
+    z-index: 1100; 
+    border-bottom: 1px solid rgba(255, 85, 0, 0.2);
+}
+
+.close-btn { 
+    font-size: 30px; 
+    cursor: pointer; 
+    color: white; 
+    line-height: 1;
+}
+
+/* Para dili "maputol" ang content inig scroll */
+#side-menu {
+    overflow-y: auto;
+}
     </style>
 </head>
 <body>
