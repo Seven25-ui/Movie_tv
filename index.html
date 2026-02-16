@@ -540,7 +540,7 @@ html {
     <span class="close-btn" onclick="toggleMenu()">×</span>
   </div>
   <ul>
-  <li><a href="#"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
+  <li><a href="javascript:void(0)" onclick="location.reload()"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
   
   <li><a href="https://seven25-ui.github.io/" target="_blank" style="color: #ffaa00; font-weight: bold;">
     <i class="fa-solid fa-fire-flame-curved"></i> Movie Gadgets
@@ -548,10 +548,10 @@ html {
   
   <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
 
-  <li><a href="#movies"><i class="fa-solid fa-clapperboard"></i> Movies</a></li>
-  <li><a href="#tv-shows"><i class="fa-solid fa-display"></i> TV Shows</a></li>
-  <li><a href="#k-drama"><i class="fa-solid fa-wand-magic-sparkles"></i> K-Drama</a></li>
-  <li><a href="#anime"><i class="fa-solid fa-mask-up"></i> Anime</a></li>
+  <li><a href="javascript:void(0)" onclick="fetchType('movie'); toggleMenu()"><i class="fa-solid fa-clapperboard"></i> Movies</a></li>
+  <li><a href="javascript:void(0)" onclick="fetchType('tv'); toggleMenu()"><i class="fa-solid fa-display"></i> TV Shows</a></li>
+  <li><a href="javascript:void(0)" onclick="fetchLang('ko'); toggleMenu()"><i class="fa-solid fa-wand-magic-sparkles"></i> K-Drama</a></li>
+  <li><a href="javascript:void(0)" onclick="fetchLang('ja'); toggleMenu()"><i class="fa-solid fa-mask-up"></i> Anime</a></li>
 
   <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
 
