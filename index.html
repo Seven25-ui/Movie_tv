@@ -635,18 +635,36 @@ html {
     100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 87, 34, 0.4); }
 }
 
-/* 3. Active State para sa Bottom Nav icons */
+/* Siguroha nga ang bottom-nav naka-fix sa ubos */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: #000; /* O bisan unsang dark background nimo */
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+/* Default style para sa tanang buttons */
 .bottom-nav .nav-btn {
-    color: #888; /* Default color para sa dili active */
-    transition: 0.3s;
+    color: #888; /* Grayish color para sa inactive */
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
 }
 
-.bottom-nav .nav-btn.active {
-    color: #ff5722; /* Imong accent color (Orange) */
+/* KINI ANG IMPORTANTE: I-target ang icon ug text kon active */
+.bottom-nav .nav-btn.active i, 
+.bottom-nav .nav-btn.active span {
+    color: #ff5722 !important; /* Imong orange accent color */
 }
 
+/* Optional: Gamay nga animation para sa active icon */
 .bottom-nav .nav-btn.active i {
-    transform: translateY(-5px); /* Gamay nga bounce effect */
+    transform: translateY(-3px);
+    transition: 0.3s ease;
 }
 
     </style>
