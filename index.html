@@ -682,6 +682,14 @@ html {
     100% { transform: scale(1); }
 }
 
+/* 1. I-define ang Pulse Animation para sa Text */
+@keyframes textPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); } /* Gamay lang nga dako para sa text */
+    100% { transform: scale(1); }
+}
+
+/* 2. I-fix ang imong Image Container (Wala na'y zoom) */
 .img-container {
     width: 65px;
     height: 65px;
@@ -689,7 +697,7 @@ html {
     align-items: center;
     justify-content: center;
     margin-bottom: 8px;
-    overflow: visible; /* Siguradohon nga dili maputol ang image inig dako */
+    overflow: hidden; /* Balik sa hidden para limpyo ang edges */
 }
 
 .img-container img {
@@ -697,8 +705,15 @@ html {
     max-height: 100%;
     border-radius: 8px;
     object-fit: contain;
-    /* --- I-add kining linya sa ubos --- */
-    animation: breathingZoom 3s infinite ease-in-out;
+    /* --- Gi-delete ang animation diri --- */
+    animation: none; 
+}
+
+/* 3. I-apply ang animation sa Lazada ug Amazon tags */
+.badge-lazada, .badge-amazon {
+    /* Siguroha nga naa kini nga class sa imong HTML text tags */
+    animation: textPulse 2s infinite ease-in-out;
+    display: inline-block; /* Importante para mo-epekto ang transform */
 }
 
 .store-tag {
