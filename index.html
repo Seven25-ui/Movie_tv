@@ -393,6 +393,7 @@
     gap: 6px;
     padding: 8px 12px;
     background: linear-gradient(135deg, #ff4d00 0%, #ff8c00 100%);
+
     color: white;
     border: none;
     border-radius: 10px;
@@ -715,17 +716,19 @@ html {
 </ul>
 </nav>
 
-<div id="status-bar" style="background: rgba(255, 255, 255, 0.05); padding: 8px 18px; border-radius: 50px; width: fit-content; margin: 20px auto; border: 1px solid rgba(255, 140, 0, 0.4); display: flex; align-items: center; gap: 10px; z-index: 10001; backdrop-filter: blur(15px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);">
-    <div style="height: 10px; width: 10px; background-color: #00ff00; border-radius: 50%; box-shadow: 0 0 10px #00ff00; animation: blinker 1.5s linear infinite;"></div>
-    
-    <span id="user-count" style="color: white; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 900;">--</span>
-    
-    <span style="color: rgba(255, 255, 255, 0.6); font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Live Streaming</span>
+<div id="status-bar" style="background: rgba(0, 0, 0, 0.6); padding: 5px 12px; border-radius: 30px; width: fit-content; margin: 10px auto; border: 1px solid rgba(0, 255, 0, 0.2); display: flex; align-items: center; gap: 8px; z-index: 10001; backdrop-filter: blur(10px);">
+    <div style="height: 6px; width: 6px; background-color: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: blinker 1.5s linear infinite;"></div>
+
+    <span id="user-count" style="color: white; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;">--</span>
+
+    <span style="color: rgba(255, 255, 255, 0.7); font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px;">Live</span>
 </div>
 
 <style>
 @keyframes blinker {
-  50% { opacity: 0.3; transform: scale(0.8); }
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
 }
 </style>
 
@@ -1229,6 +1232,30 @@ function setActive(element) {
 // I-update imong HTML onclick:
 // <div class="nav-btn" onclick="setActive(this); fetchType('movie')">...</div>
   
+function simulateLiveTraffic() {
+    const userCountElement = document.getElementById('user-count');
+    
+    // Mag-generate og random number tali sa 120 hangtod 350
+    // Para dili stagnant tan-awon ang imong site
+    let currentUsers = Math.floor(Math.random() * (350 - 120 + 1)) + 120;
+    
+    userCountElement.innerText = currentUsers.toLocaleString();
+
+    // Kada 4 ka segundo, naay gamay nga kausaban (taas o ubos)
+    setInterval(() => {
+        let change = Math.floor(Math.random() * 5) - 2; // -2, -1, 0, 1, 2
+        currentUsers += change;
+        
+        // Siguroha nga dili moubos sa 100 ang display
+        if (currentUsers < 100) currentUsers = 120;
+        
+        userCountElement.innerText = currentUsers.toLocaleString();
+    }, 4000);
+}
+
+// Sugdan ang simulation inig load sa page
+simulateLiveTraffic();
+
 </script>
 
 <div id="loginMessenger" class="draggable-btn">
