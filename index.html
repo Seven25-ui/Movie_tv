@@ -651,45 +651,74 @@ html {
     margin-bottom: 4px;
 }
 
-.affiliate-wrapper {
-    display: flex;
-    flex-wrap: wrap; /* Para mo-stack sa mobile */
-    gap: 15px;
-    padding: 15px;
-    justify-content: center;
+.affiliate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duha ka column permi para balance */
+    gap: 12px;
+    padding: 10px 15px 25px 15px;
 }
 
-.product-card {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
+.mini-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
     padding: 12px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    flex: 1; /* Para parehas ang gidak-on */
-    min-width: 280px; /* Dili kaayo gamay sa mobile */
-    max-width: 450px;
-    backdrop-filter: blur(8px);
+    text-decoration: none;
     position: relative;
+    transition: 0.3s ease;
 }
 
-/* Specific Colors para sa matag Store */
-.lazada-border { border: 1px solid rgba(17, 24, 115, 0.4); } /* Blue-ish Lazada */
-.amazon-border { border: 1px solid rgba(255, 153, 0, 0.4); } /* Orange-ish Amazon */
+.mini-card:active {
+    transform: scale(0.95); /* Gamay nga "press" effect sa mobile */
+}
 
-.laz-color { background: #111873 !important; }
-.amz-color { background: #ff9900 !important; color: #000 !important; }
+.img-container {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
 
-.product-card img {
-    width: 60px;
-    height: 60px;
+.img-container img {
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain; /* Para dili ma-stretch ang image link nimo */
 }
 
-.prod-info h3 { font-size: 13px; margin: 0; color: #eee; }
-.prod-info p { font-size: 14px; font-weight: bold; margin: 3px 0; color: #00ff00; }
+.store-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 6px;
+    font-weight: 900;
+    padding: 2px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
 
+.lazada { background: #111873; color: #fff; }
+.amazon { background: #ff9900; color: #000; }
+
+.p-name {
+    color: #eee;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.p-price {
+    color: #00ff00; /* Green color para sa price */
+    font-size: 11px;
+    font-weight: 800;
+}
 
 /* I-style ang container sa VPN */
 .vpn-mini-banner {
@@ -941,30 +970,28 @@ html {
     </div>
 </div>
 
-<div class="affiliate-wrapper">
-    <div class="product-card lazada-border">
-        <div class="badge">LOCAL DEAL (PH)</div>
-        <img src="https://via.placeholder.com/150" id="laz-img" alt="Lazada Product">
-        <div class="prod-info">
-            <h3 id="laz-title">Android TV Box 4K</h3>
-            <p id="laz-price">₱1,450.00</p>
-            <a href="IMONG_LAZADA_LINK_DIHAY" id="laz-link" target="_blank" class="buy-btn laz-color">
-                <i class="fas fa-shopping-bag"></i> BUY ON LAZADA
-            </a>
+<div class="affiliate-grid">
+    <a href="IMONG_LAZADA_AFFILIATE_LINK" target="_blank" class="mini-card">
+        <div class="store-tag lazada">LAZADA</div>
+        <div class="img-container">
+            <img src="https://via.placeholder.com/80" id="laz-img" alt="Lazada Product">
         </div>
-    </div>
+        <div class="mini-info">
+            <span class="p-name">Android TV Box 4K</span>
+            <span class="p-price">₱1,450.00</span>
+        </div>
+    </a>
 
-    <div class="product-card amazon-border">
-        <div class="badge">GLOBAL DEAL (US)</div>
-        <img src="https://via.placeholder.com/150" id="amz-img" alt="Amazon Product">
-        <div class="prod-info">
-            <h3 id="amz-title">Fire TV Stick 4K</h3>
-            <p id="amz-price">$49.99</p>
-            <a href="IMONG_AMAZON_LINK_DIHAY" id="amz-link" target="_blank" class="buy-btn amz-color">
-                <i class="fab fa-amazon"></i> VIEW ON AMAZON
-            </a>
+    <a href="IMONG_AMAZON_AFFILIATE_LINK" target="_blank" class="mini-card">
+        <div class="store-tag amazon">AMAZON</div>
+        <div class="img-container">
+            <img src="https://via.placeholder.com/80" id="amz-img" alt="Amazon Product">
         </div>
-    </div>
+        <div class="mini-info">
+            <span class="p-name">Fire TV Stick 4K</span>
+            <span class="p-price">$49.99</span>
+        </div>
+    </a>
 </div>
 
     <div class="row">
