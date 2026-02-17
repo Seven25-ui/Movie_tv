@@ -603,6 +603,52 @@ html {
     transform: translateX(10px); /* Mo-move gamay sa tuo */
 }
 
+/* 1. Glassmorphism para sa Search Box */
+.search-box {
+    background: rgba(255, 255, 255, 0.1); /* Transparent white */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    outline: none;
+}
+
+/* 2. Glow & Pulse Animation para sa WATCH NOW Button (#h-btn) */
+#h-btn {
+    background: var(--accent) !important;
+    box-shadow: 0 0 15px rgba(255, 87, 34, 0.4);
+    transition: 0.3s;
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 87, 34, 0.4); }
+    50% { transform: scale(1.03); box-shadow: 0 0 20px rgba(255, 87, 34, 0.7); }
+    100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 87, 34, 0.4); }
+}
+
+/* 3. Active State para sa Bottom Nav icons */
+.bottom-nav .nav-btn {
+    color: #888; /* Default color para sa dili active */
+    transition: 0.3s;
+}
+
+.bottom-nav .nav-btn.active {
+    color: #ff5722; /* Imong accent color (Orange) */
+}
+
+.bottom-nav .nav-btn.active i {
+    transform: translateY(-5px); /* Gamay nga bounce effect */
+}
+
     </style>
 </head>
 <body>
