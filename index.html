@@ -690,6 +690,69 @@ html {
 .prod-info h3 { font-size: 13px; margin: 0; color: #eee; }
 .prod-info p { font-size: 14px; font-weight: bold; margin: 3px 0; color: #00ff00; }
 
+
+/* I-style ang container sa VPN */
+.vpn-mini-banner {
+    margin-top: 15px;
+    max-width: 320px;
+}
+
+/* Ang Link box nga naay Glassmorphism effect */
+.vpn-link {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 102, 255, 0.1); /* Subtle Blue */
+    border: 1px solid rgba(0, 102, 255, 0.3);
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+/* Glow effect inig hover */
+.vpn-link:hover {
+    background: rgba(0, 102, 255, 0.2);
+    border-color: #0066ff;
+    box-shadow: 0 0 15px rgba(0, 102, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Icon style */
+.vpn-icon-box {
+    color: #0066ff;
+    font-size: 22px;
+    margin-right: 12px;
+}
+
+/* Text alignment */
+.vpn-text {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Title style */
+.vpn-title {
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+/* Subtext style */
+.vpn-sub {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 9px;
+    margin-top: 2px;
+}
+
+/* Gamay nga arrow sa kilid */
+.vpn-arrow {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 10px;
+}
     </style>
 </head>
 <body>
@@ -853,12 +916,30 @@ html {
     </div>
 
     <div class="hero" id="hero">
-        <div class="hero-info">
-            <h1 id="h-title">Loading...</h1>
-            <p id="h-desc">...</p>
-            <button id="h-btn" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;"><i class="fas fa-play"></i> &nbsp;WATCH NOW</button>
+    <div class="hero-info">
+        <h1 id="h-title">Loading...</h1>
+        <p id="h-desc">...</p>
+        
+        <button id="h-btn" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;">
+            <i class="fas fa-play"></i> &nbsp;WATCH NOW
+        </button>
+
+        <div class="vpn-mini-banner">
+            <a href="IMONG_VPN_AFFILIATE_LINK" target="_blank" class="vpn-link">
+                <div class="vpn-icon-box">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="vpn-text">
+                    <span class="vpn-title">SECURE YOUR STREAM</span>
+                    <span class="vpn-sub">Bypass Buffering & Hide IP</span>
+                </div>
+                <div class="vpn-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
         </div>
     </div>
+</div>
 
 <div class="affiliate-wrapper">
     <div class="product-card lazada-border">
