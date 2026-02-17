@@ -675,6 +675,13 @@ html {
     transform: scale(0.95); /* Gamay nga "press" effect sa mobile */
 }
 
+/* 1. I-define ang animation movement */
+@keyframes breathingZoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); } /* Mo-zoom in og 15% para klaro ang lihok */
+    100% { transform: scale(1); }
+}
+
 .img-container {
     width: 65px;
     height: 65px;
@@ -682,13 +689,16 @@ html {
     align-items: center;
     justify-content: center;
     margin-bottom: 8px;
+    overflow: visible; /* Siguradohon nga dili maputol ang image inig dako */
 }
 
 .img-container img {
     max-width: 100%;
     max-height: 100%;
     border-radius: 8px;
-    object-fit: contain; /* Para dili ma-stretch ang image link nimo */
+    object-fit: contain;
+    /* --- I-add kining linya sa ubos --- */
+    animation: breathingZoom 3s infinite ease-in-out;
 }
 
 .store-tag {
