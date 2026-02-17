@@ -850,21 +850,37 @@ html {
     100% { transform: rotate(360deg); }
 }
 
-/* 1. Ang Animation Logic */
-@keyframes textPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); } /* Hinay lang nga pulse para classy */
-    100% { transform: scale(1); }
+/* 1. Ang Animation Logic para sa Pulse ug Glow */
+@keyframes pulseGlowLazada {
+    0% { transform: scale(1); box-shadow: 0 0 0px rgba(0, 0, 255, 0); }
+    50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(0, 123, 255, 0.7); }
+    100% { transform: scale(1); box-shadow: 0 0 0px rgba(0, 0, 255, 0); }
 }
 
-/* 2. I-target ang saktong class gikan sa imong screenshot */
-.store-tag.amazon, .store-tag.lazada {
-    display: flex; /* Tungod kay <div> kini sa imong code */
+@keyframes pulseGlowAmazon {
+    0% { transform: scale(1); box-shadow: 0 0 0px rgba(255, 165, 0, 0); }
+    50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(255, 153, 0, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 0px rgba(255, 165, 0, 0); }
+}
+
+/* 2. I-apply sa imong Amazon Tag */
+.store-tag.amazon {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    animation: textPulse 2s infinite ease-in-out;
-    /* Siguroha nga naay transition para smooth */
-    transition: transform 0.3s ease;
+    padding: 2px 8px;
+    border-radius: 4px;
+    animation: pulseGlowAmazon 2s infinite ease-in-out;
+}
+
+/* 3. I-apply sa imong Lazada Tag */
+.store-tag.lazada {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    animation: pulseGlowLazada 2s infinite ease-in-out;
 }
 
     </style>
