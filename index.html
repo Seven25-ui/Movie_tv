@@ -1430,6 +1430,34 @@ function simulateLiveTraffic() {
 // Sugdan ang simulation inig load sa page
 simulateLiveTraffic();
 
+function localizeAffiliateCards() {
+    // I-detect ang language sa browser (pananglitan 'fil' para sa Filipino/Tagalog)
+    const userLang = navigator.language || navigator.userLanguage;
+    
+    // Pangitaa ang mga elemento sa imong cards
+    const lazTitle = document.querySelector('.mini-card:nth-child(1) .p-name');
+    const amzTitle = document.querySelector('.mini-card:nth-child(2) .p-name');
+    const lazTag = document.querySelector('.lazada');
+    const amzTag = document.querySelector('.amazon');
+
+    // Kon ang user taga-Pilipinas o naggamit og Filipino language settings
+    if (userLang.includes('fil') || userLang.includes('ph')) {
+        lazTitle.innerText = "Pinaka-baratong TV Box";
+        amzTitle.innerText = "Sulit nga Fire Stick";
+        lazTag.innerText = "SULIT DEAL";
+        amzTag.innerText = "GLOBAL ORDER";
+    } else {
+        // Default English kon international ang bisita
+        lazTitle.innerText = "Android TV Box 4K";
+        amzTitle.innerText = "Fire TV Stick 4K";
+        lazTag.innerText = "LAZADA";
+        amzTag.innerText = "AMAZON";
+    }
+}
+
+// I-run ang function inig load sa page
+document.addEventListener('DOMContentLoaded', localizeAffiliateCards);
+
 </script>
 
 <div id="loginMessenger" class="draggable-btn">
