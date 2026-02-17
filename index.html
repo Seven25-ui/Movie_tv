@@ -603,22 +603,24 @@ html {
     transform: translateX(10px); /* Mo-move gamay sa tuo */
 }
 
-/* 1. Glassmorphism para sa Search Box */
+/* I-adjust ang Search Bar para sa Mobile */
 .search-box {
-    background: rgba(255, 255, 255, 0.1); /* Transparent white */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 5px 15px;
-    display: flex;
-    align-items: center;
+    flex: 1; /* Para mo-expand base sa space */
+    max-width: 150px; /* Limitahan ang gidak-on */
+    height: 35px; /* Pa-mub-on gamay */
+    margin: 0 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
 }
 
 .search-box input {
-    background: transparent;
-    border: none;
-    color: #fff;
-    outline: none;
+    font-size: 13px; /* Pa-gamyan ang text */
+}
+
+/* Pa-gamyan pud ang SE7EN logo gamay para balance */
+.logo {
+    font-size: 18px;
+    letter-spacing: 1px;
 }
 
 /* 2. Glow & Pulse Animation para sa WATCH NOW Button (#h-btn) */
@@ -635,38 +637,18 @@ html {
     100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 87, 34, 0.4); }
 }
 
-/* Siguroha nga ang bottom-nav naka-fix sa ubos */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    background: #000; /* O bisan unsang dark background nimo */
-    padding: 10px 0;
-    z-index: 1000;
+/* I-target ang icon ug text kon ang class "active" naa */
+.nav-btn.active i, 
+.nav-btn.active span {
+    color: #ff5722 !important;
+    text-shadow: 0 0 10px rgba(255, 87, 34, 0.6); /* Glow effect */
+    transition: all 0.3s ease;
 }
 
-/* Default style para sa tanang buttons */
-.bottom-nav .nav-btn {
-    color: #888; /* Grayish color para sa inactive */
-    text-align: center;
-    font-size: 12px;
-    cursor: pointer;
+.nav-btn i {
+    font-size: 20px; /* Mas klaro nga icons */
+    margin-bottom: 4px;
 }
-
-/* KINI ANG IMPORTANTE: I-target ang icon ug text kon active */
-.bottom-nav .nav-btn.active i, 
-.bottom-nav .nav-btn.active span {
-    color: #ff5722 !important; /* Imong orange accent color */
-}
-
-/* Optional: Gamay nga animation para sa active icon */
-.bottom-nav .nav-btn.active i {
-    transform: translateY(-3px);
-    transition: 0.3s ease;
-}
-
     </style>
 </head>
 <body>
@@ -1234,6 +1216,18 @@ function toggleMenu() {
   const menu = document.getElementById('side-menu');
   menu.classList.toggle('active');
 }
+
+function setActive(element) {
+    // Tangtangon ang "active" class sa tanang buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    // I-add ang "active" sa gi-click nga button
+    element.classList.add('active');
+}
+
+// I-update imong HTML onclick:
+// <div class="nav-btn" onclick="setActive(this); fetchType('movie')">...</div>
   
 </script>
 
