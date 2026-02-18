@@ -883,6 +883,45 @@ html {
     animation: pulseGlowLazada 2s infinite ease-in-out;
 }
 
+/* Specific styling para sa Movie Library link */
+#side-menu ul li a[href="library.html"] {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: sans-serif;
+    transition: background 0.3s;
+}
+
+/* Icon style */
+#side-menu ul li a[href="library.html"] i {
+    margin-right: 12px;
+    color: #ff4500; /* SE7EN Orange */
+    width: 20px;
+    text-align: center;
+}
+
+/* Specific Badge Style */
+.badge-hot {
+    background: #ff4500;
+    color: white;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    animation: pulse-hot 1.5s infinite;
+    display: inline-block;
+}
+
+@keyframes pulse-hot {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(255, 69, 0, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); }
+}
+
     </style>
 </head>
 <body>
@@ -909,33 +948,11 @@ html {
   <li><a href="javascript:void(0)" onclick="location.reload()"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
 
   <li>
-  <a href="javascript:void(0)" onclick="showMovieLibrary()">
+  <a href="library.html">
     <i class="fa-solid fa-film"></i> Movie Library 
     <span class="badge-hot">HOT</span>
   </a>
 </li>
-
-<style>
-/* Para mo-match sa imong SE7EN orange theme */
-.badge-hot {
-    background: #ff4500; 
-    color: #fff;
-    font-size: 9px;
-    padding: 2px 5px;
-    border-radius: 3px;
-    margin-left: 8px;
-    vertical-align: middle;
-    font-weight: bold;
-    text-transform: uppercase;
-    animation: pulse-orange 1.5s infinite;
-}
-
-@keyframes pulse-orange {
-    0% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); }
-}
-</style>  
 
   <li><a href="https://seven25-ui.github.io/" target="_blank" style="color: #ffaa00; font-weight: bold;">
     <i class="fa-solid fa-fire-flame-curved"></i> Movie Gadgets
@@ -1608,56 +1625,6 @@ window.addEventListener('load', function() {
         }, 600);
     }, 1000);
 });
-
-async function showMovieLibrary() {
-    const apiKey = '3455ebd9bf16f0b30d2ed31128bf933c'; 
-    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&region=US`; 
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const mainContent = document.querySelector('.main-content-area'); 
-        
-        mainContent.innerHTML = '<h2 style="color: #ff4500; padding: 20px;">🔥 Global Trending Movies</h2><div id="movie-grid" class="grid-container"></div>';
-        const grid = document.getElementById('movie-grid');
-
-        data.results.slice(0, 12).forEach((movie, index) => {
-            
-            // DIRI NIMO IBUTANG IMONG ADSTERRA NATIVE BANNER [cite: 2026-01-31]
-            if (index === 4) {
-                const adDiv = document.createElement('div');
-                adDiv.className = 'native-ad-container';
-                adDiv.style = "grid-column: 1 / -1; margin: 20px 0; text-align: center;";
-                
-                // Imong actual Adsterra script ug container [cite: 2026-01-31]
-                adDiv.innerHTML = `
-                    <p style="color: #555; font-size: 10px; margin-bottom: 5px;">Recommended for You</p>
-                    <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
-                `;
-                
-                grid.appendChild(adDiv);
-
-                // I-load ang script human ma-create ang container [cite: 2026-01-31]
-                const script = document.createElement('script');
-                script.async = "async";
-                script.dataset.cfasync = "false";
-                script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
-                adDiv.appendChild(script);
-            }
-
-            // Movie cards display [cite: 2026-01-31]
-            grid.innerHTML += `
-                <div class="movie-card" style="padding: 10px;">
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" style="width:100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-                    <p style="color: white; font-weight: bold; margin-top: 8px; font-size: 13px;">${movie.title}</p>
-                    <span style="color: #ffb400; font-size: 12px;">⭐ ${movie.vote_average.toFixed(1)}</span>
-                </div>
-            `;
-        });
-    } catch (error) {
-        console.error("TMDB Fetch Error:", error);
-    }
-}
 
 </script>
 
