@@ -63,6 +63,45 @@
             text-align: center; margin: 20px; border: 1px solid #2ecc71;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
+
+/* Floating Back Button [cite: 2026-01-31] */
+.back-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--accent);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+    z-index: 1000;
+    transition: 0.3s;
+}
+.back-btn:active { transform: scale(0.9); }
+
+/* Footer Styling [cite: 2026-01-31] */
+footer {
+    text-align: center;
+    padding: 40px 20px 100px; /* Extra padding sa ubos para dle matabunan sa button */
+    border-top: 1px solid #1a1a1a;
+    margin-top: 30px;
+}
+footer p {
+    font-size: 12px;
+    color: #555;
+    letter-spacing: 1px;
+}
+footer span {
+    color: var(--accent);
+    font-weight: bold;
+}
+
     </style>
 </head>
 <body>
@@ -90,6 +129,15 @@
             <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd-player"></div>
         </div>
     </div>
+
+<a href="index.html" class="back-btn">
+    <i class="fas fa-arrow-left"></i> BACK TO HOME
+</a>
+
+<footer>
+    <p>© 2026 SE7EN GLOBAL. ALL RIGHTS RESERVED.</p>
+    <p style="font-size: 10px; margin-top: 5px;">POWERED BY <span>SE7EN TEAM</span></p>
+</footer>
 
     <script>
         const apiKey = '3455ebd9bf16f0b30d2ed31128bf933c'; 
