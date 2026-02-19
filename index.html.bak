@@ -1333,13 +1333,13 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
     if(currentType === 'movie') {
         // I-update nato ang mga links sa mas stable nga providers
         if (server === 'vidsrc_cc') {
-            url = `https://vidsrc.cc/embed/movie?tmdb=${currentID}`; // Mas stable nga vidsrc
+            url = `https://vidsrc.me/embed/movie?tmdb=${currentID}`; // Mas stable nga vidsrc
         } else {
             url = `https://vidsrc.to/embed/movie/${currentID}`; // Lig-on nga alternative
         }
     } else {
         if (server === 'vidsrc_cc') {
-            url = `https://vidsrc.cc/embed/tv?tmdb=${currentID}&sea=${s}&epi=${e}`;
+            url = `https://vidsrc.me/embed/tv?tmdb=${currentID}&sea=${s}&epi=${e}`;
         } else {
             url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
         }
