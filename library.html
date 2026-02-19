@@ -200,6 +200,15 @@ function playMovie(id) {
     
     document.getElementById('player-overlay').style.display = 'block';
     document.body.style.overflow = 'hidden';
+}
+
+function closePlayer() {
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+    
+    overlay.style.display = 'none';
+    iframe.src = ''; // Importante ni para moundang ang tingog sa salida [cite: 2026-01-31]
+    document.body.style.overflow = 'auto'; // Balik sa normal nga scroll [cite: 2026-01-31]
 }        
                  
     </script>
