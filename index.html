@@ -1035,7 +1035,7 @@ html {
     <div class="player-container">
     <div class="video-section">
         <div class="video-wrapper">
-            <iframe id="video-iframe" src="" allowfullscreen></iframe>
+            <iframe id="video-iframe" src="" allowfullscreen referrerpolicy="origin" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>
         </div>
 
         <div style="margin: 15px 0; text-align: center; padding: 0 20px;">
@@ -1318,9 +1318,10 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
-    if(!frame) return;
+    if (!frame) return;
 
-    if(btn) {
+    // UI Update
+    if (btn && btn.parentElement) {
         btn.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = "#1a1a1a";
             b.style.border = "1px solid #333";
@@ -1330,20 +1331,22 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
     }
 
     let url = "";
-    if(currentType === 'movie') {
-        // I-update nato ang mga links sa mas stable nga providers
+    // Modern format: Naggamit og /v2/ ug slash (/) imbis ?tmdb=
+    if (currentType === 'movie') {
         if (server === 'vidsrc_cc') {
-            url = `https://vidsrc.cc/embed/movie?tmdb=${currentID}`; // Mas stable nga vidsrc
+            url = `https://vidsrc.cc/v2/embed/movie/${currentID}`;
         } else {
-            url = `https://vidsrc.to/embed/movie/${currentID}`; // Lig-on nga alternative
+            url = `https://vidsrc.to/embed/movie/${currentID}`;
         }
     } else {
         if (server === 'vidsrc_cc') {
-            url = `https://vidsrc.cc/embed/tv?tmdb=${currentID}&sea=${s}&epi=${e}`;
+            url = `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
         } else {
             url = `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
         }
     }
+
+    // Force reload ang iframe src
     frame.src = url;
 }
 
