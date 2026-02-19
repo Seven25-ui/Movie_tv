@@ -146,71 +146,81 @@ footer span {
 </footer>
 
     <script>
-        const apiKey = '3455ebd9bf16f0b30d2ed31128bf933c'; 
-        const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&region=US`;
+    const apiKey = '3455ebd9bf16f0b30d2ed31128bf933c';
+    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&region=US`;
 
-async function fetchMovies() {
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const grid = document.getElementById('movie-grid');
-        
-        // Limpyohan ang grid kausa ra sa sugod
-        grid.innerHTML = ''; 
+    async function fetchMovies() {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const grid = document.getElementById('movie-grid');
 
-        data.results.slice(0, 12).forEach((movie, index) => {
-            // 1. Movie Card Logic
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.onclick = () => playMovie(movie.id);
-            card.innerHTML = `
-                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                <div class="movie-info">
-                    <div class="movie-title">${movie.title}</div>
-                    <div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>
-                </div>
-            `;
-            grid.appendChild(card);
+            if (!grid) return; // Siguroha nga naa ang grid sa HTML
+            grid.innerHTML = '';
 
-            // 2. Insert Native Banner at index 4
-            if (index === 4) {
-                const adDiv = document.createElement('div');
-                adDiv.className = 'native-ad-box';
-                adDiv.innerHTML = `
-                    <p style="color: #666; font-size: 10px; margin-bottom: 8px;">Recommended for You</p>
-                    <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
+            data.results.slice(0, 12).forEach((movie, index) => {
+                // 1. Movie Card Logic
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => playMovie(movie.id);
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>
+                    </div>
                 `;
-                grid.appendChild(adDiv);
+                grid.appendChild(card);
 
-                const script = document.createElement('script');
-                script.async = "async";
-                script.dataset.cfasync = "false";
-                script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
-                adDiv.appendChild(script);
-            }
-        });
-    } catch (error) { console.error("Error:", error); }
-}
+                // 2. Insert Native Banner at index 4
+                if (index === 4) {
+                    const adDiv = document.createElement('div');
+                    adDiv.className = 'native-ad-box';
+                    adDiv.innerHTML = `
+                        <p style="color: #666; font-size: 10px; margin-bottom: 8px;">Recommended for You</p>
+                        <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
+                    `;
+                    grid.appendChild(adDiv);
 
-// SAKTO NGA VERSION
-function playMovie(id) {
-    const iframe = document.getElementById('video-iframe');
-    // Gamita ang .cc ug ang /v2/ format
-    iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`; 
-    
-    document.getElementById('player-overlay').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
+                    const script = document.createElement('script');
+                    script.async = "async";
+                    script.dataset.cfasync = "false";
+                    script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
+                    adDiv.appendChild(script);
+                }
+            });
+        } catch (error) { 
+            console.error("Error fetching movies:", error); 
+        }
+    }
 
-function closePlayer() {
-    const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');
-    
-    overlay.style.display = 'none';
-    iframe.src = ''; // Importante ni para moundang ang tingog sa salida [cite: 2026-01-31]
-    document.body.style.overflow = 'auto'; // Balik sa normal nga scroll [cite: 2026-01-31]
-}        
-                 
-    </script>
+    function playMovie(id) {
+        const overlay = document.getElementById('player-overlay');
+        const iframe = document.getElementById('video-iframe');
+        
+        if (iframe) {
+            // Mao kini ang solusyon sa sad face: vidsrc.cc/v2/ [cite: 2026-01-31]
+            iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        }
+
+        if (overlay) {
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Stop background scroll [cite: 2026-01-31]
+        }
+    }
+
+    function closePlayer() {
+        const overlay = document.getElementById('player-overlay');
+        const iframe = document.getElementById('video-iframe');
+
+        if (overlay) overlay.style.display = 'none';
+        if (iframe) iframe.src = ''; // Stop video playback [cite: 2026-01-31]
+        document.body.style.overflow = 'auto'; // Restore background scroll [cite: 2026-01-31]
+    }
+
+    // KINI ANG IMPORTANTE: Kinahanglan i-trigger ang function inig load sa page!
+    document.addEventListener('DOMContentLoaded', fetchMovies);
+</script>
+                
 </body>
 </html>
