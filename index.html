@@ -17,6 +17,16 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:site_name" content="SE7EN CINEMA">
 
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SE7EN CINEMA">
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="theme-color" content="#E95420">
+
+<link rel="apple-touch-icon" href="https://image.tmdb.org/t/p/w192/wwemzKWzjKYJFfCeiB57q3r4Bcm.png">
+
+<link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1644,6 +1654,26 @@ window.addEventListener('load', function() {
         }, 600);
     }, 1000);
 });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('SW Registered!');
+        
+        // I-check kung naay update sa SW [cite: 2026-01-31]
+        reg.onupdatefound = () => {
+          const installingWorker = reg.installing;
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // Naay bag-ong version! I-notify ang user o i-auto refresh [cite: 2026-01-31]
+              console.log('New content available; please refresh.');
+              // window.location.reload(); // I-uncomment ni kung gusto nimo auto-refresh [cite: 2026-01-31]
+            }
+          };
+        };
+      }).catch(err => console.error('SW Registration Failed!', err));
+    });
+  }
 
 </script>
 
