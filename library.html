@@ -192,16 +192,13 @@ async function fetchMovies() {
     } catch (error) { console.error("Error:", error); }
 }
 
-// KINI LANG NGA FUNCTION ANG ILISI SA LIBRARY.HTML
+// SAKTO NGA VERSION
 function playMovie(id) {
-    const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
-    
-    // Nganong error? Kay vidsrc.me imong gamit sa library.
-    // KINI NGA LINK ANG SAKTO:
+    // Gamita ang .cc ug ang /v2/ format
     iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`; 
     
-    overlay.style.display = 'block';
+    document.getElementById('player-overlay').style.display = 'block';
     document.body.style.overflow = 'hidden';
 }        
                  
