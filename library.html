@@ -149,62 +149,59 @@ footer span {
         const apiKey = '3455ebd9bf16f0b30d2ed31128bf933c'; 
         const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&region=US`;
 
-        async function fetchMovies() {
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const grid = document.getElementById('movie-grid');
+async function fetchMovies() {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const grid = document.getElementById('movie-grid');
+        
+        // Limpyohan ang grid kausa ra sa sugod
+        grid.innerHTML = ''; 
 
-                data.results.slice(0, 12).forEach((movie, index) => {
-                    // Insert Native Banner at index 4 [cite: 2026-01-31]
-                    if (index === 4) {
-                        const adDiv = document.createElement('div');
-                        adDiv.className = 'native-ad-box';
-                        adDiv.innerHTML = `
-                            <p style="color: #666; font-size: 10px; margin-bottom: 8px;">Recommended for You</p>
-                            <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
-                        `;
-                        grid.appendChild(adDiv);
+        data.results.slice(0, 12).forEach((movie, index) => {
+            // 1. Movie Card Logic
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.onclick = () => playMovie(movie.id);
+            card.innerHTML = `
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                <div class="movie-info">
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>
+                </div>
+            `;
+            grid.appendChild(card);
 
-                        // Load Adsterra Script
-                        const script = document.createElement('script');
-                        script.async = "async"; script.dataset.cfasync = "false";
-                        script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
-                        adDiv.appendChild(script);
-                    }
+            // 2. Insert Native Banner at index 4
+            if (index === 4) {
+                const adDiv = document.createElement('div');
+                adDiv.className = 'native-ad-box';
+                adDiv.innerHTML = `
+                    <p style="color: #666; font-size: 10px; margin-bottom: 8px;">Recommended for You</p>
+                    <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
+                `;
+                grid.appendChild(adDiv);
 
-                    // Movie Card logic [cite: 2026-01-31]
-                    grid.innerHTML += `
-                        <div class="movie-card" onclick="playMovie('${movie.id}')">
-                            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                            <div class="movie-info">
-                                <div class="movie-title">${movie.title}</div>
-                                <div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>
-                            </div>
-                        </div>
-                    `;
-                });
-            } catch (error) { console.error("Error:", error); }
-        }
+                const script = document.createElement('script');
+                script.async = "async";
+                script.dataset.cfasync = "false";
+                script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
+                adDiv.appendChild(script);
+            }
+        });
+    } catch (error) { console.error("Error:", error); }
+}
 
-        // Player Logic [cite: 2026-01-31]
-        function playMovie(id) {
-            const overlay = document.getElementById('player-overlay');
-            const iframe = document.getElementById('video-iframe');
-            iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`; // Common movie source
-            overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closePlayer() {
-            const overlay = document.getElementById('player-overlay');
-            const iframe = document.getElementById('video-iframe');
-            overlay.style.display = 'none';
-            iframe.src = ''; 
-            document.body.style.overflow = 'auto';
-        }
-
-        fetchMovies();
+// Updated Player Logic para sa Library
+function playMovie(id) {
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+    // Gigamit ang vidsrc.cc /v2/ format para sigurado mo-play
+    iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`; 
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}        
+                 
     </script>
 </body>
 </html>
