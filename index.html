@@ -1230,6 +1230,34 @@ html {
     </a>
 </div>
 
+<div style="background-color: #000; color: #fff; padding: 40px 20px; text-align: center; border-top: 2px solid #ff9800; margin-top: 60px; font-family: sans-serif;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        
+        <div style="background: linear-gradient(145deg, #1a1a1a, #000); padding: 25px; border-radius: 15px; border: 1px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-bottom: 30px;">
+            <h3 style="color: #ff9800; margin-top: 0; letter-spacing: 1px; font-size: 1.2rem;">TAKE SE7EN CINEMA ANYWHERE!</h3>
+            <p style="color: #bbb; font-size: 14px; margin-bottom: 20px;">For a smoother and more stable experience, install our official Android app.</p>
+            
+            <a href="https://www.mediafire.com/file/0vbe529jbiy37bh/FreeStreaming.apk/file" 
+               target="_blank" 
+               style="display: inline-block; background-color: #ff9800; color: #000; padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 10px rgba(255,152,0,0.3);">
+                📥 DOWNLOAD FREE APK
+            </a>
+            
+            <p style="color: #666; font-size: 10px; margin-top: 15px; line-height: 1.4;">
+                *Note: If a security warning appears, select "Install Anyway." <br>Verified 100% safe by Se7en Team.
+            </p>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <span style="color: #ff9800; font-weight: bold; font-size: 1.1rem;">SE7EN CINEMA</span>
+        </div>
+        <p style="color: #444; font-size: 11px; margin: 0;">
+            &copy; 2026 Global Se7en. Handcrafted by <span style="color: #666;">Se7en Team</span>
+        </p>
+        
+    </div>
+</div>
+
     <div id="donationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
         <div style="background: #111; padding: 25px; border-radius: 20px; border: 1px solid #FFDD00; text-align: center; position: relative; max-width: 90%;">
             <span onclick="closeDonation()" style="position: absolute; top: 10px; right: 15px; color: #fff; font-size: 24px; cursor: pointer;">&times;</span>
@@ -1731,24 +1759,53 @@ window.addEventListener('load', function() {
   #greeting-modal {
     display: none;
     position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    backdrop-filter: blur(8px);
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px); /* Mas nindot nga blur para premium feel */
   }
   .modal-content {
     background: linear-gradient(145deg, #1a1a1a, #000000);
-    color: white; margin: 15% auto; padding: 30px; border-radius: 15px;
-    width: 85%; max-width: 450px; text-align: center;
-    box-shadow: 0 0 20px rgba(255, 136, 0, 0.4);
-    border: 1px solid #ff8800;
-    font-family: sans-serif;
+    color: white; margin: 15% auto; padding: 30px; border-radius: 20px;
+    width: 85%; max-width: 400px; text-align: center;
+    box-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
+    border: 1px solid rgba(255, 136, 0, 0.5);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  .modal-btn-download {
+    display: block; background: #ff8800; color: black !important; 
+    padding: 14px; border-radius: 10px; font-weight: bold; 
+    text-decoration: none; margin-bottom: 12px; font-size: 15px;
+    box-shadow: 0 4px 15px rgba(255, 136, 0, 0.4);
+  }
+  .modal-btn-close {
+    width: 100%; background: transparent; color: #888; border: 1px solid #333; 
+    padding: 12px; border-radius: 10px; font-weight: 500; 
+    cursor: pointer; font-size: 14px; transition: 0.3s;
+  }
+  .modal-btn-close:hover {
+    color: white; border-color: #666;
   }
 </style>
 
 <div id="greeting-modal">
   <div class="modal-content">
-    <h2 id="greet-title" style="color: #ff8800;">Welcome to SE7EN CINEMA</h2>
-    <p id="greet-msg">Experience premium streaming. Unlimited movies, anywhere.</p>
-    <button style="background: #ff8800; color: black; border: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px;" onclick="closeModal()">Start Watching</button>
+    <div style="font-size: 40px; margin-bottom: 10px;">🎬</div>
+    <h2 id="greet-title" style="color: #ff8800; margin: 0 0 10px 0; font-size: 1.5rem;">SE7EN CINEMA</h2>
+    <p id="greet-msg" style="margin-bottom: 25px; font-size: 14px; color: #bbb; line-height: 1.5;">
+        Stream your favorite movies and series seamlessly. For the best experience, use our Android app.
+    </p>
+    
+    <a href="https://www.mediafire.com/file/0vbe529jbiy37bh/FreeStreaming.apk/file" 
+       target="_blank" class="modal-btn-download">
+        📥 DOWNLOAD OFFICIAL APK
+    </a>
+
+    <button class="modal-btn-close" onclick="closeModal()">
+        Later / Watch in Browser
+    </button>
+    
+    <div style="margin-top: 20px; font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 1px;">
+        Verified Safe • Developed by Aloy
+    </div>
   </div>
 </div>
 
