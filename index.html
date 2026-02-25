@@ -1437,6 +1437,15 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
 
+function closePlayer() {
+    const overlay = document.getElementById('player-overlay');
+    const frame = document.getElementById('video-iframe');
+    
+    if (overlay) overlay.style.display = 'none'; // I-tago na pud
+    if (frame) frame.src = ""; // I-clear ang video para dili saba
+    clearTimeout(fallbackTimer); // Hunongon ang timer
+}
+
 // FIX 2: Play Function (Gi-update ang server buttons container)
 async function play(id, type, title) {
     currentID = id; currentType = type; currentS = 1; currentE = 1;
