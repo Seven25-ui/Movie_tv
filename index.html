@@ -1427,7 +1427,6 @@ function closePlayer() {
     clearTimeout(fallbackTimer); // Hunongon ang timer
 }
 
-// FIX 2: Play Function (Gi-update ang server buttons container)
 async function play(id, type, title) {
     currentID = id; currentType = type; currentS = 1; currentE = 1;
 
@@ -1435,29 +1434,24 @@ async function play(id, type, title) {
     overlay.style.display = 'block';
     document.body.style.overflow = 'hidden';
     document.getElementById('p-title').innerText = title;
-    document.getElementById('video-iframe').src = ''; // Clear para dili saba
+    document.getElementById('video-iframe').src = ''; 
 
-    // Diri nato ibutang ang duha ka Server Buttons sa ibabaw sa episodes
     const epBox = document.getElementById('episode-area'); 
-    const serverSelectionHTML = `
-        <div id="server-selector" style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
-            <button onclick="switchServer('vidsrc_cc', this)" style="padding:10px; background:#E95420; color:#fff; border:none; border-radius:5px; cursor:pointer; flex:1;">🚀 SERVER 1</button>
-            <button onclick="switchServer('embed_su', this)" style="padding:10px; background:#1a1a1a; color:#fff; border:none; border-radius:5px; cursor:pointer; flex:1;">🛡️ SERVER 2</button>
-        </div>
-    `;
+    
+    // GI-DELETE NATO ANG serverSelectionHTML DINHI PARA MAWALA ANG DOUBLE SA UBOS
 
     if(type === 'movie') {
-        // Ipakita ra ang server buttons kon movie
+        // Kon movie, tagoan ang episode area kay naa na tay buttons sa HTML sa babaw
         epBox.style.display = 'block'; 
-        epBox.innerHTML = serverSelectionHTML + '<p style="text-align:center; color:#555;">Movie Mode: Enjoy watching!</p>';
-        switchServer('vidsrc_cc');
+        epBox.innerHTML = '<p style="text-align:center; color:#555; font-size: 11px;">Movie Mode: Enjoy watching!</p>';
+        switchServer('vidsrc_to'); // Default server nga i-load
     } else {
+        // Kon TV show, Season Selector ug Episodes na lang ang ipakita
         epBox.style.display = 'block';
         const data = await apiCall(`/tv/${id}`);
         
-        // I-set ang UI para sa TV shows (Seasons + Server buttons)
-        let html = serverSelectionHTML;
-        html += `<select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px;"></select>`;
+        // Season select ug Episode grid na lang, wala na'y extra server buttons
+        let html = `<select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px; border-radius:5px;"></select>`;
         html += `<div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap:10px;"></div>`;
         epBox.innerHTML = html;
 
@@ -1471,7 +1465,7 @@ async function play(id, type, title) {
             }
         });
         await loadEpisodes(id, 1);
-        switchServer('vidsrc_cc');
+        switchServer('vidsrc_to'); // Default server
     }
 }
 
