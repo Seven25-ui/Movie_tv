@@ -1371,19 +1371,23 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-// I-define ang listahan sa servers para dali ra tuyokon
+// I-define ang listahan sa servers
 const serverList = ['vidsrc_to', 'vidsrc_xyz', 'vidsrc_cc', 'embed_su'];
 let currentServerIndex = 0;
 let fallbackTimer;
 
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
+    const overlay = document.getElementById('player-overlay'); // Gidugang nato ni
+    
     if (!frame) return;
 
-    // Hunongon ang karaan nga timer kung naay bag-ong gi-click
+    // KINI ANG FIX: I-pakita lang ang overlay kon tawgon na ang switchServer
+    if (overlay) overlay.style.display = 'block';
+
     clearTimeout(fallbackTimer);
 
-    // Update UI (imong orange style)
+    // Update UI Colors
     if (btn && btn.parentElement) {
         btn.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = "#1a1a1a";
@@ -1396,7 +1400,6 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
     let url = "";
     const isMovie = (currentType === 'movie');
 
-    // Server Selection Logic
     if (server === 'vidsrc_to') {
         url = isMovie ? `https://vidsrc.to/embed/movie/${currentID}` : `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
     } else if (server === 'vidsrc_xyz') {
@@ -1407,37 +1410,32 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
         url = isMovie ? `https://embed.su/embed/movie/${currentID}` : `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
     }
 
-    // Performance settings
     frame.setAttribute('referrerpolicy', 'origin');
-    
-    // Force reload
     frame.src = "about:blank";
+    
     setTimeout(() => {
         frame.src = url;
     }, 50);
 
-    // --- AUTO FALLBACK LOGIC ---
-    // Kung human sa 15 seconds buffer gihapon o walay salida, balhin sa sunod
+    // I-monitor ang loading sa frame dinhi sa sulod
+    frame.onload = function() {
+        clearTimeout(fallbackTimer);
+        console.log("Server loaded successfully!");
+    };
+
+    // Auto Fallback Timer
     fallbackTimer = setTimeout(() => {
         currentServerIndex++;
         if (currentServerIndex < serverList.length) {
-            console.log("Hinay ang server, namalhin ta sa: " + serverList[currentServerIndex]);
-            
-            // Pangitaon ang button para ma-update pud ang color sa UI
             const nextBtn = document.querySelector(`button[onclick*="${serverList[currentServerIndex]}"]`);
             switchServer(serverList[currentServerIndex], nextBtn, s, e);
         } else {
-            console.log("Nahurot na ang servers, Aloy. Basin internet na gyud ni.");
-            currentServerIndex = 0; // Reset para sa sunod gamit
+            currentServerIndex = 0; 
         }
-    }, 15000); // 15 seconds threshold
+    }, 15000); 
 }
 
-// Inig load sa iframe, hunongon ang timer kay "Success" na
-document.getElementById('video-iframe').onload = function() {
-    clearTimeout(fallbackTimer);
-    console.log("Server loaded successfully!");
-};
+// AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
 
 // FIX 2: Play Function (Gi-update ang server buttons container)
 async function play(id, type, title) {
