@@ -1894,34 +1894,36 @@ window.addEventListener('load', function() {
 <script>
   const isEnabled = true;
   const delayInSeconds = 3;
+  let hasOpenedAd = false; // Stopper para dili mag-cge og gawas
 
   if (isEnabled) {
     setTimeout(() => {
       const modal = document.getElementById('greeting-modal');
       if (modal) {
         modal.style.display = 'block';
-        
-        // Inig click sa gawas sa modal (sa overlay), mo-close ug mo-ads gihapon
-        window.onclick = function(event) {
-          if (event.target == modal) closeModal();
-        };
-        window.ontouchstart = function(event) {
-          if (event.target == modal) closeModal();
-        };
       }
     }, delayInSeconds * 1000);
   }
 
   function closeModal() {
     const modal = document.getElementById('greeting-modal');
-    if (modal) {
-      // 1. I-abli ang imong Smart Link sa bag-ong tab
+    if (modal && !hasOpenedAd) {
+      // 1. I-abli ang Smart Link kausa ra gyud
       window.open("https://www.effectivegatecpm.com/dngbcut70?key=b92254846ce4324f02b4201a926307f6", "_blank");
-
-      // 2. I-hide na ang modal para makasulod ang user
+      
+      // 2. I-set ang stopper
+      hasOpenedAd = true;
+      
+      // 3. I-hide ang modal
+      modal.style.display = 'none';
+    } else if (modal) {
+      // Kon nakaclick na, i-close na lang diretso
       modal.style.display = 'none';
     }
   }
+
+  // GI-TANGTANG nato ang window.onclick ug window.ontouchstart 
+  // para dili na siya "aggressive" bisan asa i-click.
 </script>
 
 <div id="toast-container" style="position: fixed; bottom: 30px; right: 20px; z-index: 10005; display: flex; flex-direction: column-reverse; gap: 12px; pointer-events: none;"></div>
