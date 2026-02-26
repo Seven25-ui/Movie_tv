@@ -962,7 +962,7 @@ l    animation: textPulse 2s infinite ease-in-out;
   <ul>
   <li><a href="javascript:void(0)" onclick="location.reload()"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
 
-<li style="list-style: none; margin-bottom: 15px;">
+<!--<li style="list-style: none; margin-bottom: 15px;">
     <a href="https://ouo.io/m9PWuO8" 
        target="_blank" 
        style="text-decoration: none; display: flex; align-items: center; padding: 5px 10px; transition: 0.3s;">
@@ -986,7 +986,7 @@ l    animation: textPulse 2s infinite ease-in-out;
             *Select "Install Anyway" if warned. Verified safe.
         </p>
     </div>
-</li>
+</li> -->
 
   <li>
   <a href="library.html">
@@ -1067,19 +1067,19 @@ l    animation: textPulse 2s infinite ease-in-out;
 </div>
 
 <div id="player-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; overflow-y: auto; font-family: sans-serif;">
-    
     <div class="player-header" style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111; position: sticky; top: 0; z-index: 10;">
         <div class="logo" style="font-size: 1.2rem; color: #E95420; font-family: 'Orbitron'; font-weight: bold; letter-spacing: 2px;">SE7EN PLAY</div>
         <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer; line-height:1;">&times;</button>
     </div>
 
     <div class="video-container" style="position: relative; width: 100%; max-width: 1000px; margin: 0 auto; aspect-ratio: 16/9; background: #050505;">
-        <iframe id="video-iframe" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen="true" referrerpolicy="origin"></iframe>
+        <iframe id="video-iframe" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen="true" referrerpolicy="origin" sandbox="allow-forms allow-scripts allow-same-origin allow-presentation allow-pointer-lock"></iframe>
     </div>
 
     <div style="margin: 15px 0; text-align: center; padding: 0 20px;">
         <p style="color: #666; font-size: 11px; font-family: monospace; margin-bottom: 8px;">Server slow? Try high speed options.</p>
         <a href="https://doctoredits.com/1877110" target="_blank" style="background: #e64a19; color: white; padding: 12px 0; border-radius: 5px; text-decoration: none; font-weight: bold; display: block; width: 100%; max-width: 350px; margin: 0 auto 12px auto; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #ff5722;">🚀 WATCH IN HIGH SPEED (VIP)</a>
+        
         <a href="https://www.effectivegatecpm.com/fg756im2nw?key=d3235d932cc1b738b04b2390dd0a6226" target="_blank" style="background: #ff3d00; color: white; padding: 12px 0; border-radius: 5px; text-decoration: none; font-weight: bold; display: block; width: 100%; max-width: 350px; margin: 0 auto; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #ff6e40;">📥 DOWNLOAD IN 1080P</a>
     </div>
 
@@ -1089,6 +1089,7 @@ l    animation: textPulse 2s infinite ease-in-out;
         <button onclick="switchServer('vidsrc_cc', this)" style="padding: 10px 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px;">Server 3</button>
         <button onclick="switchServer('embed_su', this)" style="padding: 10px 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px;">Server 4</button>
     </div>
+</div>
 
     <div style="margin: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px dashed #E95420; text-align: center;">
         <p style="color: #E95420; font-size: 10px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">🔥 Special Offers for Viewers:</p>
@@ -1347,35 +1348,24 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-// I-define ang listahan sa servers
-const serverList = ['vidsrc_to', 'vidsrc_xyz', 'vidsrc_cc', 'embed_su'];
-let currentServerIndex = 0;
-let fallbackTimer;
-
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
-    const overlay = document.getElementById('player-overlay'); // Gidugang nato ni
+    const overlay = document.getElementById('player-overlay');
     
     if (!frame) return;
 
-    // KINI ANG FIX: I-pakita lang ang overlay kon tawgon na ang switchServer
+    // Pakita ang player overlay
     if (overlay) overlay.style.display = 'block';
-
+    
     clearTimeout(fallbackTimer);
 
-    // Update UI Colors
-    if (btn && btn.parentElement) {
-        btn.parentElement.querySelectorAll('button').forEach(b => {
-            b.style.background = "#1a1a1a";
-            b.style.border = "1px solid #333";
-        });
-        btn.style.background = "#E95420";
-        btn.style.border = "1px solid #ff8c00";
-    }
-
+    // KINI ANG PINAKA-IMPORTANTE: Lock ang ads gamit ang sandbox
+    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation allow-pointer-lock');
+    
     let url = "";
     const isMovie = (currentType === 'movie');
 
+    // Server Logic
     if (server === 'vidsrc_to') {
         url = isMovie ? `https://vidsrc.to/embed/movie/${currentID}` : `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
     } else if (server === 'vidsrc_xyz') {
@@ -1386,29 +1376,16 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
         url = isMovie ? `https://embed.su/embed/movie/${currentID}` : `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
     }
 
-    frame.setAttribute('referrerpolicy', 'origin');
+    // Refresh ang frame para sigurado
     frame.src = "about:blank";
-    
-    setTimeout(() => {
-        frame.src = url;
-    }, 50);
 
-    // I-monitor ang loading sa frame dinhi sa sulod
+    setTimeout(() => {
+        if (url !== "") frame.src = url;
+    }, 100);
+
     frame.onload = function() {
         clearTimeout(fallbackTimer);
-        console.log("Server loaded successfully!");
     };
-
-    // Auto Fallback Timer
-    fallbackTimer = setTimeout(() => {
-        currentServerIndex++;
-        if (currentServerIndex < serverList.length) {
-            const nextBtn = document.querySelector(`button[onclick*="${serverList[currentServerIndex]}"]`);
-            switchServer(serverList[currentServerIndex], nextBtn, s, e);
-        } else {
-            currentServerIndex = 0; 
-        }
-    }, 15000); 
 }
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
