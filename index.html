@@ -1352,20 +1352,23 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
     const overlay = document.getElementById('player-overlay');
     
+    // Safety check para dili mo-crash ang script
     if (!frame) return;
 
     // Pakita ang player overlay
     if (overlay) overlay.style.display = 'block';
-    
-    clearTimeout(fallbackTimer);
 
-    // KINI ANG PINAKA-IMPORTANTE: Lock ang ads gamit ang sandbox
+    if (typeof fallbackTimer !== 'undefined') {
+        clearTimeout(fallbackTimer);
+    }
+
+    // ADS BLOCKER: Locked sandbox settings
     frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation allow-pointer-lock');
-    
-    let url = "";
-    const isMovie = (currentType === 'movie');
 
-    // Server Logic
+    let url = "";
+    const isMovie = (typeof currentType !== 'undefined' && currentType === 'movie');
+
+    // SERVER LOGIC: Gi-fix ang spacing ug brackets
     if (server === 'vidsrc_to') {
         url = isMovie ? `https://vidsrc.to/embed/movie/${currentID}` : `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
     } else if (server === 'vidsrc_xyz') {
@@ -1376,15 +1379,20 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
         url = isMovie ? `https://embed.su/embed/movie/${currentID}` : `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
     }
 
-    // Refresh ang frame para sigurado
+    // Refresh the iframe cleanly
     frame.src = "about:blank";
 
     setTimeout(() => {
-        if (url !== "") frame.src = url;
+        if (url !== "") {
+            frame.src = url;
+        }
     }, 100);
 
+    // I-clear ang timer inig human load
     frame.onload = function() {
-        clearTimeout(fallbackTimer);
+        if (typeof fallbackTimer !== 'undefined') {
+            clearTimeout(fallbackTimer);
+        }
     };
 }
 
