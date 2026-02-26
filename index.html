@@ -1084,11 +1084,18 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 
     <div id="server-list" style="max-width: 1000px; margin: 10px auto; padding: 0 15px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-        <button onclick="switchServer('vidsrc_to', this)" style="padding: 10px 15px; background: #E95420; border: 1px solid #ff8c00; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px;">Server 1</button>
-        <button onclick="switchServer('vidsrc_xyz', this)" style="padding: 10px 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px;">Server 2</button>
-        <button onclick="switchServer('vidsrc_cc', this)" style="padding: 10px 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px;">Server 3</button>
-        <button onclick="switchServer('embed_su', this)" style="padding: 10px 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px;">Server 4</button>
-    </div>
+    <button 
+        onclick="switchServer('vidsrc_cc', this)" 
+        style="padding: 10px 20px; background: #E95420; border: 1px solid #ff8c00; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px; transition: all 0.3s ease;">
+        Server 1
+    </button>
+
+    <button 
+        onclick="switchServer('vidsrc_to', this)" 
+        style="padding: 10px 20px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px; transition: all 0.3s ease;">
+        Server 2
+    </button>
+</div>
 
     <div style="margin: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px dashed #E95420; text-align: center;">
         <p style="color: #E95420; font-size: 10px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">🔥 Special Offers for Viewers:</p>
@@ -1347,22 +1354,25 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
+// I-update nato ang listahan para duha na lang
+const serverList = ['vidsrc_cc', 'vidsrc_to'];
+let currentServerIndex = 0;
+let fallbackTimer;
+
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
-    const overlay = document.getElementById('player-overlay'); 
+    const overlay = document.getElementById('player-overlay');
 
     if (!frame) return;
 
     if (overlay) overlay.style.display = 'block';
 
-    clearTimeout(fallbackTimer);
+    if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
 
-    // --- KINI ANG PANG-FIX SA ADS (SANDBOX) ---
-    // Gikuha nato ang 'allow-popups' ug 'allow-modals' para dili sila ka-abli og ads.
-    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation allow-pointer-lock');
-    // ------------------------------------------
+    // ADS BLOCKER + CLICK FIX
+    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation allow-pointer-lock allow-popups-to-escape-sandbox');
 
-    // Update UI Colors (Layout untouched)
+    // Update UI Colors
     if (btn && btn.parentElement) {
         btn.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = "#1a1a1a";
@@ -1375,28 +1385,25 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
     let url = "";
     const isMovie = (currentType === 'movie');
 
-    if (server === 'vidsrc_to') {
-        url = isMovie ? `https://vidsrc.to/embed/movie/${currentID}` : `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
-    } else if (server === 'vidsrc_xyz') {
-        url = isMovie ? `https://vidsrc.xyz/embed/movie/${currentID}` : `https://vidsrc.xyz/embed/tv/${currentID}/${s}/${e}`;
-    } else if (server === 'vidsrc_cc') {
+    // DUHA NA LANG KA SERVERS: vidsrc_cc (Default) ug vidsrc_to (Server 2)
+    if (server === 'vidsrc_cc' || server === 'default') {
         url = isMovie ? `https://vidsrc.cc/v2/embed/movie/${currentID}` : `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
-    } else if (server === 'embed_su') {
-        url = isMovie ? `https://embed.su/embed/movie/${currentID}` : `https://embed.su/embed/tv/${currentID}/${s}/${e}`;
+    } else if (server === 'vidsrc_to') {
+        url = isMovie ? `https://vidsrc.to/embed/movie/${currentID}` : `https://vidsrc.to/embed/tv/${currentID}/${s}/${e}`;
     }
 
     frame.setAttribute('referrerpolicy', 'origin');
     frame.src = "about:blank";
 
     setTimeout(() => {
-        frame.src = url;
+        if (url) frame.src = url;
     }, 50);
 
     frame.onload = function() {
-        clearTimeout(fallbackTimer);
-        console.log("Server loaded successfully!");
+        if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
     };
 
+    // Fallback timer (vidsrc.cc -> vidsrc.to)
     fallbackTimer = setTimeout(() => {
         currentServerIndex++;
         if (currentServerIndex < serverList.length) {
