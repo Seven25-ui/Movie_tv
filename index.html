@@ -1147,9 +1147,9 @@ html {
         <h1 id="h-title">Loading...</h1>
         <p id="h-desc">...</p>
         
-        <button id="h-btn" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;">
-            <i class="fas fa-play"></i> &nbsp;WATCH NOW
-        </button>
+        <button id="h-btn" onclick="triggerWatchAd()" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;">
+    <i class="fas fa-play"></i> &nbsp;WATCH NOW
+</button>
 
         <div class="vpn-mini-banner">
             <a href="https://doctoredits.com/1877110" target="_blank" class="vpn-link">
@@ -1736,6 +1736,20 @@ window.addEventListener('load', function() {
     });
   }
 
+<script>
+  function triggerWatchAd() {
+    // 1. I-abli ang imong Smart Link sa bag-ong tab
+    window.open("https://www.effectivegatecpm.com/dngbcut70?key=b92254846ce4324f02b4201a926307f6", "_blank");
+
+    // 2. (Optional) I-scroll sila paubos sa movie list o i-redirect sa player
+    // Pananglitan, i-scroll sa movie section:
+    const movieSection = document.getElementById('movie-list'); // usba ang ID depende sa imong code
+    if (movieSection) {
+      movieSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1791,53 +1805,112 @@ window.addEventListener('load', function() {
 <style>
   #greeting-modal {
     display: none;
-    position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.85);
-    backdrop-filter: blur(10px); /* Mas nindot nga blur para premium feel */
+    position: fixed; 
+    z-index: 9999; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(0,0,0,0.92); /* Deeper dark for focus */
+    backdrop-filter: blur(15px);
+    animation: fadeIn 0.5s ease;
   }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
   .modal-content {
-    background: linear-gradient(145deg, #1a1a1a, #000000);
-    color: white; margin: 15% auto; padding: 30px; border-radius: 20px;
-    width: 85%; max-width: 400px; text-align: center;
-    box-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
-    border: 1px solid rgba(255, 136, 0, 0.5);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(145deg, #1e1e1e, #000000);
+    color: white; 
+    margin: 20% auto; 
+    padding: 40px 30px; 
+    border-radius: 28px;
+    width: 85%; 
+    max-width: 380px; 
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 136, 0, 0.15);
+    border: 1px solid rgba(255, 136, 0, 0.4);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .modal-btn-download {
-    display: block; background: #ff8800; color: black !important; 
-    padding: 14px; border-radius: 10px; font-weight: bold; 
-    text-decoration: none; margin-bottom: 12px; font-size: 15px;
-    box-shadow: 0 4px 15px rgba(255, 136, 0, 0.4);
+
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
-  .modal-btn-close {
-    width: 100%; background: transparent; color: #888; border: 1px solid #333; 
-    padding: 12px; border-radius: 10px; font-weight: 500; 
-    cursor: pointer; font-size: 14px; transition: 0.3s;
+
+  .welcome-icon {
+    font-size: 55px;
+    margin-bottom: 20px;
+    display: inline-block;
+    filter: drop-shadow(0 5px 15px rgba(255, 136, 0, 0.3));
   }
-  .modal-btn-close:hover {
-    color: white; border-color: #666;
+
+  .modal-title {
+    color: #ff8800; 
+    margin: 0 0 12px 0; 
+    font-size: 1.8rem; 
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+  }
+
+  .modal-text {
+    margin-bottom: 35px; 
+    font-size: 15px; 
+    color: #aeaeae; 
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .modal-btn-enter {
+    width: 100%; 
+    background: #ff8800; 
+    color: #000 !important;
+    padding: 16px; 
+    border-radius: 14px; 
+    font-weight: 700;
+    border: none;
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 0 8px 20px rgba(255, 136, 0, 0.3);
+  }
+
+  .modal-btn-enter:active {
+    transform: scale(0.96);
+    background: #e67a00;
+  }
+
+  .footer-tag {
+    margin-top: 30px; 
+    font-size: 10px; 
+    color: #555; 
+    text-transform: uppercase; 
+    letter-spacing: 3px;
+    font-weight: 600;
   }
 </style>
 
 <div id="greeting-modal">
   <div class="modal-content">
-    <div style="font-size: 40px; margin-bottom: 10px;">🎬</div>
-    <h2 id="greet-title" style="color: #ff8800; margin: 0 0 10px 0; font-size: 1.5rem;">SE7EN CINEMA</h2>
-    <p id="greet-msg" style="margin-bottom: 25px; font-size: 14px; color: #bbb; line-height: 1.5;">
-        Stream your favorite movies and series seamlessly. For the best experience, use our Android app.
+    <div class="welcome-icon">🎬</div>
+    <h2 class="modal-title">WELCOME</h2>
+    <p class="modal-text">
+        Thank you for choosing <b>Free Movie's</b>.<br>
+        Experience seamless streaming of your favorite movies and series in high definition.
     </p>
-    
-    <a href="https://ouo.io/m9PWuO8" 
-       target="_blank" class="modal-btn-download">
-        📥 DOWNLOAD OFFICIAL APK
-    </a>
 
-    <button class="modal-btn-close" onclick="closeModal()">
-        Later / Watch in Browser
+    <button class="modal-btn-enter" onclick="closeModal()">
+        Start Watching
     </button>
-    
-    <div style="margin-top: 20px; font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 1px;">
-        Verified Safe • Developed by Se7en Team
+
+    <div class="footer-tag">
+        Official Release • Se7en Matrix
     </div>
   </div>
 </div>
@@ -1851,6 +1924,8 @@ window.addEventListener('load', function() {
       const modal = document.getElementById('greeting-modal');
       if (modal) {
         modal.style.display = 'block';
+        
+        // Inig click sa gawas sa modal (sa overlay), mo-close ug mo-ads gihapon
         window.onclick = function(event) {
           if (event.target == modal) closeModal();
         };
@@ -1863,11 +1938,15 @@ window.addEventListener('load', function() {
 
   function closeModal() {
     const modal = document.getElementById('greeting-modal');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+      // 1. I-abli ang imong Smart Link sa bag-ong tab
+      window.open("https://www.effectivegatecpm.com/dngbcut70?key=b92254846ce4324f02b4201a926307f6", "_blank");
+
+      // 2. I-hide na ang modal para makasulod ang user
+      modal.style.display = 'none';
+    }
   }
 </script>
-
-<script src="https://pl28702340.effectivegatecpm.com/98/41/b8/9841b8bf09616a7e6e27a07353d77759.js"></script>  
 
 <div id="toast-container" style="position: fixed; bottom: 30px; right: 20px; z-index: 10005; display: flex; flex-direction: column-reverse; gap: 12px; pointer-events: none;"></div>
 
