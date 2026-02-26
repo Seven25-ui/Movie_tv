@@ -1347,23 +1347,22 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-// I-define ang listahan sa servers
-const serverList = ['vidsrc_to', 'vidsrc_xyz', 'vidsrc_cc', 'embed_su'];
-let currentServerIndex = 0;
-let fallbackTimer;
-
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
-    const overlay = document.getElementById('player-overlay'); // Gidugang nato ni
-    
+    const overlay = document.getElementById('player-overlay'); 
+
     if (!frame) return;
 
-    // KINI ANG FIX: I-pakita lang ang overlay kon tawgon na ang switchServer
     if (overlay) overlay.style.display = 'block';
 
     clearTimeout(fallbackTimer);
 
-    // Update UI Colors
+    // --- KINI ANG PANG-FIX SA ADS (SANDBOX) ---
+    // Gikuha nato ang 'allow-popups' ug 'allow-modals' para dili sila ka-abli og ads.
+    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation allow-pointer-lock');
+    // ------------------------------------------
+
+    // Update UI Colors (Layout untouched)
     if (btn && btn.parentElement) {
         btn.parentElement.querySelectorAll('button').forEach(b => {
             b.style.background = "#1a1a1a";
@@ -1388,27 +1387,25 @@ function switchServer(server, btn = null, s = currentS, e = currentE) {
 
     frame.setAttribute('referrerpolicy', 'origin');
     frame.src = "about:blank";
-    
+
     setTimeout(() => {
         frame.src = url;
     }, 50);
 
-    // I-monitor ang loading sa frame dinhi sa sulod
     frame.onload = function() {
         clearTimeout(fallbackTimer);
         console.log("Server loaded successfully!");
     };
 
-    // Auto Fallback Timer
     fallbackTimer = setTimeout(() => {
         currentServerIndex++;
         if (currentServerIndex < serverList.length) {
             const nextBtn = document.querySelector(`button[onclick*="${serverList[currentServerIndex]}"]`);
             switchServer(serverList[currentServerIndex], nextBtn, s, e);
         } else {
-            currentServerIndex = 0; 
+            currentServerIndex = 0;
         }
-    }, 15000); 
+    }, 15000);
 }
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
