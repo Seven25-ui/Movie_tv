@@ -1073,17 +1073,24 @@ l    animation: textPulse 2s infinite ease-in-out;
         <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer; line-height:1;">&times;</button>
     </div>
 
-    <div class="video-container" style="position: relative; width: 100%; max-width: 1000px; margin: 0 auto; aspect-ratio: 16/9; background: #000; border: 1px solid #1a1a1a; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+    <div class="video-container" style="
+    position: relative; 
+    width: 100%; 
+    max-aspect-ratio: 16/9; 
+    background: #000; 
+    border-radius: 8px; 
+    overflow: hidden;
+    transform: translateZ(0); /* Gi-force ang GPU para dili mo-ungot ang UI */
+    backface-visibility: hidden;
+">
     <iframe
         id="video-iframe"
-        src="about:blank" 
-        style="width: 100%; height: 100%; border: none;"
-        allowfullscreen="true"
-        webkitallowfullscreen="true"
-        mozallowfullscreen="true"
+        src="about:blank"
+        style="width: 100%; height: 100%; border: none; background: #000;"
+        allow="autoplay; encrypted-media; fullscreen"
+        sandbox="allow-forms allow-scripts allow-same-origin" 
         referrerpolicy="no-referrer"
-        loading="lazy"
-        sandbox="allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups">
+        loading="lazy">
     </iframe>
 </div>
 
@@ -1358,49 +1365,25 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-function loadV2Player(btn = null, s = currentS, e = currentE) {
+function loadV2Player(s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
-    const overlay = document.getElementById('player-overlay');
-
     if (!frame) return;
 
-    // 1. UI LOCK & FEEDBACK
-    if (overlay) {
-        overlay.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Stop background scroll [cite: 2026-01-31]
-    }
+    // 1. KILL EXISTING PROCESSES (The Matrix Wipe)
+    frame.src = ""; // Clear existing content
+    frame.contentWindow.document.write(''); // Clear internal memory
+    frame.contentWindow.close(); // Stop any running scripts inside
 
-    // 2. SANDBOX PROTECTION (Anti-Ungot)
-    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups');
-    frame.setAttribute('referrerpolicy', 'no-referrer');
-
-    // 3. UI BUTTON FEEDBACK (Optional)
-    if (btn) {
-        btn.style.background = "#E95420";
-        btn.style.border = "1px solid #ff8c00";
-        btn.innerText = "LOADING...";
-    }
-
-    // 4. FORCE VIDSRC.CC V2 URL
     const isMovie = (currentType === 'movie');
     const url = isMovie 
         ? `https://vidsrc.cc/v2/embed/movie/${currentID}` 
         : `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
 
-    // 5. CLEAN RELOAD
-    frame.src = "about:blank";
-    
+    // 2. DELAY LOAD (Hatagan og 500ms ang CPU para maka-recover)
     setTimeout(() => {
         frame.src = url;
-        console.log("🚀 Aloy, V2 Force Loaded. No more Sad Face.");
-    }, 150);
-
-    // 6. ON LOAD ACTION
-    frame.onload = function() {
-        if (btn) btn.innerText = "LOAD PLAYER (V2)";
-        // Pwede nimo i-hide ang overlay diri kon gusto nimo
-        // if (overlay) overlay.style.display = 'none';
-    };
+        console.log("⚡ V2 Force Loaded with Hardware Acceleration.");
+    }, 500); 
 }
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
