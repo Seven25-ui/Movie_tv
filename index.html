@@ -1363,68 +1363,69 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-const serverList = ['vidsrc_cc', 'vidsrc_pm']; // Gi-ilisdan ang 'to' og 'pm' kay mas paspas
+const serverList = ['vidsrc_cc', 'vidsrc_pm'];
 let currentServerIndex = 0;
 let fallbackTimer;
 
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
     const overlay = document.getElementById('player-overlay');
-
+    
     if (!frame) return;
     if (overlay) overlay.style.display = 'block';
 
-    if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
+    // 1. CLEAR PREVIOUS TIMER - Para dili mag-double load ang servers
+    if (fallbackTimer) clearTimeout(fallbackTimer);
 
-    // KINI ANG SIKRETO: Minimal sandbox settings para dili mo-ungot ang browser
-    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups-to-escape-sandbox');
-    frame.setAttribute('referrerpolicy', 'no-referrer'); // No-referrer para mas paspas ang load
+    // 2. THE ANTI-FREEZE SANDBOX 
+    // Gi-remove nako ang 'allow-modals' ug 'allow-top-navigation' 
+    // para dili ka i-redirect sa mga virus/scam sites nga makapa-ungot.
+    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups');
+    frame.setAttribute('referrerpolicy', 'no-referrer');
+    frame.setAttribute('loading', 'lazy'); // I-load lang kon makita na
 
-    // Update UI Colors
+    // 3. UI RESET (Optimized)
     if (btn && btn.parentElement) {
-        btn.parentElement.querySelectorAll('button').forEach(b => {
-            b.style.background = "#1a1a1a";
-            b.style.border = "1px solid #333";
+        const allBtns = btn.parentElement.querySelectorAll('button');
+        allBtns.forEach(b => {
+            b.style.cssText = "background: #1a1a1a; border: 1px solid #333; transition: 0.3s;";
         });
-        btn.style.background = "#E95420";
-        btn.style.border = "1px solid #ff8c00";
+        btn.style.cssText = "background: #E95420; border: 1px solid #ff8c00; box-shadow: 0 0 10px #E95420;";
     }
 
     let url = "";
     const isMovie = (currentType === 'movie');
 
-    // SERVER 1: vidsrc.cc (v2 Force)
     if (server === 'vidsrc_cc' || server === 'default') {
         url = isMovie ? `https://vidsrc.cc/v2/embed/movie/${currentID}` : `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
-    } 
-    // SERVER 2: vidsrc.pm (Kini mas gaan, dili makapang-ungot)
-    else if (server === 'vidsrc_pm') {
+    } else if (server === 'vidsrc_pm') {
         url = isMovie ? `https://vidsrc.pm/embed/movie/${currentID}` : `https://vidsrc.pm/embed/tv/${currentID}/${s}/${e}`;
     }
 
-    // Reset iframe to stop ongoing heavy scripts
+    // 4. CLEAN RESET (Stop heavy scripts before switching)
     frame.src = "about:blank";
 
-    // Hatagan og gamay nga pahuway ang browser (100ms) para dili mo-freeze
+    // 5. THE DELAY TRICK (Gipatas-an gamay para maka-ginhawa ang CPU)
     setTimeout(() => {
-        if (url) frame.src = url;
-    }, 100);
+        if (url) {
+            frame.src = url;
+            console.log("🚀 Aloy, Matrix Tunneling to: " + server);
+        }
+    }, 300); // 300ms is the sweet spot para sa mobile
 
-    frame.onload = function() {
-        if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
-        console.log("Server Switched Successfully!");
+    frame.onload = () => {
+        if (fallbackTimer) clearTimeout(fallbackTimer);
+        if (overlay) overlay.style.display = 'none'; // I-hide overlay inig human load
     };
 
-    // Auto-fallback kon dugay mo-load (20 seconds para sure)
+    // 6. SMART AUTO-FALLBACK
     fallbackTimer = setTimeout(() => {
-        currentServerIndex++;
-        if (currentServerIndex < serverList.length) {
-            const nextBtn = document.querySelector(`button[onclick*="${serverList[currentServerIndex]}"]`);
-            switchServer(serverList[currentServerIndex], nextBtn, s, e);
-        } else {
-            currentServerIndex = 0; // Reset index back to start
-        }
-    }, 20000);
+        console.warn("⚠️ Server ungot! Switching to fallback...");
+        currentServerIndex = (currentServerIndex + 1) % serverList.length;
+        const nextServer = serverList[currentServerIndex];
+        const nextBtn = document.querySelector(`button[onclick*="${nextServer}"]`);
+        switchServer(nextServer, nextBtn, s, e);
+    }, 15000); // 15 seconds ra, ayaw paabta og 20 kay mapul-an ang user
 }
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
