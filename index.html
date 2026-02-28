@@ -1367,52 +1367,25 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
             card.innerHTML = `<img src="${IMG + m.poster_path}"><div class="card-meta"><h3>${m.title || m.name}</h3></div>`;
             g.appendChild(card);
         });
+  }
+
+function playMovie(id) {
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+
+    if (iframe) {
+        // [cite: 2026-02-28] Diretso load sa V2 URL
+        // Dili na nato hilabtan ang sandbox settings sa JS para dili mo-ungot
+        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     }
 
-/**
- * [cite: 2026-02-28] 
- * Aloy's Optimized V2 Player Loader
- * Purpose: Fix "Sad Face" and "Ungot" issues.
- */
-function loadV2Player(s = currentS, e = currentE) {
-    const frame = document.getElementById('video-iframe');
-    const overlay = document.getElementById('player-overlay');
-
-    if (!frame) return;
-
-    // 1. CLEAR MEMORY & UI FEEDBACK
-    frame.src = "about:blank"; // Limpyo nga sugod
     if (overlay) {
         overlay.style.display = 'block';
+        // Para dili mo-scroll ang background samtang nag-tan-aw
         document.body.style.overflow = 'hidden'; 
     }
-
-    // 2. APPLY ALOY'S "NO-UNGOT" ATTRIBUTES
-    // Kini ang mo-force sa sandbox ug policy sa dili pa mo-load ang URL
-    frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-top-navigation allow-pointer-lock');
-    frame.setAttribute('referrerpolicy', 'origin'); // [cite: 2026-02-28] Solution to Sad Face
-
-    // 3. GENERATE V2 URL
-    const isMovie = (currentType === 'movie');
-    const baseUrl = "https://vidsrc.cc/v2/embed";
-    const url = isMovie 
-        ? `${baseUrl}/movie/${currentID}` 
-        : `${baseUrl}/tv/${currentID}/${s}/${e}`;
-
-    // 4. THE DELAYED LOAD (Para dili ma-shock ang GPU/RAM)
-    setTimeout(() => {
-        frame.src = url;
-        console.log("⚡ Matrix Updated: V2 Player Loaded with Origin Policy.");
-    }, 250);
-
-    // 5. UNLOCK UI ONCE LOADED
-    frame.onload = function() {
-        // Optional: Pwede nimo i-auto close ang overlay diri
-        // if (overlay) overlay.style.display = 'none';
-        // document.body.style.overflow = 'auto';
-    };
 }
-
+    
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
 
 function closePlayer() {
