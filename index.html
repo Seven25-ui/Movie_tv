@@ -1066,37 +1066,16 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 </div>
 
-<div id="player-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; overflow-y: auto; font-family: sans-serif;">
-    
-    <div class="player-header" style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111; position: sticky; top: 0; z-index: 10;">
-        <div class="logo" style="font-size: 1.2rem; color: #E95420; font-family: 'Orbitron'; font-weight: bold; letter-spacing: 2px;">SE7EN PLAY</div>
-        <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer; line-height:1;">&times;</button>
-    </div>
+<div id="player-overlay">
+        <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">
+            <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">SE7EN PLAY</div>
+            <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>
+        </div>
 
-    <div class="video-container" style="
-    position: relative; 
-    width: 100%; 
-    aspect-ratio: 16/9; /* Mas stable kaysa max-aspect-ratio para sa responsiveness */
-    background: #000; 
-    border-radius: 8px; 
-    overflow: hidden;
-    transform: translateZ(0); /* Hardware Acceleration Boost */
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-">
-    <iframe
-        id="video-iframe"
-        src="about:blank"
-        style="width: 100%; height: 100%; border: none; background: #000;"
-        allow="autoplay; encrypted-media; fullscreen"
-        /* Gidugangan og allow-top-navigation ug allow-pointer-lock base sa imong diskubre */
-        sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation allow-pointer-lock"
-        /* Gi-usab sa 'origin' para dili ma-block sa vidsrc server */
-        referrerpolicy="origin"
-        loading="lazy">
-    </iframe>
-</div>
+        <div class="video-wrapper">
+            <iframe id="video-iframe" src="" allowfullscreen referrerpolicy="origin" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>
+        </div>
+
 
     <div style="margin: 15px 0; text-align: center; padding: 0 20px;">
         <p style="color: #666; font-size: 11px; font-family: monospace; margin-bottom: 8px;">Server slow? Try high speed options.</p>
