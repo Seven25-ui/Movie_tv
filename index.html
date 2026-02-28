@@ -1363,69 +1363,67 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-const serverList = ['vidsrc_cc', 'vidsrc_pm'];
-let currentServerIndex = 0;
-let fallbackTimer;
-
 function switchServer(server, btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
     const overlay = document.getElementById('player-overlay');
     
     if (!frame) return;
-    if (overlay) overlay.style.display = 'block';
 
-    // 1. CLEAR PREVIOUS TIMER - Para dili mag-double load ang servers
-    if (fallbackTimer) clearTimeout(fallbackTimer);
+    // 1. UI FEEDBACK & FIX OVERFLOW
+    if (overlay) {
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // [cite: 2026-01-31] Stop background scroll
+    }
 
-    // 2. THE ANTI-FREEZE SANDBOX 
-    // Gi-remove nako ang 'allow-modals' ug 'allow-top-navigation' 
-    // para dili ka i-redirect sa mga virus/scam sites nga makapa-ungot.
+    if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
+
+    // 2. SANDBOX & REFERRER (Anti-Ungot Protection)
     frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups');
     frame.setAttribute('referrerpolicy', 'no-referrer');
-    frame.setAttribute('loading', 'lazy'); // I-load lang kon makita na
 
-    // 3. UI RESET (Optimized)
+    // 3. UI BUTTON UPDATE
     if (btn && btn.parentElement) {
-        const allBtns = btn.parentElement.querySelectorAll('button');
-        allBtns.forEach(b => {
-            b.style.cssText = "background: #1a1a1a; border: 1px solid #333; transition: 0.3s;";
+        btn.parentElement.querySelectorAll('button').forEach(b => {
+            b.style.background = "#1a1a1a";
+            b.style.border = "1px solid #333";
         });
-        btn.style.cssText = "background: #E95420; border: 1px solid #ff8c00; box-shadow: 0 0 10px #E95420;";
+        btn.style.background = "#E95420";
+        btn.style.border = "1px solid #ff8c00";
     }
 
     let url = "";
     const isMovie = (currentType === 'movie');
 
+    // 4. THE "SAD FACE" SOLUTION (v2 Force)
     if (server === 'vidsrc_cc' || server === 'default') {
+        // [cite: 2026-01-31] Using /v2/embed/ to bypass the block
         url = isMovie ? `https://vidsrc.cc/v2/embed/movie/${currentID}` : `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
-    } else if (server === 'vidsrc_pm') {
+    } 
+    else if (server === 'vidsrc_pm') {
         url = isMovie ? `https://vidsrc.pm/embed/movie/${currentID}` : `https://vidsrc.pm/embed/tv/${currentID}/${s}/${e}`;
     }
 
-    // 4. CLEAN RESET (Stop heavy scripts before switching)
+    // 5. CLEAN RELOAD
     frame.src = "about:blank";
-
-    // 5. THE DELAY TRICK (Gipatas-an gamay para maka-ginhawa ang CPU)
     setTimeout(() => {
-        if (url) {
-            frame.src = url;
-            console.log("🚀 Aloy, Matrix Tunneling to: " + server);
-        }
-    }, 300); // 300ms is the sweet spot para sa mobile
+        if (url) frame.src = url;
+    }, 150);
 
-    frame.onload = () => {
-        if (fallbackTimer) clearTimeout(fallbackTimer);
-        if (overlay) overlay.style.display = 'none'; // I-hide overlay inig human load
+    // 6. AUTO-CLOSE OVERLAY ONCE LOADED
+    frame.onload = function() {
+        if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
+        // Pwede nimo i-comment out ni kon gusto nimo manual i-close ang overlay
+        // if (overlay) overlay.style.display = 'none'; 
+        // document.body.style.overflow = 'auto'; 
     };
 
-    // 6. SMART AUTO-FALLBACK
+    // 7. FALLBACK
     fallbackTimer = setTimeout(() => {
-        console.warn("⚠️ Server ungot! Switching to fallback...");
         currentServerIndex = (currentServerIndex + 1) % serverList.length;
         const nextServer = serverList[currentServerIndex];
         const nextBtn = document.querySelector(`button[onclick*="${nextServer}"]`);
         switchServer(nextServer, nextBtn, s, e);
-    }, 15000); // 15 seconds ra, ayaw paabta og 20 kay mapul-an ang user
+    }, 20000);
 }
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
