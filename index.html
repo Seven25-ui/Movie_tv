@@ -1369,32 +1369,53 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
 }
 
+/**
+ * SE7EN PLAY - Official Logic [2026-02-28]
+ * Synchronized with Aloy's exact HTML structure.
+ */
+
 function playMovie(id) {
+    // 1. Pag-target sa mga Elements
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
 
-    if (iframe) {
-        // [cite: 2026-02-28] Diretso load sa V2 URL
-        // Dili na nato hilabtan ang sandbox settings sa JS para dili mo-ungot
-        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+    if (!id) {
+        console.error("Error: Movie ID is missing!");
+        return;
     }
 
+    // 2. I-show ang Overlay
     if (overlay) {
         overlay.style.display = 'block';
-        // Para dili mo-scroll ang background samtang nag-tan-aw
-        document.body.style.overflow = 'hidden'; 
+        // Para dili mo-scroll ang main page samtang nag-tan-aw
+        document.body.style.overflow = 'hidden';
+        // Siguroha nga ang view magsugod sa taas
+        overlay.scrollTo(0, 0);
+    }
+
+    // 3. I-load ang Video sa Iframe
+    if (iframe) {
+        // [cite: 2026-02-28] Loading via V2 with Aloy's sandbox settings
+        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     }
 }
-    
-// AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
 
 function closePlayer() {
     const overlay = document.getElementById('player-overlay');
-    const frame = document.getElementById('video-iframe');
-    
-    if (overlay) overlay.style.display = 'none'; // I-tago na pud
-    if (frame) frame.src = ""; // I-clear ang video para dili saba
-    clearTimeout(fallbackTimer); // Hunongon ang timer
+    const iframe = document.getElementById('video-iframe');
+
+    // 1. I-tago ang Overlay
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+
+    // 2. I-clear ang Iframe (Para mamatay ang sounds ug ads sa background)
+    if (iframe) {
+        iframe.src = 'about:blank';
+    }
+
+    // 3. I-balik ang scroll sa main page
+    document.body.style.overflow = 'auto';
 }
 
 async function play(id, type, title) {
