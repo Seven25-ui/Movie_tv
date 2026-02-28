@@ -1073,16 +1073,17 @@ l    animation: textPulse 2s infinite ease-in-out;
         <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer; line-height:1;">&times;</button>
     </div>
 
-    <div class="video-container" style="position: relative; width: 100%; max-width: 1000px; margin: 0 auto; aspect-ratio: 16/9; background: #000; border: 1px solid #1a1a1a; border-radius: 8px; overflow: hidden;">
-    <iframe 
-        id="video-iframe" 
-        src="" 
-        style="width: 100%; height: 100%; border: none;" 
-        allowfullscreen="true" 
-        webkitallowfullscreen="true" 
+    <div class="video-container" style="position: relative; width: 100%; max-width: 1000px; margin: 0 auto; aspect-ratio: 16/9; background: #000; border: 1px solid #1a1a1a; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+    <iframe
+        id="video-iframe"
+        src="about:blank" 
+        style="width: 100%; height: 100%; border: none;"
+        allowfullscreen="true"
+        webkitallowfullscreen="true"
         mozallowfullscreen="true"
         referrerpolicy="no-referrer"
-        sandbox="allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups-to-escape-sandbox">
+        loading="lazy"
+        sandbox="allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups">
     </iframe>
 </div>
 
@@ -1092,17 +1093,11 @@ l    animation: textPulse 2s infinite ease-in-out;
         <a href="https://www.effectivegatecpm.com/fg756im2nw?key=d3235d932cc1b738b04b2390dd0a6226" target="_blank" style="background: #ff3d00; color: white; padding: 12px 0; border-radius: 5px; text-decoration: none; font-weight: bold; display: block; width: 100%; max-width: 350px; margin: 0 auto; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #ff6e40;">📥 DOWNLOAD IN 1080P</a>
     </div>
 
-    <div id="server-list" style="max-width: 1000px; margin: 10px auto; padding: 0 15px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-    <button
-        onclick="switchServer('vidsrc_cc', this)"
-        style="padding: 10px 20px; background: #E95420; border: 1px solid #ff8c00; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px; transition: all 0.3s ease;">
-        Server 1
-    </button>
-
-    <button
-        onclick="switchServer('vidsrc_pm', this)"
-        style="padding: 10px 20px; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px; transition: all 0.3s ease;">
-        Server 2
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+    <button 
+        onclick="loadV2Player(this)" 
+        style="padding: 10px 20px; background: #E95420; border: 1px solid #ff8c00; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px; transition: all 0.3s ease; box-shadow: 0 0 10px rgba(233, 84, 32, 0.4);">
+        LOAD PLAYER (V2)
     </button>
 </div>
 
@@ -1363,67 +1358,49 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
         });
     }
 
-function switchServer(server, btn = null, s = currentS, e = currentE) {
+function loadV2Player(btn = null, s = currentS, e = currentE) {
     const frame = document.getElementById('video-iframe');
     const overlay = document.getElementById('player-overlay');
-    
+
     if (!frame) return;
 
-    // 1. UI FEEDBACK & FIX OVERFLOW
+    // 1. UI LOCK & FEEDBACK
     if (overlay) {
         overlay.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // [cite: 2026-01-31] Stop background scroll
+        document.body.style.overflow = 'hidden'; // Stop background scroll [cite: 2026-01-31]
     }
 
-    if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
-
-    // 2. SANDBOX & REFERRER (Anti-Ungot Protection)
+    // 2. SANDBOX PROTECTION (Anti-Ungot)
     frame.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-pointer-lock allow-popups');
     frame.setAttribute('referrerpolicy', 'no-referrer');
 
-    // 3. UI BUTTON UPDATE
-    if (btn && btn.parentElement) {
-        btn.parentElement.querySelectorAll('button').forEach(b => {
-            b.style.background = "#1a1a1a";
-            b.style.border = "1px solid #333";
-        });
+    // 3. UI BUTTON FEEDBACK (Optional)
+    if (btn) {
         btn.style.background = "#E95420";
         btn.style.border = "1px solid #ff8c00";
+        btn.innerText = "LOADING...";
     }
 
-    let url = "";
+    // 4. FORCE VIDSRC.CC V2 URL
     const isMovie = (currentType === 'movie');
-
-    // 4. THE "SAD FACE" SOLUTION (v2 Force)
-    if (server === 'vidsrc_cc' || server === 'default') {
-        // [cite: 2026-01-31] Using /v2/embed/ to bypass the block
-        url = isMovie ? `https://vidsrc.cc/v2/embed/movie/${currentID}` : `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
-    } 
-    else if (server === 'vidsrc_pm') {
-        url = isMovie ? `https://vidsrc.pm/embed/movie/${currentID}` : `https://vidsrc.pm/embed/tv/${currentID}/${s}/${e}`;
-    }
+    const url = isMovie 
+        ? `https://vidsrc.cc/v2/embed/movie/${currentID}` 
+        : `https://vidsrc.cc/v2/embed/tv/${currentID}/${s}/${e}`;
 
     // 5. CLEAN RELOAD
     frame.src = "about:blank";
+    
     setTimeout(() => {
-        if (url) frame.src = url;
+        frame.src = url;
+        console.log("🚀 Aloy, V2 Force Loaded. No more Sad Face.");
     }, 150);
 
-    // 6. AUTO-CLOSE OVERLAY ONCE LOADED
+    // 6. ON LOAD ACTION
     frame.onload = function() {
-        if (typeof fallbackTimer !== 'undefined') clearTimeout(fallbackTimer);
-        // Pwede nimo i-comment out ni kon gusto nimo manual i-close ang overlay
-        // if (overlay) overlay.style.display = 'none'; 
-        // document.body.style.overflow = 'auto'; 
+        if (btn) btn.innerText = "LOAD PLAYER (V2)";
+        // Pwede nimo i-hide ang overlay diri kon gusto nimo
+        // if (overlay) overlay.style.display = 'none';
     };
-
-    // 7. FALLBACK
-    fallbackTimer = setTimeout(() => {
-        currentServerIndex = (currentServerIndex + 1) % serverList.length;
-        const nextServer = serverList[currentServerIndex];
-        const nextBtn = document.querySelector(`button[onclick*="${nextServer}"]`);
-        switchServer(nextServer, nextBtn, s, e);
-    }, 20000);
 }
 
 // AYAW na ibutang ang document.getElementById('video-iframe').onload sa gawas!
