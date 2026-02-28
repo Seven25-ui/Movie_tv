@@ -1367,7 +1367,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
             card.innerHTML = `<img src="${IMG + m.poster_path}"><div class="card-meta"><h3>${m.title || m.name}</h3></div>`;
             g.appendChild(card);
         });
-  }
+}
 
 function playMovie(id) {
     const overlay = document.getElementById('player-overlay');
