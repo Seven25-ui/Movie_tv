@@ -1627,18 +1627,29 @@ window.onload = () => {
     }
 
     async function search(q) {
-        const d = await apiCall(`/search/multi?query=${encodeURIComponent(q)}`);
-        document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = "Results: " + q;
+    // KINI ANG PINAKA-IMPORTANTE: Multi-search!
+    const d = await apiCall(`/search/multi?query=${encodeURIComponent(q)}`);
+    
+    // I-hide ang hero banner
+    const hero = document.getElementById('hero');
+    if (hero) hero.style.display = "none";
+    
+    // I-update ang title
+    const rowTitle = document.getElementById('row-title');
+    if (rowTitle) rowTitle.innerText = `Search Results for: ${q}`;
+    
+    // I-display ang results
+    if (d && d.results) {
         render(d.results);
     }
+}
 
-// --- LIVE SEARCH TRIGGER PARA SA CLASS "search-box" ---
-let typingTimer; 
-const doneTypingInterval = 500; 
+// LIVE SEARCH TRIGGER PARA SA CLASS "search-box"
+let typingTimer;
+const doneTypingInterval = 500;
 
-// Kuhaon nato ang input sa sulod sa .search-box
-const searchInputField = document.querySelector('.search-box input');
+// Siguroha nga husto ang selector (.search-box)
+const searchInputField = document.querySelector('.search-box');
 
 if (searchInputField) {
     searchInputField.addEventListener('input', function() {
@@ -1647,14 +1658,16 @@ if (searchInputField) {
 
         if (query.length > 2) {
             typingTimer = setTimeout(() => {
-                // Tawgon ang imong gi-paste nga function
+                // Mao ni ang motawag sa TMDb API function
                 search(query); 
             }, doneTypingInterval);
         } else if (query.length === 0) {
             // I-reset kon gi-delete ang text
-            document.getElementById('hero').style.display = 'flex';
-            document.getElementById('row-title').innerText = "Trending Now";
-            location.reload(); 
+            const hero = document.getElementById('hero');
+            if(hero) hero.style.display = "block"; // I-pakita balik ang hero section
+            
+            // Imbis location.reload(), mas maayo i-clear lang ang search results
+            // location.reload(); 
         }
     });
 }
