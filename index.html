@@ -935,6 +935,34 @@ l    animation: textPulse 2s infinite ease-in-out;
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); }
 }
 
+/* Siguradohon nato nga ang overlay motabon sa tibuok screen */
+#player-overlay {
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: #000; 
+    z-index: 9999; /* Pinaka-ibabaw gyud dapat */
+    overflow-y: auto;
+}
+
+/* Para sa nindot nga 16:9 ratio sa video */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
     </style>
 </head>
 <body>
@@ -1068,7 +1096,9 @@ l    animation: textPulse 2s infinite ease-in-out;
 
 <div id="player-overlay">
         <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">
-            <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">SE7EN PLAY</div>
+            <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">
+    SE7EN PLAY <span id="p-title" style="font-size: 0.9rem; color: #666; margin-left: 10px;"></span>
+</div>
             <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>
         </div>
 
@@ -1342,100 +1372,117 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
             const type = m.media_type || (m.first_air_date ? 'tv' : 'movie');
             const card = document.createElement('div');
             card.className = 'card';
-            card.onclick = () => { play(m.id, type, m.title || m.name); window.scrollTo({top:0, behavior:'smooth'}); };
-            card.innerHTML = `<img src="${IMG + m.poster_path}"><div class="card-meta"><h3>${m.title || m.name}</h3></div>`;
+            
+            // Siguruha nga playMovie (o play) ang name sa imong function
+            const title = m.title || m.name;
+            card.onclick = () => { 
+                playMovie(m.id, title); // <--- Mao ni ang mo-trigger sa player
+                window.scrollTo({top:0, behavior:'smooth'}); 
+            };
+            
+            card.innerHTML = `
+                <img src="${IMG + m.poster_path}">
+                <div class="card-meta">
+                    <h3>${title}</h3>
+                </div>
+            `;
             g.appendChild(card);
         });
-}
+    }
 
-/**
- * SE7EN PLAY - Official Logic [2026-02-28]
- * Synchronized with Aloy's exact HTML structure.
- */
 
-function playMovie(id) {
-    // 1. Pag-target sa mga Elements
+function playMovie(id, title = "") {
     const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');
+    const iframe = document.getElementById('video-iframe'); // Gi-match sa imong HTML ID
+    const titleEl = document.getElementById('p-title');
 
-    if (!id) {
-        console.error("Error: Movie ID is missing!");
-        return;
-    }
+    if (!id) return console.error("Missing Movie ID");
 
-    // 2. I-show ang Overlay
-    if (overlay) {
-        overlay.style.display = 'block';
-        // Para dili mo-scroll ang main page samtang nag-tan-aw
-        document.body.style.overflow = 'hidden';
-        // Siguroha nga ang view magsugod sa taas
-        overlay.scrollTo(0, 0);
-    }
+    // 1. I-show ang Overlay
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    overlay.scrollTo(0, 0);
 
-    // 3. I-load ang Video sa Iframe
-    if (iframe) {
-        // [cite: 2026-02-28] Loading via V2 with Aloy's sandbox settings
-        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
-    }
+    // 2. I-update ang Title (kon gidugangan nimo ang HTML)
+    if (titleEl) titleEl.innerText = "| " + title;
+
+    // 3. I-load ang Salida
+    // Nindot ang .cc kay paspas, but remember backup servers (vidsrc.to/vidsrc.me)
+    iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
 }
 
 function closePlayer() {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
 
-    // 1. I-tago ang Overlay
-    if (overlay) {
-        overlay.style.display = 'none';
-    }
-
-    // 2. I-clear ang Iframe (Para mamatay ang sounds ug ads sa background)
-    if (iframe) {
-        iframe.src = 'about:blank';
-    }
-
-    // 3. I-balik ang scroll sa main page
-    document.body.style.overflow = 'auto';
+    overlay.style.display = 'none';
+    document.body.style.overflow = 'auto'; // I-balik ang scroll sa page
+    
+    // IMPORTANTE: Patyon ang audio/video inig close
+    iframe.src = ''; 
 }
 
 async function play(id, type, title) {
-    currentID = id; currentType = type; currentS = 1; currentE = 1;
+    // 1. I-set ang Global Variables (Importante para sa Episodes)
+    currentID = id; 
+    currentType = type; 
+    currentS = 1; 
+    currentE = 1;
 
+    // 2. Setup ang UI
     const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+    const titleEl = document.getElementById('p-title');
+    const epBox = document.getElementById('episode-area');
+
     overlay.style.display = 'block';
     document.body.style.overflow = 'hidden';
-    document.getElementById('p-title').innerText = title;
-    document.getElementById('video-iframe').src = ''; 
+    overlay.scrollTo(0, 0);
 
-    const epBox = document.getElementById('episode-area'); 
-    
-    // GI-DELETE NATO ANG serverSelectionHTML DINHI PARA MAWALA ANG DOUBLE SA UBOS
+    if (titleEl) titleEl.innerText = "| " + title;
 
-    if(type === 'movie') {
-        // Kon movie, tagoan ang episode area kay naa na tay buttons sa HTML sa babaw
-        epBox.style.display = 'block'; 
-        epBox.innerHTML = '<p style="text-align:center; color:#555; font-size: 11px;">Movie Mode: Enjoy watching!</p>';
-        switchServer('vidsrc_to'); // Default server nga i-load
-    } else {
-        // Kon TV show, Season Selector ug Episodes na lang ang ipakita
-        epBox.style.display = 'block';
-        const data = await apiCall(`/tv/${id}`);
+    // 3. Logic base sa Type (Movie vs TV)
+    if (type === 'movie') {
+        // Direkta load sa Movie
+        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
         
-        // Season select ug Episode grid na lang, wala na'y extra server buttons
-        let html = `<select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px; border-radius:5px;"></select>`;
-        html += `<div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap:10px;"></div>`;
-        epBox.innerHTML = html;
+        // Limpyohan ang episode area
+        if (epBox) {
+            epBox.innerHTML = '<p style="text-align:center; color:#555; font-size: 11px; padding: 20px;">Movie Mode: Enjoy watching!</p>';
+        }
+    } else {
+        // Kon TV Show, load una ang default (S1 E1)
+        iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
 
-        const select = document.getElementById('season-select');
-        data.seasons.forEach(s => {
-            if(s.season_number > 0) {
-                const opt = document.createElement('option');
-                opt.value = s.season_number;
-                opt.innerText = s.name;
-                select.appendChild(opt);
+        // I-fetch ang data gikan sa TMDB para sa Season Selector
+        if (epBox) {
+            epBox.innerHTML = '<p style="text-align:center; color:var(--accent);">Loading Seasons...</p>';
+            
+            try {
+                const data = await apiCall(`/tv/${id}`);
+                
+                let html = `<select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;"></select>`;
+                html += `<div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap:10px;"></div>`;
+                epBox.innerHTML = html;
+
+                const select = document.getElementById('season-select');
+                data.seasons.forEach(s => {
+                    // I-skip ang "Specials" (Season 0)
+                    if (s.season_number > 0) {
+                        const opt = document.createElement('option');
+                        opt.value = s.season_number;
+                        opt.innerText = s.name;
+                        select.appendChild(opt);
+                    }
+                });
+
+                // Load sa mga buttons sa Episode 1, Season 1
+                await loadEpisodes(id, 1);
+            } catch (err) {
+                console.error("Error loading TV data:", err);
+                epBox.innerHTML = '<p style="color:red; text-align:center;">Failed to load episodes.</p>';
             }
-        });
-        await loadEpisodes(id, 1);
-        switchServer('vidsrc_to'); // Default server
+        }
     }
 }
 
