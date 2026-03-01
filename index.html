@@ -1140,9 +1140,9 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 
     <div style="padding: 0 20px 20px;">
-        <h1 id="p-title" style="font-size: 1.5rem; color: #E95420; margin-bottom: 10px;">Movie Title</h1>
-        <p id="p-desc" style="color: #bbb; font-size: 0.85rem; line-height: 1.5;">Description...</p>
-    </div>
+    <h1 id="p-movie-name" style="font-size: 1.5rem; color: #E95420; margin-bottom: 10px;">Movie Title</h1>
+    <p id="p-desc" style="color: #bbb; font-size: 0.85rem; line-height: 1.5;">Description...</p>
+</div>
 
     <div class="episode-section" id="episode-area" style="display:none; padding: 0 20px 40px;">
         <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; border-radius:5px; margin-bottom:15px;"></select>
@@ -1365,31 +1365,34 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     }
 
     function render(list) {
-        const g = document.getElementById('main-grid');
-        g.innerHTML = '';
-        list.forEach(m => {
-            if(!m.poster_path) return;
-            const type = m.media_type || (m.first_air_date ? 'tv' : 'movie');
-            const card = document.createElement('div');
-            card.className = 'card';
-            
-            // Siguruha nga playMovie (o play) ang name sa imong function
-            const title = m.title || m.name;
-            card.onclick = () => { 
-                playMovie(m.id, title); // <--- Mao ni ang mo-trigger sa player
-                window.scrollTo({top:0, behavior:'smooth'}); 
-            };
-            
-            card.innerHTML = `
-                <img src="${IMG + m.poster_path}">
-                <div class="card-meta">
-                    <h3>${title}</h3>
-                </div>
-            `;
-            g.appendChild(card);
-        });
-    }
+    const g = document.getElementById('main-grid');
+    g.innerHTML = '';
+    list.forEach(m => {
+        if(!m.poster_path) return;
+        const type = m.media_type || (m.first_air_date ? 'tv' : 'movie');
+        const card = document.createElement('div');
+        card.className = 'card';
 
+        const title = m.title || m.name;
+        const description = m.overview; // Gikuha nato ang overview gikan sa API
+
+        card.onclick = () => { 
+            // 1. Gi-change nato sa 'play' para match sa imong existing function
+            // 2. Gipasa nato ang type (para mahibalo kon movie o tv)
+            // 3. Gipasa nato ang description (para dili na blanko sa ubos)
+            play(m.id, type, title, description); 
+            window.scrollTo({top:0, behavior:'smooth'});
+        };                                         
+        
+        card.innerHTML = `
+            <img src="${IMG + m.poster_path}">
+            <div class="card-meta">
+                <h3>${title}</h3>
+            </div>
+        `;
+        g.appendChild(card);
+    });
+}
 
 function playMovie(id, title = "") {
     const overlay = document.getElementById('player-overlay');
@@ -1422,52 +1425,55 @@ function closePlayer() {
     iframe.src = ''; 
 }
 
-async function play(id, type, title) {
-    // 1. I-set ang Global Variables (Importante para sa Episodes)
-    currentID = id; 
-    currentType = type; 
-    currentS = 1; 
+async function play(id, type, title, description) {
+    // 1. I-set ang Global Variables
+    currentID = id;
+    currentType = type;
+    currentS = 1;
     currentE = 1;
 
     // 2. Setup ang UI
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
-    const titleEl = document.getElementById('p-title');
+    const titleEl = document.getElementById('p-title'); // Header
+    const nameEl = document.getElementById('p-movie-name'); // Title sa ubos
+    const descEl = document.getElementById('p-desc'); // Description sa ubos
     const epBox = document.getElementById('episode-area');
 
     overlay.style.display = 'block';
     document.body.style.overflow = 'hidden';
     overlay.scrollTo(0, 0);
 
+    // I-update ang mga Text (Mao ni ang mo-fix sa blanko)
     if (titleEl) titleEl.innerText = "| " + title;
+    if (nameEl) nameEl.innerText = title;
+    if (descEl) descEl.innerText = description || "No description available for this title.";
+    
+    // I-reset ang iframe src para limpyo ang load
+    iframe.src = '';
 
     // 3. Logic base sa Type (Movie vs TV)
     if (type === 'movie') {
-        // Direkta load sa Movie
+        // Direkta load sa Movie gamit ang vidsrc.cc
         iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
         
-        // Limpyohan ang episode area
         if (epBox) {
             epBox.innerHTML = '<p style="text-align:center; color:#555; font-size: 11px; padding: 20px;">Movie Mode: Enjoy watching!</p>';
         }
     } else {
         // Kon TV Show, load una ang default (S1 E1)
-        iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
+        iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`; 
 
-        // I-fetch ang data gikan sa TMDB para sa Season Selector
         if (epBox) {
             epBox.innerHTML = '<p style="text-align:center; color:var(--accent);">Loading Seasons...</p>';
-            
             try {
                 const data = await apiCall(`/tv/${id}`);
-                
                 let html = `<select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;"></select>`;
                 html += `<div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap:10px;"></div>`;
                 epBox.innerHTML = html;
 
                 const select = document.getElementById('season-select');
                 data.seasons.forEach(s => {
-                    // I-skip ang "Specials" (Season 0)
                     if (s.season_number > 0) {
                         const opt = document.createElement('option');
                         opt.value = s.season_number;
