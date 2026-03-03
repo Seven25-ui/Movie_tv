@@ -1113,14 +1113,6 @@ l    animation: textPulse 2s infinite ease-in-out;
         <a href="https://www.effectivegatecpm.com/fg756im2nw?key=d3235d932cc1b738b04b2390dd0a6226" target="_blank" style="background: #ff3d00; color: white; padding: 12px 0; border-radius: 5px; text-decoration: none; font-weight: bold; display: block; width: 100%; max-width: 350px; margin: 0 auto; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #ff6e40;">📥 DOWNLOAD IN 1080P</a>
     </div>
 
-    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-    <button 
-        onclick="loadV2Player(this)" 
-        style="padding: 10px 20px; background: #E95420; border: 1px solid #ff8c00; color: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; font-size: 11px; transition: all 0.3s ease; box-shadow: 0 0 10px rgba(233, 84, 32, 0.4);">
-        LOAD PLAYER (V2)
-    </button>
-</div>
-
     <div style="margin: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px dashed #E95420; text-align: center;">
         <p style="color: #E95420; font-size: 10px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">🔥 Special Offers for Viewers:</p>
         <div style="display: flex; justify-content: space-around; align-items: center;">
@@ -1557,21 +1549,49 @@ function closePlayer() {
     document.getElementById('video-iframe').src = ''; // Mao ni saktong ID
 }
 
+// FIX sa playEp: Mao ni ang mo-switch sa video content
 function playEp(sNum, eNum) {
-    currentS = sNum; 
+    // 1. Update global counters
+    currentS = sNum;
     currentE = eNum;
-    
-    // Inig click sa episode, mo-play dretso sa vidsrc.cc
-    switchServer('vidsrc_cc'); 
-    
-    // I-scroll pasaka para makita ang video
-    document.getElementById('player-overlay').scrollTo({ top: 0, behavior: 'smooth' });
+
+    const iframe = document.getElementById('video-iframe');
+
+    // 2. KANI ANG IMPORTANTE: Usba ang src sa iframe para mobalhin ang episode
+    if (currentID && iframe) {
+        // I-inject dritso ang bag-ong Episode URL
+        iframe.src = `https://vidsrc.cc/v2/embed/tv/${currentID}/${sNum}/${eNum}`;
+        
+        // Pwede ra gihapon i-call ang switchServer kung naa kay server switching logic
+        if (typeof switchServer === 'function') {
+            switchServer('vidsrc_cc');
+        }
+
+        // 3. I-scroll pasaka para makita ang video dayon
+        const overlay = document.getElementById('player-overlay');
+        if (overlay) {
+            overlay.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        console.log(`Elite Mode: Playing S${sNum} E${eNum}`);
+    } else {
+        console.error("Missing currentID! Click a show first.");
+    }
 }
 
-// FIX 6: loadSeason
+// FIX sa loadSeason: Para mo-refresh ang grid inig pili sa dropdown
 async function loadSeason(sNum) {
-    currentS = sNum;
-    await loadEpisodes(currentID, sNum);
+    // 1. Siguraduhon nga number ang value
+    const selectedSeason = parseInt(sNum);
+    currentS = selectedSeason;
+    
+    // 2. Reset episode back to 1 inig balhin og season
+    currentE = 1; 
+
+    // 3. I-load ang mga bag-ong buttons (Dili nato usbon ang loadEpisodes)
+    if (currentID) {
+        await loadEpisodes(currentID, selectedSeason);
+    }
 }
 
     function startMatrix() {
