@@ -1385,7 +1385,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
 function playMovie(id, title = "") {
     const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe'); // Gi-match sa imong HTML ID
+    const iframe = document.getElementById('video-iframe'); 
     const titleEl = document.getElementById('p-title');
 
     if (!id) return console.error("Missing Movie ID");
@@ -1395,11 +1395,15 @@ function playMovie(id, title = "") {
     document.body.style.overflow = 'hidden';
     overlay.scrollTo(0, 0);
 
-    // 2. I-update ang Title (kon gidugangan nimo ang HTML)
+    // 2. I-update ang Title
     if (titleEl) titleEl.innerText = "| " + title;
 
-    // 3. I-load ang Salida
-    // Nindot ang .cc kay paspas, but remember backup servers (vidsrc.to/vidsrc.me)
+    // 3. I-CLEAR ANG SANDBOX UG I-SET ANG POWER (Kini ang fix!)
+    iframe.removeAttribute('sandbox'); // Tangtangon ang prisuhan
+    iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', 'true');
+
+    // 4. I-load ang Salida
     iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
 }
 
@@ -1415,7 +1419,7 @@ function closePlayer() {
 }
 
 async function play(id, type, title, description) {
-    // 1. I-set ang Global Variables (Importante para sa loadEpisodes ug loadSeason)
+    // 1. I-set ang Global Variables
     currentID = id;
     currentType = type;
     currentS = 1;
@@ -1424,50 +1428,46 @@ async function play(id, type, title, description) {
     // 2. Setup ang UI Elements
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
-    const titleEl = document.getElementById('p-title');     // Header
-    const nameEl = document.getElementById('p-movie-name');  // Title sa ubos
-    const descEl = document.getElementById('p-desc');       // Description sa ubos
-    const epBox = document.getElementById('episode-area');  // Episode Container
+    const titleEl = document.getElementById('p-title');
+    const nameEl = document.getElementById('p-movie-name');
+    const descEl = document.getElementById('p-desc');
+    const epBox = document.getElementById('episode-area');
 
-    // I-pakita ang Overlay ug i-lock ang scroll sa background
     overlay.style.display = 'block';
     document.body.style.overflow = 'hidden';
     overlay.scrollTo(0, 0);
 
-    // I-update ang mga Text sa Info Section
     if (titleEl) titleEl.innerText = "| " + title;
     if (nameEl) nameEl.innerText = title;
     if (descEl) descEl.innerText = description || "No description available for this title.";
 
-    // I-reset ang iframe src para limpyo ang load sa sugod
-    iframe.src = '';
+    // I-reset ang iframe src
+    iframe.src = 'about:blank'; 
+
+    // --- IMPORTANTE: TANGTANGON ANG SANDBOX PARA DILI MAG-UNGOT ---
+    iframe.removeAttribute('sandbox'); 
+    
+    // I-set ang "Power Permits" para paspas ang buffering ug naay fullscreen
+    iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', 'true');
 
     // 3. LOGIC BASE SA TYPE (Movie vs TV)
-    if (type === 'movie' || type === 'movie') {
-        // --- MOVIE MODE ---
-        if (epBox) epBox.style.display = 'none'; // I-hide ang episode area kung movie
-        
+    if (type === 'movie') {
+        if (epBox) epBox.style.display = 'none';
         iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
-        
     } else {
-        // --- TV SHOW MODE ---
-        // KANI ANG IMPORTANTE: I-pakita ang episode area nga naka-display:none sa HTML
         if (epBox) {
-            epBox.style.display = 'block'; 
+            epBox.style.display = 'block';
             epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        // I-load ang default video (Season 1, Episode 1)
         iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
 
         try {
-            // I-fetch ang data sa TV Show gikan sa TMDB API
             const data = await apiCall(`/tv/${id}`);
-            
             if (epBox && data.seasons) {
-                // I-render ang HTML para sa Season Select ug Episode Grid
                 let html = `
-                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none; font-family:sans-serif;">
+                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">
                     </select>
                     <div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap:10px;">
                     </div>
@@ -1475,10 +1475,8 @@ async function play(id, type, title, description) {
                 epBox.innerHTML = html;
 
                 const select = document.getElementById('season-select');
-                
-                // I-filter ug i-add ang mga Seasons sa Dropdown
                 data.seasons.forEach(s => {
-                    if (s.season_number > 0) { // Laktawan ang Specials (Season 0)
+                    if (s.season_number > 0) {
                         const opt = document.createElement('option');
                         opt.value = s.season_number;
                         opt.innerText = s.name || `Season ${s.season_number}`;
@@ -1486,12 +1484,11 @@ async function play(id, type, title, description) {
                     }
                 });
 
-                // Human ma-render ang UI, i-load ang mga buttons para sa Season 1
                 await loadEpisodes(id, 1);
             }
         } catch (err) {
             console.error("Error loading TV data:", err);
-            if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes. Please try again.</p>';
+            if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
         }
     }
 }
