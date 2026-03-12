@@ -1333,7 +1333,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     let currentID, currentType, currentS=1, currentE=1, episodeList = [];
     
     async function apiCall(endpoint) {
-    // Kani nga string mao ang "3455ebd9bf16f0b30d2ed31128bf933c" sa Base64
+    
     const _mask = "MzQ1NWViZDliZjE2ZjBiMzBkMmVkMzExMjhiZjkzM2M=";
     const API_KEY = atob(_mask);
     
@@ -1681,28 +1681,30 @@ window.onload = () => {
 
 // LIVE SEARCH TRIGGER PARA SA CLASS "search-box"
 let typingTimer;
-const doneTypingInterval = 500;
-
-// Siguroha nga husto ang selector (.search-box)
+const doneTypingInterval = 500; 
 const searchInputField = document.querySelector('.search-box');
 
 if (searchInputField) {
     searchInputField.addEventListener('input', function() {
         clearTimeout(typingTimer);
         const query = this.value.trim();
-
+        
+        // Kon ang gi-type labaw sa 2 ka characters
         if (query.length > 2) {
             typingTimer = setTimeout(() => {
-                // Mao ni ang motawag sa TMDb API function
+                // Tawgon ang imong existing search function
                 search(query); 
             }, doneTypingInterval);
-        } else if (query.length === 0) {
-            // I-reset kon gi-delete ang text
+        } 
+        // Kon gi-delete tanan (empty)
+        else if (query.length === 0) {
             const hero = document.getElementById('hero');
-            if(hero) hero.style.display = "block"; // I-pakita balik ang hero section
+            if(hero) hero.style.display = "block"; 
             
-            // Imbis location.reload(), mas maayo i-clear lang ang search results
-            // location.reload(); 
+            // I-clear ang listahan sa movies sa screen
+            // Mas maayo kon naa kay container (e.g., 'movie-list') nga i-clear
+            const resultsGrid = document.querySelector('.movies-grid'); // I-adjust ni kon lahi imong class
+            if (resultsGrid) resultsGrid.innerHTML = '';
         }
     });
 }
