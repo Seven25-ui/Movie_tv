@@ -1333,14 +1333,20 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     let currentID, currentType, currentS=1, currentE=1, episodeList = [];
     
     async function apiCall(endpoint) {
-        const API_KEY = "3455ebd9bf16f0b30d2ed31128bf933c";
-        const connector = endpoint.includes('?') ? '&' : '?';
-        const url = `${TMDB}${endpoint}${connector}api_key=${API_KEY}`;
-        try {
-            const r = await fetch(url);
-            return r.ok ? await r.json() : null;
-        } catch(e) { return null; }
+    // Kani nga string mao ang "3455ebd9bf16f0b30d2ed31128bf933c" sa Base64
+    const _mask = "MzQ1NWViZDliZjE2ZjBiMzBkMmVkMzExMjhiZjkzM2M=";
+    const API_KEY = atob(_mask);
+    
+    const connector = endpoint.includes('?') ? '&' : '?';
+    const url = `${TMDB}${endpoint}${connector}api_key=${API_KEY}`;
+    
+    try {
+        const r = await fetch(url);
+        return r.ok ? await r.json() : null;
+    } catch(e) { 
+        return null; 
     }
+}
 
     async function init() {
         const data = await apiCall('/trending/all/day');
