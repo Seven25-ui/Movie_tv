@@ -1389,115 +1389,161 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     });
 }
 
+// Globals
+let currentID = null;
+let currentType = null;
+let currentS = 1;
+let currentE = 1;
+
 function playMovie(id, title = "") {
-    const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe'); 
-    const titleEl = document.getElementById('p-title');
+  const overlay = document.getElementById('player-overlay');
+  const iframe = document.getElementById('video-iframe');
+  const titleEl = document.getElementById('p-title');
 
-    if (!id) return console.error("Missing Movie ID");
+  if (!id) return console.error("Missing Movie ID");
+  if (!overlay || !iframe) return console.error('Required DOM elements missing: player-overlay or video-iframe');
 
-    // 1. I-show ang Overlay
-    overlay.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    overlay.scrollTo(0, 0);
+  // 1. I-show ang Overlay
+  overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  overlay.scrollTo?.(0, 0);
 
-    // 2. I-update ang Title
-    if (titleEl) titleEl.innerText = "| " + title;
+  // 2. I-update ang Title
+  if (titleEl) titleEl.textContent = "| " + (title || "");
 
-    // 3. I-CLEAR ANG SANDBOX UG I-SET ANG POWER (Kini ang fix!)
-    iframe.removeAttribute('sandbox'); // Tangtangon ang prisuhan
+  // 3. I-CLEAR ANG SANDBOX UG I-SET ANG POWER
+  try {
+    if (iframe.hasAttribute && iframe.hasAttribute('sandbox')) iframe.removeAttribute('sandbox');
     iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
     iframe.setAttribute('allowfullscreen', 'true');
+    iframe.allowFullscreen = true;
+  } catch (e) {
+    console.warn('Could not set iframe attributes', e);
+  }
 
-    // 4. I-load ang Salida
-    iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+  // 4. I-load ang Salida (set src last)
+  const safeId = encodeURIComponent(id);
+  iframe.src = `https://vidsrc.cc/v2/embed/movie/${safeId}`;
+
+  iframe.onload = () => console.log('player loaded');
+  iframe.onerror = () => {
+    console.error('player failed to load');
+    try {
+      const msg = document.createElement('div');
+      msg.style.color = '#ff6b6b';
+      msg.style.padding = '12px';
+      msg.style.textAlign = 'center';
+      msg.textContent = 'Failed to load player. Check console for X-Frame-Options or CSP errors.';
+      overlay.appendChild(msg);
+    } catch (_) {}
+  };
 }
 
 function closePlayer() {
-    const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');
+  const overlay = document.getElementById('player-overlay');
+  const iframe = document.getElementById('video-iframe');
+  if (!overlay || !iframe) return;
 
-    overlay.style.display = 'none';
-    document.body.style.overflow = 'auto'; // I-balik ang scroll sa page
-    
-    // IMPORTANTE: Patyon ang audio/video inig close
-    iframe.src = ''; 
+  overlay.style.display = 'none';
+  document.body.style.overflow = 'auto';
+
+  // Stop playback reliably
+  try {
+    iframe.src = 'about:blank';
+    iframe.removeAttribute && iframe.removeAttribute('src');
+    iframe.onload = null;
+    iframe.onerror = null;
+  } catch (e) {
+    console.warn('Error clearing iframe', e);
+  }
 }
 
 async function play(id, type, title, description) {
-    // 1. I-set ang Global Variables
-    currentID = id;
-    currentType = type;
-    currentS = 1;
-    currentE = 1;
+  if (!id) return console.error('Missing id');
 
-    // 2. Setup ang UI Elements
-    const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');
-    const titleEl = document.getElementById('p-title');
-    const nameEl = document.getElementById('p-movie-name');
-    const descEl = document.getElementById('p-desc');
-    const epBox = document.getElementById('episode-area');
+  // 1. I-set ang Global Variables
+  currentID = id;
+  currentType = type;
+  currentS = 1;
+  currentE = 1;
 
-    overlay.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    overlay.scrollTo(0, 0);
+  // 2. Setup ang UI Elements
+  const overlay = document.getElementById('player-overlay');
+  const iframe = document.getElementById('video-iframe');
+  const titleEl = document.getElementById('p-title');
+  const nameEl = document.getElementById('p-movie-name');
+  const descEl = document.getElementById('p-desc');
+  const epBox = document.getElementById('episode-area');
 
-    if (titleEl) titleEl.innerText = "| " + title;
-    if (nameEl) nameEl.innerText = title;
-    if (descEl) descEl.innerText = description || "No description available for this title.";
+  if (!overlay || !iframe) return console.error('Required DOM elements missing: player-overlay or video-iframe');
 
-    // I-reset ang iframe src
-    iframe.src = 'about:blank'; 
+  overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  overlay.scrollTo?.(0, 0);
 
-    // --- IMPORTANTE: TANGTANGON ANG SANDBOX PARA DILI MAG-UNGOT ---
-    iframe.removeAttribute('sandbox'); 
-    
-    // I-set ang "Power Permits" para paspas ang buffering ug naay fullscreen
+  if (titleEl) titleEl.textContent = "| " + (title || "");
+  if (nameEl) nameEl.textContent = title || "";
+  if (descEl) descEl.textContent = description || "No description available for this title.";
+
+  // I-reset ang iframe src
+  try { iframe.src = 'about:blank'; } catch (e) {}
+
+  // Tangtangon ang sandbox ug i-set ang allow attrs
+  try {
+    if (iframe.hasAttribute && iframe.hasAttribute('sandbox')) iframe.removeAttribute('sandbox');
     iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
     iframe.setAttribute('allowfullscreen', 'true');
+    iframe.allowFullscreen = true;
+  } catch (e) { console.warn('Could not set iframe attributes', e); }
 
-    // 3. LOGIC BASE SA TYPE (Movie vs TV)
-    if (type === 'movie') {
-        if (epBox) epBox.style.display = 'none';
-        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
-    } else {
-        if (epBox) {
-            epBox.style.display = 'block';
-            epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
-        }
-
-        iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
-
-        try {
-            const data = await apiCall(`/tv/${id}`);
-            if (epBox && data.seasons) {
-                let html = `
-                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">
-                    </select>
-                    <div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap:10px;">
-                    </div>
-                `;
-                epBox.innerHTML = html;
-
-                const select = document.getElementById('season-select');
-                data.seasons.forEach(s => {
-                    if (s.season_number > 0) {
-                        const opt = document.createElement('option');
-                        opt.value = s.season_number;
-                        opt.innerText = s.name || `Season ${s.season_number}`;
-                        select.appendChild(opt);
-                    }
-                });
-
-                await loadEpisodes(id, 1);
-            }
-        } catch (err) {
-            console.error("Error loading TV data:", err);
-            if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
-        }
+  // 3. LOGIC BASE SA TYPE (Movie vs TV)
+  const safeId = encodeURIComponent(id);
+  if (type === 'movie') {
+    if (epBox) epBox.style.display = 'none';
+    iframe.src = `https://vidsrc.cc/v2/embed/movie/${safeId}`;
+  } else {
+    if (epBox) {
+      epBox.style.display = 'block';
+      epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
     }
+
+    iframe.src = `https://vidsrc.cc/v2/embed/tv/${safeId}/1/1`;
+
+    try {
+      const data = await apiCall(`/tv/${id}`);
+      if (epBox && Array.isArray(data?.seasons) && data.seasons.length) {
+        epBox.innerHTML = `
+          <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;"></select>
+          <div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap:10px;"></div>
+        `;
+        const select = document.getElementById('season-select');
+        data.seasons.forEach(s => {
+          if (s.season_number > 0) {
+            const opt = document.createElement('option');
+            opt.value = s.season_number;
+            opt.textContent = s.name || `Season ${s.season_number}`;
+            select.appendChild(opt);
+          }
+        });
+
+        if (typeof loadEpisodes === 'function') {
+          await loadEpisodes(id, 1);
+        } else {
+          console.warn('loadEpisodes not defined');
+        }
+      } else {
+        if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">No season data available.</p>';
+      }
+    } catch (err) {
+      console.error("Error loading TV data:", err);
+      if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
+    }
+  }
+
+  iframe.onload = () => console.log('player loaded');
+  iframe.onerror = () => console.error('player failed to load');
 }
+
 
 async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
