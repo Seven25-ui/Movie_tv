@@ -1091,18 +1091,11 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 </div>
 
-<div id="player-overlay">
-        <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">
-            <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">
+<div id="player-overlay">                                   <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">                                   <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">
     SE7EN PLAY <span id="p-title" style="font-size: 0.9rem; color: #666; margin-left: 10px;"></span>
+</div>                                                         <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>                 </div>                                                                                                                                                 <div class="video-wrapper">
+            <iframe id="video-iframe" src="" allowfullscreen referrerpolicy="origin" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>                    </div>
 </div>
-            <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>
-        </div>
-
-        <div class="video-wrapper">
-            <iframe id="video-iframe" src="" allowfullscreen referrerpolicy="origin" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>
-        </div>
-
 
     <div style="margin: 15px 0; text-align: center; padding: 0 20px;">
         <p style="color: #666; font-size: 11px; font-family: monospace; margin-bottom: 8px;">Server slow? Try high speed options.</p>
@@ -1389,6 +1382,7 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     });
 }
 
+// --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "") {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
@@ -1396,51 +1390,47 @@ function playMovie(id, title = "") {
 
     if (!id) return console.error("Missing Movie ID");
 
-    // 1. I-show ang Overlay
+    currentID = id;
+    currentType = 'movie';
+
     if (overlay) {
         overlay.style.display = 'block';
         overlay.scrollTo(0, 0);
     }
     document.body.style.overflow = 'hidden';
 
-    // 2. I-update ang Title
     if (titleEl) titleEl.innerText = "| " + title;
 
-    // 3. FIX: I-set ang luag nga sandbox imbes nga tangtangon sa hingpit aron dili mag-crash ang mobile browser
     if (iframe) {
-        iframe.setAttribute('sandbox', 'allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation-by-user-activation');
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
-
-        // 4. I-load ang Salida
-        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        
+        // FIX: Gi-balhin sa .to nga domain para mo-load ug dili ma-block
+        iframe.src = `https://vidsrc.to/embed/movie/${id}`;
     }
 }
 
+// --- CLOSE PLAYER FUNCTION ---
 function closePlayer() {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
 
     if (overlay) overlay.style.display = 'none';
-    document.body.style.overflow = 'auto'; // I-balik ang scroll sa page
+    document.body.style.overflow = 'auto'; 
 
-    // IMPORTANTE FIX: 'about:blank' imbes nga empty string aron mapatay gyud ang audio/video sa mobile browsers
-    if (iframe) iframe.src = 'about:blank';
+    if (iframe) iframe.src = 'about:blank'; // I-reset ang player aron mohunong ang tingog
 }
 
+// --- MAIN PLAY LOGIC (Para sa Grid Cards: Movies & TV Shows) ---
 async function play(id, type, title, description) {
-    // 1. I-set ang Global Variables
     currentID = id;
     currentType = type;
     currentS = 1;
     currentE = 1;
 
-    // 2. Setup ang UI Elements
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
     const titleEl = document.getElementById('p-title');
-    const nameEl = document.getElementById('p-movie-name');
-    const descEl = document.getElementById('p-desc');
     const epBox = document.getElementById('episode-area');
 
     if (overlay) {
@@ -1450,32 +1440,25 @@ async function play(id, type, title, description) {
     document.body.style.overflow = 'hidden';
 
     if (titleEl) titleEl.innerText = "| " + title;
-    if (nameEl) nameEl.innerText = title;
-    if (descEl) descEl.innerText = description || "No description available for this title.";
 
     if (iframe) {
-        // I-reset ang iframe src
         iframe.src = 'about:blank';
-
-        // --- IMPORTANTE FIX: I-set ang saktong sandbox values para iwas ungot ug browser crash ---
-        iframe.setAttribute('sandbox', 'allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation-by-user-activation');
-
-        // I-set ang permissions para paspas ang buffering ug naay fullscreen
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
     }
 
-    // 3. LOGIC BASE SA TYPE (Movie vs TV)
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
-        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        // FIX: Giusab ngadto sa .to para sa salida
+        if (iframe) iframe.src = `https://vidsrc.to/embed/movie/${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
+        // FIX: Giusab ngadto sa .to para sa tv show (Default Season 1, Episode 1)
+        if (iframe) iframe.src = `https://vidsrc.to/embed/tv/${id}/1/1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
@@ -1509,7 +1492,7 @@ async function play(id, type, title, description) {
             if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
         }
     }
-}
+}   
 
 async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
