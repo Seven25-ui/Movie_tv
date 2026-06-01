@@ -1389,12 +1389,6 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     });
 }
 
-// Siguradoha lang nga kani nga global variables anaa sa taas sa imong script file
-let currentID = null;
-let currentType = null;
-let currentS = 1;
-let currentE = 1;
-
 function playMovie(id, title = "") {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
