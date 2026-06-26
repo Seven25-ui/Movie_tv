@@ -1389,11 +1389,37 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     });
 }
 
+// --- GLOBAL COUNTERS ---
+let currentID = null;
+let currentType = 'movie';
+let currentS = 1;
+let currentE = 1;
+let episodeList = [];
+
+// --- HELPER FUNCTION: PARA SA DESCRIPTION UG TITLE FIX ---
+function updatePlayerDetails(title, description) {
+    const movieNameEl = document.getElementById('p-movie-name');
+    const descEl = document.getElementById('p-desc');
+    const titleEl = document.getElementById('p-title');
+
+    // I-update ang header title (tupad sa SE7EN PLAY)
+    if (titleEl) titleEl.innerText = title ? "| " + title : "";
+    
+    // FIX: I-update ang Dako nga Title sa ubos sa player
+    if (movieNameEl) {
+        movieNameEl.innerText = title || "Movie Title";
+    }
+    
+    // FIX: I-update ang Description sa ubos sa player
+    if (descEl) {
+        descEl.innerText = description || "No description available for this content.";
+    }
+}
+
 // --- PLAY MOVIE ONLY FUNCTION ---
-function playMovie(id, title = "") {
+function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
-    const titleEl = document.getElementById('p-title');
 
     if (!id) return console.error("Missing Movie ID");
 
@@ -1406,26 +1432,16 @@ function playMovie(id, title = "") {
     }
     document.body.style.overflow = 'hidden';
 
-    if (titleEl) titleEl.innerText = "| " + title;
+    // Tawgon ang helper aron ma-render ang hapsay nga text ug description
+    updatePlayerDetails(title, description);
 
     if (iframe) {
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
         
-        // FIX: Gi-balhin sa .to nga domain para mo-load ug dili ma-block
-        iframe.src = `https://vidsrc.to/embed/movie/${id}`;
+        // FIX: Gi-update gamit ang mas stable nga vidsrc API v2 embedder
+        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     }
-}
-
-// --- CLOSE PLAYER FUNCTION ---
-function closePlayer() {
-    const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');
-
-    if (overlay) overlay.style.display = 'none';
-    document.body.style.overflow = 'auto'; 
-
-    if (iframe) iframe.src = 'about:blank'; // I-reset ang player aron mohunong ang tingog
 }
 
 // --- MAIN PLAY LOGIC (Para sa Grid Cards: Movies & TV Shows) ---
@@ -1437,7 +1453,6 @@ async function play(id, type, title, description) {
 
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
-    const titleEl = document.getElementById('p-title');
     const epBox = document.getElementById('episode-area');
 
     if (overlay) {
@@ -1446,26 +1461,27 @@ async function play(id, type, title, description) {
     }
     document.body.style.overflow = 'hidden';
 
-    if (titleEl) titleEl.innerText = "| " + title;
-
     if (iframe) {
         iframe.src = 'about:blank';
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
     }
 
+    // Tawgon ang helper aron ma-fix ang title ug description sa salida/TV show
+    updatePlayerDetails(title, description);
+
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
-        // FIX: Giusab ngadto sa .to para sa salida
-        if (iframe) iframe.src = `https://vidsrc.to/embed/movie/${id}`;
+        // FIX: Gi-update ngadto sa vidsrc.cc v2 para mo-play ang salida
+        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        // FIX: Giusab ngadto sa .to para sa tv show (Default Season 1, Episode 1)
-        if (iframe) iframe.src = `https://vidsrc.to/embed/tv/${id}/1/1`;
+        // FIX: Gi-update ngadto sa vidsrc.cc v2 para sa tv show (Default Season 1, Episode 1)
+        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
@@ -1501,6 +1517,7 @@ async function play(id, type, title, description) {
     }
 }   
 
+// --- LOAD EPISODES FUNCTION ---
 async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
     if(!data) return;
@@ -1513,25 +1530,21 @@ async function loadEpisodes(id, sNum) {
         const btn = document.createElement('button');
         const isActive = ep.episode_number === currentE;
 
-        // Base Style sa Episode Button
         btn.style.padding = "10px";
-        btn.style.background = isActive ? "#E95420" : "#222"; // Highlight kon active
+        btn.style.background = isActive ? "#E95420" : "#222"; 
         btn.style.color = "#fff";
         btn.style.border = isActive ? "1px solid #ff8c00" : "1px solid #444";
         btn.style.cursor = "pointer";
         btn.style.borderRadius = "5px";
-        btn.style.transition = "0.3s"; // Para hamis ang hover
+        btn.style.transition = "0.3s"; 
         btn.innerText = ep.episode_number;
 
-        // HOVER EFFECT (Inig itungod ang mouse)
         btn.onmouseover = () => { if(ep.episode_number !== currentE) btn.style.background = "#444"; };
         btn.onmouseout = () => { if(ep.episode_number !== currentE) btn.style.background = "#222"; };
 
-        // CLICK EFFECT
         btn.onclick = () => {
             playEp(sNum, ep.episode_number);
             
-            // I-reset tanan buttons ug highlight-an ang gi-click
             document.querySelectorAll('#episodes-grid button').forEach(b => {
                 b.style.background = "#222";
                 b.style.border = "1px solid #444";
@@ -1544,32 +1557,35 @@ async function loadEpisodes(id, sNum) {
     });
 }
 
-// FIX 4: closePlayer (Gi-fix ang 'v-frame' error)
+// --- CLOSE PLAYER FUNCTION ---
 function closePlayer() { 
-    document.getElementById('player-overlay').style.display = 'none'; 
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+    const epBox = document.getElementById('episode-area');
+
+    if (overlay) overlay.style.display = 'none'; 
     document.body.style.overflow = 'auto'; 
-    document.getElementById('video-iframe').src = ''; // Mao ni saktong ID
+    if (iframe) iframe.src = ''; 
+    
+    // I-tago sab ang episode box inig sirado para limpyo sa sunod salida
+    if (epBox) epBox.style.display = 'none';
 }
 
-// FIX sa playEp: Mao ni ang mo-switch sa video content
+// --- PLAY EPISODE FUNCTION ---
 function playEp(sNum, eNum) {
-    // 1. Update global counters
     currentS = sNum;
     currentE = eNum;
 
     const iframe = document.getElementById('video-iframe');
 
-    // 2. KANI ANG IMPORTANTE: Usba ang src sa iframe para mobalhin ang episode
     if (currentID && iframe) {
-        // I-inject dritso ang bag-ong Episode URL
+        // FIX: Gigamit gihapon ang stable nga vidsrc.cc v2 domain para sa series
         iframe.src = `https://vidsrc.cc/v2/embed/tv/${currentID}/${sNum}/${eNum}`;
         
-        // Pwede ra gihapon i-call ang switchServer kung naa kay server switching logic
         if (typeof switchServer === 'function') {
             switchServer('vidsrc_cc');
         }
 
-        // 3. I-scroll pasaka para makita ang video dayon
         const overlay = document.getElementById('player-overlay');
         if (overlay) {
             overlay.scrollTo({ top: 0, behavior: 'smooth' });
