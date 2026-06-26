@@ -1091,11 +1091,17 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 </div>
 
-<div id="player-overlay">                                   <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">                                   <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">
-    SE7EN PLAY <span id="p-title" style="font-size: 0.9rem; color: #666; margin-left: 10px;"></span>
-</div>                                                         <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>                 </div>                                                                                                                                                 <div class="video-wrapper">
-            <iframe id="video-iframe" src="" allowfullscreen referrerpolicy="origin" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>                    </div>
-</div>
+<div id="player-overlay">
+    <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">
+        <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">
+            SE7EN PLAY <span id="p-title" style="font-size: 0.9rem; color: #666; margin-left: 10px;"></span>
+        </div>
+        <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>
+    </div>
+
+    <div class="video-wrapper">
+        <iframe id="video-iframe" src="" allowfullscreen referrerpolicy="origin" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>
+    </div>
 
     <div style="margin: 15px 0; text-align: center; padding: 0 20px;">
         <p style="color: #666; font-size: 11px; font-family: monospace; margin-bottom: 8px;">Server slow? Try high speed options.</p>
@@ -1122,9 +1128,18 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 
     <div style="padding: 0 20px 20px;">
-    <h1 id="p-movie-name" style="font-size: 1.5rem; color: #E95420; margin-bottom: 10px;">Movie Title</h1>
-    <p id="p-desc" style="color: #bbb; font-size: 0.85rem; line-height: 1.5;">Description...</p>
-</div>
+        <h1 id="p-movie-name" style="font-size: 1.5rem; color: #E95420; margin-bottom: 10px;">Movie Title</h1>
+        <p id="p-desc" style="color: #bbb; font-size: 0.85rem; line-height: 1.5;">Description...</p>
+    </div>
+
+</div> ```
+
+### 🔍 Unsa ang Nausab?
+Tan-awa ang pinaka-ubos nga code. Akong gibalhin ang pagsira sa tag nga `</div>` (kanang para sa `#player-overlay`) ngadto sa pinakailawom gyud sa imong code. 
+
+Tungod niini, kung i-run sa imong JavaScript ang pag-open o pag-close sa player gamit ang:
+```javascript
+document.getElementById('player-overlay').style.display = 'none'; // o 'block'
 
     <div class="episode-section" id="episode-area" style="display:none; padding: 0 20px 40px;">
         <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; border-radius:5px; margin-bottom:15px;"></select>
