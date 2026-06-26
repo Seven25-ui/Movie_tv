@@ -1414,6 +1414,9 @@ function updatePlayerDetails(title, description) {
 function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
+    const titleEl = document.getElementById('p-title');
+    const movieNameEl = document.getElementById('p-movie-name');
+    const descEl = document.getElementById('p-desc');
 
     if (!id) return console.error("Missing Movie ID");
 
@@ -1426,15 +1429,17 @@ function playMovie(id, title = "", description = "") {
     }
     document.body.style.overflow = 'hidden';
 
-    // Tawgon ang helper aron ma-render ang hapsay nga text ug description
-    updatePlayerDetails(title, description);
+    // FIX SA TEXT: Gi-update ang header, dako nga titulo, ug description
+    if (titleEl) titleEl.innerText = "| " + title;
+    if (movieNameEl) movieNameEl.innerText = title;
+    if (descEl) descEl.innerText = description || "No description available.";
 
     if (iframe) {
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
         
-        // FIX: Gi-update gamit ang mas stable nga vidsrc API v2 embedder
-        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        // FIX SA PLAYER: Giusab ngadto sa mas stable nga API (.xyz o .cc/v2) para mo-load sa localhost
+        iframe.src = `https://vidsrc.xyz/embed/movie/${id}`;
     }
 }
 
@@ -1447,6 +1452,9 @@ async function play(id, type, title, description) {
 
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
+    const titleEl = document.getElementById('p-title');
+    const movieNameEl = document.getElementById('p-movie-name');
+    const descEl = document.getElementById('p-desc');
     const epBox = document.getElementById('episode-area');
 
     if (overlay) {
@@ -1455,27 +1463,29 @@ async function play(id, type, title, description) {
     }
     document.body.style.overflow = 'hidden';
 
+    // FIX SA TEXT: Gi-render ang saktong detalye sa salida/TV show
+    if (titleEl) titleEl.innerText = "| " + title;
+    if (movieNameEl) movieNameEl.innerText = title;
+    if (descEl) descEl.innerText = description || "No description available.";
+
     if (iframe) {
         iframe.src = 'about:blank';
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
     }
 
-    // Tawgon ang helper aron ma-fix ang title ug description sa salida/TV show
-    updatePlayerDetails(title, description);
-
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
-        // FIX: Gi-update ngadto sa vidsrc.cc v2 para mo-play ang salida
-        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        // FIX SA PLAYER: Gi-update ngadto sa vidsrc.xyz para sa mga salida
+        if (iframe) iframe.src = `https://vidsrc.xyz/embed/movie/${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        // FIX: Gi-update ngadto sa vidsrc.cc v2 para sa tv show (Default Season 1, Episode 1)
-        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}/1/1`;
+        // FIX SA PLAYER: Gi-update ngadto sa vidsrc.xyz para sa tv series
+        if (iframe) iframe.src = `https://vidsrc.xyz/embed/tv/${id}/1/1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
