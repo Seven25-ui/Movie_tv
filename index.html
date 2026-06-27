@@ -1439,7 +1439,8 @@ function playMovie(id, title = "", description = "") {
         iframe.setAttribute('allowfullscreen', 'true');
         
         // FIX SA PLAYER: Giusab ngadto sa mas stable nga API (.xyz o .cc/v2) para mo-load sa localhost
-        iframe.src = `https://vidsrc.xyz/embed/movie/${id}`;
+        // ILISI KINI NGA LINYA:
+iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
     }
 }
 
@@ -1477,15 +1478,16 @@ async function play(id, type, title, description) {
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         // FIX SA PLAYER: Gi-update ngadto sa vidsrc.xyz para sa mga salida
-        if (iframe) iframe.src = `https://vidsrc.xyz/embed/movie/${id}`;
+        // ILISI KINI NGA LINYA:
+if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1&s=1&e=1`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        // FIX SA PLAYER: Gi-update ngadto sa vidsrc.xyz para sa tv series
-        if (iframe) iframe.src = `https://vidsrc.xyz/embed/tv/${id}/1/1`;
+        // ILISI KINI NGA LINYA:
+if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`; 
 
         try {
             const data = await apiCall(`/tv/${id}`);
@@ -1584,7 +1586,8 @@ function playEp(sNum, eNum) {
 
     if (currentID && iframe) {
         // FIX: Gigamit gihapon ang stable nga vidsrc.cc v2 domain para sa series
-        iframe.src = `https://vidsrc.cc/v2/embed/tv/${currentID}/${sNum}/${eNum}`;
+        // ILISI KINI NGA LINYA:
+iframe.src = `https://multiembed.mov/?video_id=${currentID}&tmdb=1&s=${sNum}&e=${eNum}`;
         
         if (typeof switchServer === 'function') {
             switchServer('vidsrc_cc');
@@ -1600,6 +1603,7 @@ function playEp(sNum, eNum) {
         console.error("Missing currentID! Click a show first.");
     }
 }
+        
 
 // FIX sa loadSeason: Para mo-refresh ang grid inig pili sa dropdown
 async function loadSeason(sNum) {
