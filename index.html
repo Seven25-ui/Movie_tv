@@ -1455,15 +1455,16 @@ function playMovie(id, title = "", description = "") {
     if (iframe) {
         // Gi-allow ang kompleto nga features alang sa mobile media players
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
-        
+
         // Saktong paagi sa pag-inject sa boolean fullscreen flags para sa browsers
-        iframe.allowFullscreen = true; 
+        iframe.allowFullscreen = true;
         iframe.setAttribute('webkitallowfullscreen', '');
         iframe.setAttribute('mozallowfullscreen', '');
-        
+
         // FIX SA PLAYER: Giusab ngadto sa mas stable nga API
         iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
-    }
+    } // <-- KANI NGA CLOSING BRACE ANG KULANG NIMO KAGANINA!
+}
 
 // --- MAIN PLAY LOGIC (Para sa Grid Cards: Movies & TV Shows) ---
 async function play(id, type, title, description) {
