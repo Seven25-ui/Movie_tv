@@ -1453,14 +1453,17 @@ function playMovie(id, title = "", description = "") {
     if (descEl) descEl.innerText = description || "No description available.";
 
     if (iframe) {
+        // Gi-allow ang kompleto nga features alang sa mobile media players
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
-        iframe.setAttribute('allowfullscreen', 'true');
         
-        // FIX SA PLAYER: Giusab ngadto sa mas stable nga API (.xyz o .cc/v2) para mo-load sa localhost
-        // ILISI KINI NGA LINYA:
-iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
+        // Saktong paagi sa pag-inject sa boolean fullscreen flags para sa browsers
+        iframe.allowFullscreen = true; 
+        iframe.setAttribute('webkitallowfullscreen', '');
+        iframe.setAttribute('mozallowfullscreen', '');
+        
+        // FIX SA PLAYER: Giusab ngadto sa mas stable nga API
+        iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
     }
-}
 
 // --- MAIN PLAY LOGIC (Para sa Grid Cards: Movies & TV Shows) ---
 async function play(id, type, title, description) {
