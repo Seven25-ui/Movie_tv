@@ -1462,11 +1462,10 @@ function playMovie(id, title = "", description = "") {
         iframe.setAttribute('mozallowfullscreen', '');
 
         // FIX SA PLAYER: Giusab ngadto sa mas stable nga API
-        iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
+        iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     } // <-- KANI NGA CLOSING BRACE ANG KULANG NIMO KAGANINA!
 }
 
-// --- MAIN PLAY LOGIC (Para sa Grid Cards: Movies & TV Shows) ---
 async function play(id, type, title, description) {
     currentID = id;
     currentType = type;
@@ -1474,11 +1473,11 @@ async function play(id, type, title, description) {
     currentE = 1;
 
     const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');   
+    const iframe = document.getElementById('video-iframe');
     const titleEl = document.getElementById('p-title');
     const movieNameEl = document.getElementById('p-movie-name');
     const descEl = document.getElementById('p-desc');
-    const epBox = document.getElementById('episode-area'); 
+    const epBox = document.getElementById('episode-area');
 
     if (overlay) {
         overlay.style.display = 'block';
@@ -1495,29 +1494,29 @@ async function play(id, type, title, description) {
         iframe.src = 'about:blank';
         // FIX PARA SA FULLSCREEN FUNCTIONALITY SA TANANG CELLPHONE BROWSER
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
-        iframe.setAttribute('allowfullscreen', 'true');
-        iframe.setAttribute('webkitallowfullscreen', 'true');
-        iframe.setAttribute('mozallowfullscreen', 'true');
-    }                                                   
+        iframe.allowFullscreen = true;
+        iframe.setAttribute('webkitallowfullscreen', '');
+        iframe.setAttribute('mozallowfullscreen', '');
+    }
 
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
-        // SAKTO NGA URL PARA SA MOVIE: Walay &s= ug &e=
-        if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
+        // SAKTO NGA URL PARA SA MOVIE: Naggamit og /movie/ ug walay mga episode parameters
+        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     } else {
-        if (epBox) {                                                                           
+        if (epBox) {                                       
             epBox.style.display = 'block';
-            epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';            
+            epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';    
         }
 
-        // SAKTO NGA URL PARA SA TV SHOW: Naay default Season 1, Episode 1
-        if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1&s=1&e=1`;
+        // SAKTO NGA URL PARA SA TV SHOW: Naggamit og '?' para sa unang query parameter
+        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}?s=1&e=1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
-            if (epBox && data && data.seasons) {                           
-                let html = `                                                                   
-                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">                                    
+            if (epBox && data && data.seasons) {           
+                let html = `                                
+                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">                
                     </select>
                     <div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap:10px;">
                     </div>
@@ -1526,15 +1525,15 @@ async function play(id, type, title, description) {
 
                 const select = document.getElementById('season-select');
                 if (select) {
-                    data.seasons.forEach(s => {                                     
+                    data.seasons.forEach(s => {            
                         if (s.season_number > 0) {
                             const opt = document.createElement('option');
                             opt.value = s.season_number;
                             opt.innerText = s.name || `Season ${s.season_number}`;
                             select.appendChild(opt);
-                        }                                      
+                        }                                  
                     });
-                }          
+                }
 
                 if (typeof loadEpisodes === 'function') {
                     await loadEpisodes(id, 1);
@@ -1545,7 +1544,7 @@ async function play(id, type, title, description) {
             if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
         }
     }
-}                                                           
+}
 
 // --- LOAD EPISODES FUNCTION ---
 async function loadEpisodes(id, sNum) {
@@ -1608,27 +1607,24 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
 
     if (currentID && iframe) {
-        // FIX: Gigamit gihapon ang stable nga vidsrc.cc v2 domain para sa series
-        // ILISI KINI NGA LINYA:
-iframe.src = `https://multiembed.mov/?video_id=${currentID}&tmdb=1&s=${sNum}&e=${eNum}`;
-        
+        // SAKTO NGA URL: Gigamit ang currentID, sNum, ug eNum nga responsive gamit ang saktong '?' symbol
+        iframe.src = `https://vidsrc.cc/v2/embed/tv/${currentID}?s=${sNum}&e=${eNum}`;
+
         if (typeof switchServer === 'function') {
             switchServer('vidsrc_cc');
-        }
-
+        }                                                 
+        
         const overlay = document.getElementById('player-overlay');
-        if (overlay) {
-            overlay.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        if (overlay) {                                                 
+            overlay.scrollTo({ top: 0, behavior: 'smooth' });                                                                                                               
+        }                                                 
         
         console.log(`Elite Mode: Playing S${sNum} E${eNum}`);
-    } else {
-        console.error("Missing currentID! Click a show first.");
+    } else {                                                                                        
+        console.error("Missing currentID! Click a show first.");                                                                         
     }
 }
-        
 
-// FIX sa loadSeason: Para mo-refresh ang grid inig pili sa dropdown
 async function loadSeason(sNum) {
     // 1. Siguraduhon nga number ang value
     const selectedSeason = parseInt(sNum);
