@@ -1463,7 +1463,7 @@ function playMovie(id, title = "", description = "") {
 
         // FIX SA PLAYER: Giusab ngadto sa mas stable nga API
         iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
-    } // <-- KANI NGA CLOSING BRACE ANG KULANG NIMO KAGANINA!
+    }
 }
 
 async function play(id, type, title, description) {
@@ -1485,14 +1485,12 @@ async function play(id, type, title, description) {
     }
     document.body.style.overflow = 'hidden';
 
-    // FIX SA TEXT: Gi-render ang saktong detalye sa salida/TV show
     if (titleEl) titleEl.innerText = "| " + title;
     if (movieNameEl) movieNameEl.innerText = title;
     if (descEl) descEl.innerText = description || "No description available.";
 
     if (iframe) {
         iframe.src = 'about:blank';
-        // FIX PARA SA FULLSCREEN FUNCTIONALITY SA TANANG CELLPHONE BROWSER
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
         iframe.allowFullscreen = true;
         iframe.setAttribute('webkitallowfullscreen', '');
@@ -1501,22 +1499,20 @@ async function play(id, type, title, description) {
 
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
-        // SAKTO NGA URL PARA SA MOVIE: Naggamit og /movie/ ug walay mga episode parameters
         if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
     } else {
-        if (epBox) {                                       
+        if (epBox) {
             epBox.style.display = 'block';
-            epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';    
+            epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        // SAKTO NGA URL PARA SA TV SHOW: Naggamit og '?' para sa unang query parameter
         if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}?s=1&e=1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
-            if (epBox && data && data.seasons) {           
-                let html = `                                
-                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">                
+            if (epBox && data && data.seasons) {
+                let html = `                               
+                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">
                     </select>
                     <div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap:10px;">
                     </div>
@@ -1525,13 +1521,13 @@ async function play(id, type, title, description) {
 
                 const select = document.getElementById('season-select');
                 if (select) {
-                    data.seasons.forEach(s => {            
+                    data.seasons.forEach(s => {
                         if (s.season_number > 0) {
                             const opt = document.createElement('option');
                             opt.value = s.season_number;
                             opt.innerText = s.name || `Season ${s.season_number}`;
                             select.appendChild(opt);
-                        }                                  
+                        }
                     });
                 }
 
@@ -1551,21 +1547,23 @@ async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
     if(!data) return;
 
-    episodeList = data.episodes;                               
+    // Gi-add ang 'let' para dili mu-error in strict mode
+    let episodeList = data.episodes;                           
     const epG = document.getElementById('episodes-grid');
+    if (!epG) return;
     epG.innerHTML = '';
 
-    data.episodes.forEach(ep => {                                  
-        const btn = document.createElement('button');              
+    data.episodes.forEach(ep => {                          
+        const btn = document.createElement('button');      
         const isActive = ep.episode_number === currentE;
-        
+
         btn.style.padding = "10px";
         btn.style.background = isActive ? "#E95420" : "#222";
-        btn.style.color = "#fff";                                  
+        btn.style.color = "#fff";                          
         btn.style.border = isActive ? "1px solid #ff8c00" : "1px solid #444";
-        btn.style.cursor = "pointer";                              
-        btn.style.borderRadius = "5px";                            
-        btn.style.transition = "0.3s";                             
+        btn.style.cursor = "pointer";                      
+        btn.style.borderRadius = "5px";                    
+        btn.style.transition = "0.3s";                     
         btn.innerText = ep.episode_number;
 
         btn.onmouseover = () => { if(ep.episode_number !== currentE) btn.style.background = "#444"; };
@@ -1574,55 +1572,56 @@ async function loadEpisodes(id, sNum) {
         btn.onclick = () => {
             playEp(sNum, ep.episode_number);
             document.querySelectorAll('#episodes-grid button').forEach(b => {
-                b.style.background = "#222";                               
+                b.style.background = "#222";               
                 b.style.border = "1px solid #444";
-            });                                                                        
+            });                                            
             btn.style.background = "#E95420";
             btn.style.border = "1px solid #ff8c00";
         };
 
         epG.appendChild(btn);
-    });                                                                    
+    });                                                    
 }
 
 // --- CLOSE PLAYER FUNCTION ---
-function closePlayer() { 
+function closePlayer() {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
     const epBox = document.getElementById('episode-area');
-
-    if (overlay) overlay.style.display = 'none'; 
-    document.body.style.overflow = 'auto'; 
-    if (iframe) iframe.src = ''; 
     
-    // I-tago sab ang episode box inig sirado para limpyo sa sunod salida
+    if (overlay) overlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    if (iframe) iframe.src = '';
+    
+    // I-tago sab ang episode box inig sirado para limpyo sa sunod salida                                               
     if (epBox) epBox.style.display = 'none';
-}
+}                                                                                                                                                             
 
-// --- PLAY EPISODE FUNCTION ---
+// --- PLAY EPISODE FUNCTION ---                           
 function playEp(sNum, eNum) {
     currentS = sNum;
     currentE = eNum;
 
     const iframe = document.getElementById('video-iframe');
 
-    if (currentID && iframe) {
-        // SAKTO NGA URL: Gigamit ang currentID, sNum, ug eNum nga responsive gamit ang saktong '?' symbol
+    if (currentID && iframe) {                                     
+        // SAKTO NGA URL: Gigamit ang currentID, sNum, ug eNum nga responsive gamit ang saktong '?' symbol                    
         iframe.src = `https://vidsrc.cc/v2/embed/tv/${currentID}?s=${sNum}&e=${eNum}`;
-
+                                                                   
         if (typeof switchServer === 'function') {
             switchServer('vidsrc_cc');
-        }                                                 
-        
-        const overlay = document.getElementById('player-overlay');
-        if (overlay) {                                                 
-            overlay.scrollTo({ top: 0, behavior: 'smooth' });                                                                                                               
-        }                                                 
-        
+        }
+
+        const overlay = document.getElementById('player-overlay');                                                          
+        if (overlay) {                                                                                                      
+            overlay.scrollTo({ top: 0, behavior: 'smooth' });                                                          
+        }
+
         console.log(`Elite Mode: Playing S${sNum} E${eNum}`);
-    } else {                                                                                        
-        console.error("Missing currentID! Click a show first.");                                                                         
-    }
+    } else {                                               
+        console.error("Missing currentID! Click a show first.");                                                                                                               
+    }                                                       
 }
 
 async function loadSeason(sNum) {
