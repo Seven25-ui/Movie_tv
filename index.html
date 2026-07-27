@@ -1428,6 +1428,17 @@ function updatePlayerDetails(title, description) {
     }
 }
 
+// --- HELPER FUNCTION PARA SA PLAYER SETUP ---
+function setupIframeAttributes(iframe) {
+    // Gi-allow ang kompleto nga features alang sa media players
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+    
+    // Saktong paagi sa pag-inject sa boolean fullscreen flags para sa browsers
+    iframe.allowFullscreen = true;
+    iframe.setAttribute('webkitallowfullscreen', '');
+    iframe.setAttribute('mozallowfullscreen', '');
+}
+
 // --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
@@ -1435,6 +1446,7 @@ function playMovie(id, title = "", description = "") {
     const titleEl = document.getElementById('p-title');
     const movieNameEl = document.getElementById('p-movie-name');
     const descEl = document.getElementById('p-desc');
+    const epBox = document.getElementById('episode-area'); // Gidugang para limpyo
 
     if (!id) return console.error("Missing Movie ID");
 
@@ -1452,24 +1464,25 @@ function playMovie(id, title = "", description = "") {
     if (movieNameEl) movieNameEl.innerText = title;
     if (descEl) descEl.innerText = description || "No description available.";
 
+    // I-hide ang episode area para sa movie
+    if (epBox) epBox.style.display = 'none';
+
     if (iframe) {
-        // Gi-allow ang kompleto nga features alang sa mobile media players
-        iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+        // I-setup ang attributes sa dili pa i-set ang src
+        setupIframeAttributes(iframe);
 
-        // Saktong paagi sa pag-inject sa boolean fullscreen flags para sa browsers
-        iframe.allowFullscreen = true;
-        iframe.setAttribute('webkitallowfullscreen', '');
-        iframe.setAttribute('mozallowfullscreen', '');
-
-        // FIX SA PLAYER: Giusab ngadto sa mas stable nga API
+        // DIREKTA NGA GI-LOAD ANG URL. Gi-tangtang ang about:blank
         iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        console.log(`Loading Movie ID: ${id}`);
     }
 }
 
+// --- PLAY MASTER FUNCTION (MOVIE + TV) ---
 async function play(id, type, title, description) {
     currentID = id;
     currentType = type;
-    currentS = 1;
+    // Reset default season/episode para sa TV
+    currentS = 1; 
     currentE = 1;
 
     const overlay = document.getElementById('player-overlay');
@@ -1490,27 +1503,35 @@ async function play(id, type, title, description) {
     if (descEl) descEl.innerText = description || "No description available.";
 
     if (iframe) {
-        iframe.src = 'about:blank';
-        iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
-        iframe.allowFullscreen = true;
-        iframe.setAttribute('webkitallowfullscreen', '');
-        iframe.setAttribute('mozallowfullscreen', '');
+        // I-setup ang attributes sa dili pa i-set ang src
+        setupIframeAttributes(iframe);
     }
 
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
-        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+        if (iframe) {
+            // DIREKTA NGA GI-LOAD ANG URL
+            iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
+            console.log(`Loading Movie (from playMaster): ${id}`);
+        }
     } else {
+        // TYPE IS TV SHOW
         if (epBox) {
             epBox.style.display = 'block';
             epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
         }
 
-        if (iframe) iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}?s=1&e=1`;
+        // DIREKTA NGA GI-LOAD ANG TV SHOW URL (default S1E1)
+        if (iframe) {
+            iframe.src = `https://vidsrc.cc/v2/embed/tv/${id}?s=1&e=1`;
+            console.log(`Loading TV Show: ${id} (S1:E1)`);
+        }
 
         try {
             const data = await apiCall(`/tv/${id}`);
             if (epBox && data && data.seasons) {
+                // (Nagpadayon ang code para sa season dropdown ug episode buttons...)
+                // (Igo ra gi-update ang player loading logic sa taas)
                 let html = `                               
                     <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">
                     </select>
@@ -1540,6 +1561,22 @@ async function play(id, type, title, description) {
             if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
         }
     }
+}
+
+// --- CLOSE PLAYER FUNCTION ---
+function closePlayer() {
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+    const epBox = document.getElementById('episode-area');
+    
+    if (overlay) overlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // I-reset ang iframe src para mapatay ang video
+    if (iframe) iframe.src = 'about:blank';
+    
+    if (epBox) epBox.style.display = 'none';
+    console.log("Player closed.");
 }
 
 // --- LOAD EPISODES FUNCTION ---
