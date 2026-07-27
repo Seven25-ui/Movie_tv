@@ -1465,8 +1465,8 @@ function playMovie(id, title = "", description = "") {
     if (iframe) {
         setupIframeAttributes(iframe);
         // GI-ILISAN: vidsrc.xyz format para sa Movie
-        iframe.src = `https://vidsrc.xyz/embed/movie?tmdb=${id}`;
-        console.log(`Loading Movie (vidsrc.xyz): ${id}`);
+        iframe.src = `https://vidsrc.pro/embed/movie/${id}`;
+        console.log(`Loading Movie (vidsrc.pro): ${id}`);
     }
 }
 
@@ -1501,7 +1501,7 @@ async function play(id, type, title, description) {
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (iframe) {
-            iframe.src = `https://vidsrc.xyz/embed/movie?tmdb=${id}`;
+            iframe.src = `https://vidsrc.pro/embed/movie/${id}`;
             console.log(`Loading Movie: ${id}`);
         }
     } else {
@@ -1512,7 +1512,7 @@ async function play(id, type, title, description) {
 
         if (iframe) {
             // GI-ILISAN: vidsrc.xyz format para sa TV Show
-            iframe.src = `https://vidsrc.xyz/embed/tv?tmdb=${id}&s=1&e=1`;
+            iframe.src = `https://vidsrc.pro/embed/tv/${id}/1/1`;
             console.log(`Loading TV Show: ${id} (S1:E1)`);
         }
 
@@ -1559,7 +1559,7 @@ function playEp(sNum, eNum) {
 
     if (currentID && iframe) {                                     
         // GI-ILISAN: vidsrc.xyz format para sa Episode
-        iframe.src = `https://vidsrc.xyz/embed/tv?tmdb=${currentID}&s=${sNum}&e=${eNum}`;
+        iframe.src = `https://vidsrc.pro/embed/tv/${currentID}/${sNum}/${eNum}`;
                                                                    
         if (typeof switchServer === 'function') {
             switchServer('vidsrc_xyz');
