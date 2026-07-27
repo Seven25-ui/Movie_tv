@@ -1464,9 +1464,9 @@ function playMovie(id, title = "", description = "") {
 
     if (iframe) {
         setupIframeAttributes(iframe);
-        // GI-ILISAN ANG URL: Gigamit ang vidsrc.me imbes nga vidsrc.cc
-        iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
-        console.log(`Loading Movie (vidsrc.me): ${id}`);
+        // GI-ILISAN: vidsrc.xyz format para sa Movie
+        iframe.src = `https://vidsrc.xyz/embed/movie?tmdb=${id}`;
+        console.log(`Loading Movie (vidsrc.xyz): ${id}`);
     }
 }
 
@@ -1501,8 +1501,7 @@ async function play(id, type, title, description) {
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (iframe) {
-            // GI-ILISAN ANG URL SA MOVIE
-            iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
+            iframe.src = `https://vidsrc.xyz/embed/movie?tmdb=${id}`;
             console.log(`Loading Movie: ${id}`);
         }
     } else {
@@ -1512,8 +1511,8 @@ async function play(id, type, title, description) {
         }
 
         if (iframe) {
-            // GI-ILISAN ANG URL SA TV SHOW (vidsrc.me format: ?tmdb=ID&s=1&e=1)
-            iframe.src = `https://vidsrc.me/embed/tv?tmdb=${id}&s=1&e=1`;
+            // GI-ILISAN: vidsrc.xyz format para sa TV Show
+            iframe.src = `https://vidsrc.xyz/embed/tv?tmdb=${id}&s=1&e=1`;
             console.log(`Loading TV Show: ${id} (S1:E1)`);
         }
 
@@ -1559,11 +1558,11 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
 
     if (currentID && iframe) {                                     
-        // GI-ILISAN ANG URL SA EPISODE GAMIT ANG vidsrc.me format
-        iframe.src = `https://vidsrc.me/embed/tv?tmdb=${currentID}&s=${sNum}&e=${eNum}`;
+        // GI-ILISAN: vidsrc.xyz format para sa Episode
+        iframe.src = `https://vidsrc.xyz/embed/tv?tmdb=${currentID}&s=${sNum}&e=${eNum}`;
                                                                    
         if (typeof switchServer === 'function') {
-            switchServer('vidsrc_me');
+            switchServer('vidsrc_xyz');
         }
 
         const overlay = document.getElementById('player-overlay');                                                          
