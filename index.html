@@ -43,20 +43,24 @@
 
         /* --- DESKTOP VIEW --- */
         @media (min-width: 1024px) {
-            :root { --nav-width: 85px; }
-            body { padding-bottom: 0 !important; padding-left: var(--nav-width); }
-            .bottom-nav {
-                width: var(--nav-width) !important; height: 100vh !important;
-                flex-direction: column !important; left: 0 !important; top: 0 !important;
-                bottom: auto !important; border-top: none !important;
-                border-right: 1px solid #1a1a1a; padding: 40px 0 !important;
-                justify-content: flex-start !important; gap: 35px;
-            }
-            .nav-btn span { display: none; }
-            .nav-btn i { font-size: 24px !important; }
-            .top-bar { left: var(--nav-width); width: calc(100% - var(--nav-width)); padding: 15px 50px; }
-            .grid { grid-template-columns: repeat(6, 1fr) !important; gap: 25px !important; }
-        }
+    :root { --nav-width: 85px; }
+    body { padding-bottom: 0 !important; padding-left: var(--nav-width); }
+    #menu-icon {
+        top: 20px !important;
+        left: 20px !important;
+    }
+    .bottom-nav {
+        width: var(--nav-width) !important; height: 100vh !important;
+        flex-direction: column !important; left: 0 !important; top: 0 !important;
+        bottom: auto !important; border-top: none !important;
+        border-right: 1px solid #1a1a1a; padding: 100px 0 40px !important;
+        justify-content: flex-start !important; gap: 35px;
+    }
+    .nav-btn span { display: none; }
+    .nav-btn i { font-size: 24px !important; }
+    .top-bar { left: var(--nav-width); width: calc(100% - var(--nav-width)); padding: 15px 50px; }
+    .grid { grid-template-columns: repeat(6, 1fr) !important; gap: 25px !important; }
+}
 
         /* --- UI COMPONENTS --- */
         .top-bar { position: sticky; top: 0; background: rgba(0,0,0,0.9); padding: 12px 15px; z-index: 1000; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(15px); }
