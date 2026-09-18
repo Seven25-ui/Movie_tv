@@ -1029,6 +1029,32 @@ l    animation: textPulse 2s infinite ease-in-out;
   }
 }
 
+        .recommendation-tag {
+    background: #E95420;
+    color: #fff;
+    font-weight: 800;
+}
+
+.kdrama-tag {
+    background: #b00020;
+    color: #fff;
+}
+
+#recommendation-grid .mini-card {
+    cursor: pointer;
+}
+
+#recommendation-grid .mini-card:hover {
+    transform: translateY(-4px);
+    border-color: #E95420;
+}
+
+#recommendation-grid .img-container img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+}
+
     </style>
 </head>
 <body>
@@ -1255,28 +1281,41 @@ l    animation: textPulse 2s infinite ease-in-out;
     </div>
 </div>
 
-<div class="affiliate-grid">
-    <a href="https://s.lazada.com.ph/s.ZaavN3?cc&t=p-i4sPKPu-sRl2CUK" target="_blank" class="mini-card">
-        <div class="store-tag lazada">LAZADA</div>
-        <div class="img-container">
-            <img src="https://m.media-amazon.com/images/I/71FbUoqLdLL._AC_UF1000,1000_QL80_FMwebp_.jpg" id="laz-img" alt="Lazada Product">
-        </div>
-        <div class="mini-info">
-            <span class="p-name">Android TV Box 4K</span>
-            <span class="p-price">$72.71</span>
-        </div>
-    </a>
+<div class="affiliate-grid" id="recommendation-grid">
 
-    <a href="https://amzn.to/4csW6vq" target="_blank" class="mini-card">
-        <div class="store-tag amazon">AMAZON</div>
+    <div class="mini-card" id="tv-recommendation">
+        <div class="store-tag recommendation-tag">
+            TV SHOWS
+        </div>
+
         <div class="img-container">
-            <img src="https://m.media-amazon.com/images/I/51Zbj-2DwhL._AC_UF350,350_QL80_FMwebp_.jpg" id="amz-img" alt="Amazon Product">
+            <img id="tv-rec-img" src="" alt="Recommended TV Show">
         </div>
+
         <div class="mini-info">
-            <span class="p-name">Fire Tv Stick 4K</span>
-            <span class="p-price">$49.99</span>
+            <span class="p-name" id="tv-rec-title">
+                Loading TV Shows...
+            </span>
         </div>
-    </a>
+    </div>
+
+
+    <div class="mini-card" id="kdrama-recommendation">
+        <div class="store-tag recommendation-tag kdrama-tag">
+            K-DRAMA
+        </div>
+
+        <div class="img-container">
+            <img id="kdrama-rec-img" src="" alt="Recommended K-Drama">
+        </div>
+
+        <div class="mini-info">
+            <span class="p-name" id="kdrama-rec-title">
+                Loading K-Drama...
+            </span>
+        </div>
+    </div>
+
 </div>
 
     <div class="row">
@@ -1877,30 +1916,65 @@ function simulateLiveTraffic() {
 // Sugdan ang simulation inig load sa page
 simulateLiveTraffic();
 
-function localizeAffiliateCards() {
-    // I-detect ang language sa browser (pananglitan 'fil' para sa Filipino/Tagalog)
-    const userLang = navigator.language || navigator.userLanguage;
-    
-    // Pangitaa ang mga elemento sa imong cards
-    const lazTitle = document.querySelector('.mini-card:nth-child(1) .p-name');
-    const amzTitle = document.querySelector('.mini-card:nth-child(2) .p-name');
-    const lazTag = document.querySelector('.lazada');
-    const amzTag = document.querySelector('.amazon');
+async function loadRecommendationCards() {
 
-    // Kon ang user taga-Pilipinas o naggamit og Filipino language settings
-    if (userLang.includes('fil') || userLang.includes('ph')) {
-        lazTitle.innerText = "Pinaka-baratong TV Box";
-        amzTitle.innerText = "Sulit nga Fire Stick";
-        lazTag.innerText = "SULIT DEAL";
-        amzTag.innerText = "GLOBAL ORDER";
-    } else {
-        // Default English kon international ang bisita
-        lazTitle.innerText = "Android TV Box 4K";
-        amzTitle.innerText = "Fire TV Stick 4K";
-        lazTag.innerText = "LAZADA";
-        amzTag.innerText = "AMAZON";
+    // Recommended TV Shows
+    const tvData = await apiCall(
+        '/tv/popular?page=1'
+    );
+
+    // Recommended K-Dramas
+    const kData = await apiCall(
+        '/discover/tv?with_original_language=ko&sort_by=popularity.desc&page=1'
+    );
+
+    const tv = tvData?.results?.find(x => x.poster_path);
+    const kdrama = kData?.results?.find(x => x.poster_path);
+
+    // TV SHOW
+    if (tv) {
+        const img = document.getElementById('tv-rec-img');
+        const title = document.getElementById('tv-rec-title');
+        const card = document.getElementById('tv-recommendation');
+
+        img.src = IMG + tv.poster_path;
+        title.innerText = tv.name;
+
+        card.onclick = () => {
+            play(tv.id, 'tv', tv.name, tv.overview);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    }
+
+    // K-DRAMA
+    if (kdrama) {
+        const img = document.getElementById('kdrama-rec-img');
+        const title = document.getElementById('kdrama-rec-title');
+        const card = document.getElementById('kdrama-recommendation');
+
+        img.src = IMG + kdrama.poster_path;
+        title.innerText = kdrama.name;
+
+        card.onclick = () => {
+            play(
+                kdrama.id,
+                'tv',
+                kdrama.name,
+                kdrama.overview
+            );
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
     }
 }
+
+document.addEventListener(
+    'DOMContentLoaded',
+    loadRecommendationCards
+);
 
 // I-run ang function inig load sa page
 document.addEventListener('DOMContentLoaded', localizeAffiliateCards);
