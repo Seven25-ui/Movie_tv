@@ -982,6 +982,53 @@ l    animation: textPulse 2s infinite ease-in-out;
     border: none;
 }
 
+        @media (max-width: 600px) {
+  #side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: auto;
+    width: min(82vw, 320px);
+    height: 100dvh;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 10001;
+    transform: translateX(110%);
+    transition: transform 0.3s ease;
+    padding-bottom: 80px;
+  }
+
+  #side-menu.active {
+    transform: translateX(0);
+  }
+
+  #side-menu ul {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 10px 15px 30px;
+  }
+
+  #side-menu a {
+    max-width: 100%;
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+
+  #side-menu .menu-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
     </style>
 </head>
 <body>
