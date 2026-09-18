@@ -1418,15 +1418,45 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 }
 
     async function init() {
-        const data = await apiCall('/trending/all/day');
-        if(!data) return;
-        const top = data.results[0];
-        document.getElementById('h-title').innerText = top.title || top.name;
-        document.getElementById('h-desc').innerText = top.overview;
-        document.getElementById('hero').style.backgroundImage = `linear-gradient(to top, #000 5%, transparent), url('https://image.tmdb.org/t/p/original${top.backdrop_path}')`;
-        document.getElementById('h-btn').onclick = () => play(top.id, top.media_type || 'movie', top.title || top.name);
-        render(data.results);
-    }
+    const data1 = await apiCall('/trending/all/day?page=1');
+    const data2 = await apiCall('/trending/all/day?page=2');
+
+    if (!data1) return;
+
+    const allResults = [
+        ...(data1.results || []),
+        ...(data2?.results || [])
+    ];
+
+    // Kuhaa lang ang naay poster
+    const validResults = allResults.filter(m => m.poster_path);
+
+    // 18 ka complete tiles
+    const results = validResults.slice(0, 18);
+
+    if (!results.length) return;
+
+    const top = results[0];
+
+    document.getElementById('h-title').innerText =
+        top.title || top.name;
+
+    document.getElementById('h-desc').innerText =
+        top.overview || '';
+
+    document.getElementById('hero').style.backgroundImage =
+        `linear-gradient(to top, #000 5%, transparent),
+         url('https://image.tmdb.org/t/p/original${top.backdrop_path}')`;
+
+    document.getElementById('h-btn').onclick = () =>
+        play(
+            top.id,
+            top.media_type || 'movie',
+            top.title || top.name
+        );
+
+    render(results);
+}
 
     function render(list) {
     const g = document.getElementById('main-grid');
