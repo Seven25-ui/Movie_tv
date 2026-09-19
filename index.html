@@ -1812,20 +1812,69 @@ window.onload = () => {
     startMatrix();
 };
 
-    // --- ANG IMONG MGA KARAAN NGA FUNCTIONS (WALAY USAB) ---
     async function fetchType(t) {
-        const d = await apiCall(`/discover/${t}?sort_by=popularity.desc`);
-        document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = t === 'movie' ? "🎬 Popular Movies" : "📺 Popular TV Shows";
-        render(d.results.map(i => ({...i, media_type: t})));
-    }
+    const d1 = await apiCall(
+        `/discover/${t}?sort_by=popularity.desc&page=1`
+    );
+
+    const d2 = await apiCall(
+        `/discover/${t}?sort_by=popularity.desc&page=2`
+    );
+
+    if (!d1) return;
+
+    const results = [
+        ...(d1.results || []),
+        ...(d2?.results || [])
+    ]
+    .filter(i => i.poster_path)
+    .slice(0, 24)
+    .map(i => ({
+        ...i,
+        media_type: t
+    }));
+
+    document.getElementById('hero').style.display = 'none';
+
+    document.getElementById('row-title').innerText =
+        t === 'movie'
+            ? "🎬 Popular Movies"
+            : "📺 Popular TV Shows";
+
+    render(results);
+}
 
     async function fetchLang(l) {
-        const d = await apiCall(`/discover/tv?with_original_language=${l}`);
-        document.getElementById('hero').style.display = 'none';
-        document.getElementById('row-title').innerText = l === 'ko' ? "🇰🇷 K-Drama" : "🇯🇵 Anime";
-        render(d.results.map(i => ({...i, media_type: 'tv'})));
-    }
+    const d1 = await apiCall(
+        `/discover/tv?with_original_language=${l}&sort_by=popularity.desc&page=1`
+    );
+
+    const d2 = await apiCall(
+        `/discover/tv?with_original_language=${l}&sort_by=popularity.desc&page=2`
+    );
+
+    if (!d1) return;
+
+    const results = [
+        ...(d1.results || []),
+        ...(d2?.results || [])
+    ]
+    .filter(i => i.poster_path)
+    .slice(0, 24)
+    .map(i => ({
+        ...i,
+        media_type: 'tv'
+    }));
+
+    document.getElementById('hero').style.display = 'none';
+
+    document.getElementById('row-title').innerText =
+        l === 'ko'
+            ? "🇰🇷 K-Drama"
+            : "🇯🇵 Anime";
+
+    render(results);
+}
 
     async function search(q) {
     // KINI ANG PINAKA-IMPORTANTE: Multi-search!
