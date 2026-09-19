@@ -211,19 +211,18 @@ footer span {
     }
 
     function playMovie(id) {
-        const overlay = document.getElementById('player-overlay');
-        const iframe = document.getElementById('video-iframe');
-        
-        if (iframe) {
-            // Mao kini ang solusyon sa sad face: vidsrc.cc/v2/ [cite: 2026-01-31]
-            iframe.src = `https://vidsrc.cc/v2/embed/movie/${id}`;
-        }
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
 
-        if (overlay) {
-            overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Stop background scroll [cite: 2026-01-31]
-        }
+    if (iframe) {
+        iframe.src = `https://vidsrc.sh/embed/movie/${id}`;
     }
+
+    if (overlay) {
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
 
     function closePlayer() {
         const overlay = document.getElementById('player-overlay');
