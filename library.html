@@ -215,7 +215,7 @@ footer span {
     const iframe = document.getElementById('video-iframe');
 
     if (iframe) {
-        iframe.src = `https://vidsrc.sh/embed/movie/${id}`;
+        iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
     }
 
     if (overlay) {
@@ -224,14 +224,15 @@ footer span {
     }
 }
 
-    function closePlayer() {
-        const overlay = document.getElementById('player-overlay');
-        const iframe = document.getElementById('video-iframe');
+function closePlayer() {
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
 
-        if (overlay) overlay.style.display = 'none';
-        if (iframe) iframe.src = ''; // Stop video playback [cite: 2026-01-31]
-        document.body.style.overflow = 'auto'; // Restore background scroll [cite: 2026-01-31]
-    }
+    if (overlay) overlay.style.display = 'none';
+    if (iframe) iframe.src = '';
+
+    document.body.style.overflow = 'auto';
+}
 
     // KINI ANG IMPORTANTE: Kinahanglan i-trigger ang function inig load sa page!
     document.addEventListener('DOMContentLoaded', fetchMovies);
