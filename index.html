@@ -1239,13 +1239,9 @@ html {
 
 </div>
 
-<div id="up-next-overlay" style="display:none; position:fixed; bottom:20px; right:20px; z-index:10002; background:rgba(15,15,15,0.95); border:1px solid #E95420; border-radius:14px; padding:16px 20px; max-width:280px; box-shadow:0 10px 30px rgba(0,0,0,0.6); backdrop-filter: blur(10px);">
-    <p style="color:#E95420; font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:6px;">Up Next</p>
-    <p id="up-next-title" style="color:#fff; font-size:13px; font-weight:700; margin-bottom:10px;">Episode Title</p>
-    <div style="display:flex; gap:8px; align-items:center;">
-        <button onclick="confirmAutoNext()" style="flex:1; background:#E95420; color:#fff; border:none; padding:8px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer;">Play Now (<span id="up-next-countdown">10</span>s)</button>
-        <button onclick="cancelAutoNext()" style="background:#222; color:#aaa; border:1px solid #444; padding:8px 12px; border-radius:8px; font-size:12px; cursor:pointer;">Cancel</button>
-    </div>
+<div id="up-next-overlay" style="display:none; position:fixed; bottom:20px; right:20px; z-index:10002; background:rgba(15,15,15,0.95); border:1px solid #E95420; border-radius:14px; padding:14px 20px; max-width:280px; box-shadow:0 10px 30px rgba(0,0,0,0.6); backdrop-filter: blur(10px); pointer-events:none;">
+    <p style="color:#E95420; font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:4px;">▶ Playing Next</p>
+    <p id="up-next-title" style="color:#fff; font-size:13px; font-weight:700; margin:0;">Episode Title</p>
 </div>
 
 <style>
@@ -1455,7 +1451,6 @@ const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     let currentID, currentType, currentS=1, currentE=1, episodeList = [];
     let currentSeasonsMeta = [];
     let autoNextTimer = null;
-    let autoNextCountdownInterval = null;
     
     async function apiCall(endpoint) {
     
@@ -1783,40 +1778,29 @@ function scheduleAutoNext(runtimeMinutes) {
     if (!next) return; // last episode na sa tibuok series
 
     if (!runtimeMinutes || runtimeMinutes <= 0) runtimeMinutes = 24; // fallback guess (anime avg)
-    autoNextTimer = setTimeout(showUpNextPrompt, runtimeMinutes * 60 * 1000);
+    autoNextTimer = setTimeout(autoPlayNext, runtimeMinutes * 60 * 1000);
 }
 
-function showUpNextPrompt() {
+// Tinuod nga automatic: mo-play dayon dayon, gamay ra nga toast nga mawala ra iyaha
+function autoPlayNext() {
     const next = peekNextEpisode();
     if (!next) return;
+    showAutoNextToast(next);
+    changeEpisode(1);
+}
 
+function showAutoNextToast(next) {
     const overlay = document.getElementById('up-next-overlay');
     const titleEl = document.getElementById('up-next-title');
     if (titleEl) titleEl.innerText = `Season ${next.season}, Episode ${next.episode}`;
-    if (overlay) overlay.style.display = 'block';
-
-    let seconds = 10;
-    const countdownEl = document.getElementById('up-next-countdown');
-    if (countdownEl) countdownEl.innerText = seconds;
-
-    autoNextCountdownInterval = setInterval(() => {
-        seconds--;
-        if (countdownEl) countdownEl.innerText = seconds;
-        if (seconds <= 0) confirmAutoNext();
-    }, 1000);
-}
-
-function confirmAutoNext() {
-    const overlay = document.getElementById('up-next-overlay');
-    if (overlay) overlay.style.display = 'none';
-    clearInterval(autoNextCountdownInterval);
-    autoNextCountdownInterval = null;
-    changeEpisode(1);
+    if (overlay) {
+        overlay.style.display = 'block';
+        setTimeout(() => { overlay.style.display = 'none'; }, 3000);
+    }
 }
 
 function cancelAutoNext() {
     if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = null; }
-    if (autoNextCountdownInterval) { clearInterval(autoNextCountdownInterval); autoNextCountdownInterval = null; }
     const overlay = document.getElementById('up-next-overlay');
     if (overlay) overlay.style.display = 'none';
 }
