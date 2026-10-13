@@ -2672,17 +2672,18 @@ startRealtimeCount();
       }
 
       loading.textContent = data.reply || "No reply received.";
-    } catch (error) {
-      loading.textContent =
-        "Sorry, dili pa ko makatubag karon. " +
-        "Please try again later.";
-      console.error("SE7EN AI error:", error);
-    } finally {
-      input.disabled = false;
-      sendButton.disabled = false;
-      input.focus();
-      messages.scrollTop = messages.scrollHeight;
-    }
+    
+} catch (error) {
+  loading.textContent =
+    "AI error: " + (error.message || "Unknown error");
+  console.error("SE7EN AI error:", error);
+} finally {
+  input.disabled = false;
+  sendButton.disabled = false;
+  input.focus();
+  messages.scrollTop = messages.scrollHeight;
+}
+
   });
 })();
 </script>
