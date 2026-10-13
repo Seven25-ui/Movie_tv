@@ -2479,5 +2479,214 @@ function startRealtimeCount() {
 startRealtimeCount();
 </script>
 
+    
+<!-- SE7EN CINEMA AI -->
+<style>
+  #se7en-ai-button {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 99999;
+    border: 0;
+    border-radius: 30px;
+    padding: 14px 18px;
+    background: #ff4500;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 18px #0008;
+  }
+
+  #se7en-ai-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 82px;
+    z-index: 99999;
+    width: min(350px, calc(100vw - 32px));
+    height: 430px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #ff4500;
+    border-radius: 16px;
+    background: #111;
+    color: #fff;
+    box-shadow: 0 8px 35px #000a;
+    font: 14px Arial, sans-serif;
+  }
+
+  #se7en-ai-header {
+    padding: 15px;
+    background: #ff4500;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #se7en-ai-close {
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  #se7en-ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  .se7en-ai-msg {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 10px 12px;
+    margin: 8px 0;
+    border-radius: 12px;
+    line-height: 1.45;
+  }
+
+  .se7en-ai-bot {
+    background: #292929;
+    margin-right: 24px;
+  }
+
+  .se7en-ai-user {
+    background: #713019;
+    margin-left: 24px;
+  }
+
+  #se7en-ai-form {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid #333;
+  }
+
+  #se7en-ai-input {
+    min-width: 0;
+    flex: 1;
+    padding: 11px;
+    border: 1px solid #555;
+    border-radius: 9px;
+    background: #202020;
+    color: white;
+  }
+
+  #se7en-ai-form button {
+    padding: 10px 13px;
+    border: 0;
+    border-radius: 9px;
+    background: #ff4500;
+    color: white;
+    cursor: pointer;
+  }
+</style>
+
+<button id="se7en-ai-button" type="button">
+  🎬 Ask SE7EN AI
+</button>
+
+<section id="se7en-ai-panel" aria-label="SE7EN CINEMA AI chat">
+  <div id="se7en-ai-header">
+    <span>🎬 SE7EN CINEMA AI</span>
+    <button id="se7en-ai-close" type="button"
+      aria-label="Close chat">×</button>
+  </div>
+
+  <div id="se7en-ai-messages" aria-live="polite">
+    <div class="se7en-ai-msg se7en-ai-bot">
+      Yo! Welcome to SE7EN CINEMA. 🍿
+      Ask me for movie recommendations!
+    </div>
+  </div>
+
+  <form id="se7en-ai-form">
+    <input id="se7en-ai-input"
+      placeholder="Ask about movies..."
+      maxlength="1000"
+      autocomplete="off"
+      required />
+    <button type="submit">Send</button>
+  </form>
+</section>
+
+<script>
+(() => {
+  const API =
+    "https://se7en-cinema-ai.guardianagene6.workers.dev/api/chat";
+
+  const button = document.getElementById("se7en-ai-button");
+  const panel = document.getElementById("se7en-ai-panel");
+  const close = document.getElementById("se7en-ai-close");
+  const messages = document.getElementById("se7en-ai-messages");
+  const form = document.getElementById("se7en-ai-form");
+  const input = document.getElementById("se7en-ai-input");
+
+  button.addEventListener("click", () => {
+    panel.style.display = "flex";
+    input.focus();
+  });
+
+  close.addEventListener("click", () => {
+    panel.style.display = "none";
+  });
+
+  function addMessage(text, type) {
+    const item = document.createElement("div");
+    item.className = "se7en-ai-msg " +
+      (type === "user" ? "se7en-ai-user" : "se7en-ai-bot");
+    item.textContent = text;
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+    return item;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, "user");
+    input.value = "";
+    input.disabled = true;
+
+    const sendButton = form.querySelector("button");
+    sendButton.disabled = true;
+
+    const loading = addMessage("Thinking...", "bot");
+
+    try {
+      const response = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "AI request failed.");
+      }
+
+      loading.textContent = data.reply || "No reply received.";
+    } catch (error) {
+      loading.textContent =
+        "Sorry, dili pa ko makatubag karon. " +
+        "Please try again later.";
+      console.error("SE7EN AI error:", error);
+    } finally {
+      input.disabled = false;
+      sendButton.disabled = false;
+      input.focus();
+      messages.scrollTop = messages.scrollHeight;
+    }
+  });
+})();
+</script>
+<!-- END SE7EN CINEMA AI -->
+    
 </body>
 </html>
