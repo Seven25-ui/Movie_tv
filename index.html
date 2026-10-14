@@ -2493,8 +2493,16 @@ startRealtimeCount();
     background: #ff4500;
     color: white;
     font-weight: 700;
-    cursor: pointer;
+    cursor: grab;
     box-shadow: 0 4px 18px #0008;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  #se7en-ai-button.se7en-dragging,
+  #se7en-ai-header.se7en-dragging {
+    cursor: grabbing;
   }
 
   #se7en-ai-panel {
@@ -2504,6 +2512,7 @@ startRealtimeCount();
     z-index: 99999;
     width: min(350px, calc(100vw - 32px));
     height: 430px;
+    max-height: calc(100vh - 16px);
     display: none;
     flex-direction: column;
     overflow: hidden;
@@ -2522,6 +2531,10 @@ startRealtimeCount();
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   #se7en-ai-close {
@@ -2572,6 +2585,7 @@ startRealtimeCount();
     border-radius: 9px;
     background: #202020;
     color: white;
+    font-size: 16px; /* prevents auto-zoom on phones */
   }
 
   #se7en-ai-form button {
@@ -2582,6 +2596,25 @@ startRealtimeCount();
     color: white;
     cursor: pointer;
   }
+
+  /* Phone/tablet: the site's bottom nav is visible below 1024px,
+     so lift the button and panel above it */
+  @media (max-width: 1023px) {
+    #se7en-ai-button {
+      bottom: 80px;
+      right: 14px;
+      padding: 12px 15px;
+      font-size: 13px;
+    }
+
+    #se7en-ai-panel {
+      right: 16px;
+      bottom: 136px;
+      height: 430px;
+      max-height: calc(100vh - 150px);
+      max-height: calc(100dvh - 150px);
+    }
+  }
 </style>
 
 <button id="se7en-ai-button" type="button">
@@ -2589,7 +2622,7 @@ startRealtimeCount();
 </button>
 
 <section id="se7en-ai-panel" aria-label="SE7EN CINEMA AI chat">
-  <div id="se7en-ai-header">
+  <div id="se7en-ai-header" title="Drag to move">
     <span>🎬 SE7EN CINEMA AI</span>
     <button id="se7en-ai-close" type="button"
       aria-label="Close chat">×</button>
@@ -2619,20 +2652,111 @@ startRealtimeCount();
 
   const button = document.getElementById("se7en-ai-button");
   const panel = document.getElementById("se7en-ai-panel");
+  const header = document.getElementById("se7en-ai-header");
   const close = document.getElementById("se7en-ai-close");
   const messages = document.getElementById("se7en-ai-messages");
   const form = document.getElementById("se7en-ai-form");
   const input = document.getElementById("se7en-ai-input");
 
-  button.addEventListener("click", () => {
+  function openPanel() {
     panel.style.display = "flex";
+    keepInView(panel);
     input.focus();
-  });
+  }
 
-  close.addEventListener("click", () => {
+  function closePanel() {
     panel.style.display = "none";
+  }
+
+  close.addEventListener("click", closePanel);
+
+  // Keyboard activation (Enter/Space) on the button
+  button.addEventListener("click", (e) => {
+    if (e.detail === 0) openPanel();
   });
 
+  // ---------- DRAG LOGIC (mouse + touch + pen) ----------
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(value, max));
+  }
+
+  // Keep an element fully inside the screen
+  function keepInView(el) {
+    if (!el.style.left) return; // never dragged, default position is fine
+    const maxLeft = window.innerWidth - el.offsetWidth;
+    const maxTop = window.innerHeight - el.offsetHeight;
+    el.style.left = clamp(el.offsetLeft, 0, Math.max(0, maxLeft)) + "px";
+    el.style.top = clamp(el.offsetTop, 0, Math.max(0, maxTop)) + "px";
+  }
+
+  function makeDraggable(el, handle, onTap) {
+    let startX, startY, startLeft, startTop, moved = false, active = false;
+
+    handle.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      if (e.target.closest("#se7en-ai-close")) return;
+
+      const rect = el.getBoundingClientRect();
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = rect.left;
+      startTop = rect.top;
+      moved = false;
+      active = true;
+
+      // Switch from right/bottom anchoring to left/top
+      el.style.left = rect.left + "px";
+      el.style.top = rect.top + "px";
+      el.style.right = "auto";
+      el.style.bottom = "auto";
+
+      handle.setPointerCapture(e.pointerId);
+    });
+
+    handle.addEventListener("pointermove", (e) => {
+      if (!active) return;
+
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      if (!moved && Math.abs(dx) + Math.abs(dy) < 5) return;
+      moved = true;
+      handle.classList.add("se7en-dragging");
+
+      const maxLeft = window.innerWidth - el.offsetWidth;
+      const maxTop = window.innerHeight - el.offsetHeight;
+
+      el.style.left = clamp(startLeft + dx, 0, Math.max(0, maxLeft)) + "px";
+      el.style.top = clamp(startTop + dy, 0, Math.max(0, maxTop)) + "px";
+    });
+
+    function endDrag(e) {
+      if (!active) return;
+      active = false;
+      handle.classList.remove("se7en-dragging");
+      if (handle.hasPointerCapture(e.pointerId)) {
+        handle.releasePointerCapture(e.pointerId);
+      }
+      if (!moved && onTap) onTap();
+    }
+
+    handle.addEventListener("pointerup", endDrag);
+    handle.addEventListener("pointercancel", endDrag);
+  }
+
+  // Panel: drag by the orange header
+  makeDraggable(panel, header);
+
+  // Button: drag anywhere, a simple tap still opens the chat
+  makeDraggable(button, button, openPanel);
+
+  // Re-clamp if the screen size or phone orientation changes
+  window.addEventListener("resize", () => {
+    keepInView(button);
+    if (panel.style.display !== "none") keepInView(panel);
+  });
+
+  // ---------- CHAT LOGIC ----------
   function addMessage(text, type) {
     const item = document.createElement("div");
     item.className = "se7en-ai-msg " +
@@ -2665,31 +2789,23 @@ startRealtimeCount();
         body: JSON.stringify({ message })
       });
 
-     
-const data = await response.json();
+      const data = await response.json();
 
-if (!response.ok) {
-  throw new Error(
-    `${data.error || "AI request failed."}` +
-    `${data.details ? " | Details: " + data.details : ""}` +
-    `${data.providerStatus ? " | Status: " + data.providerStatus : ""}`
-  );
-}
+      if (!response.ok) {
+        throw new Error(data.error || "AI request failed.");
+      }
 
-loading.textContent = data.reply || "No reply received.";
-
-    
-} catch (error) {
-  loading.textContent =
-    "AI error: " + (error.message || "Unknown error");
-  console.error("SE7EN AI error:", error);
-} finally {
-  input.disabled = false;
-  sendButton.disabled = false;
-  input.focus();
-  messages.scrollTop = messages.scrollHeight;
-}
-
+      loading.textContent = data.reply || "No reply received.";
+    } catch (error) {
+      loading.textContent =
+        "AI error: " + (error.message || "Unknown error");
+      console.error("SE7EN AI error:", error);
+    } finally {
+      input.disabled = false;
+      sendButton.disabled = false;
+      input.focus();
+      messages.scrollTop = messages.scrollHeight;
+    }
   });
 })();
 </script>
