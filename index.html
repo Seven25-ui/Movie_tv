@@ -2658,6 +2658,11 @@ startRealtimeCount();
   const form = document.getElementById("se7en-ai-form");
   const input = document.getElementById("se7en-ai-input");
 
+  // Last few messages, so the bot remembers the conversation.
+  // Only successful exchanges are stored (not errors or "Thinking...").
+  const history = [];
+  const MAX_HISTORY = 8;
+
   function openPanel() {
     panel.style.display = "flex";
     keepInView(panel);
@@ -2786,7 +2791,7 @@ startRealtimeCount();
       const response = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message, history })
       });
 
       const data = await response.json();
@@ -2796,6 +2801,12 @@ startRealtimeCount();
       }
 
       loading.textContent = data.reply || "No reply received.";
+
+      if (data.reply) {
+        history.push({ role: "user", text: message });
+        history.push({ role: "model", text: data.reply });
+        while (history.length > MAX_HISTORY) history.shift();
+      }
     } catch (error) {
       loading.textContent =
         "AI error: " + (error.message || "Unknown error");
