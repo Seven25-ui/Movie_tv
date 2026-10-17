@@ -461,7 +461,7 @@ function updatePlayerDetails(title, description) {
     if (movieNameEl) movieNameEl.innerText = title || "Movie Title";
     if (descEl) descEl.innerText = description || "No description available for this content.";
 }
-
+  
 // --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
@@ -490,8 +490,8 @@ function playMovie(id, title = "", description = "") {
 
     if (iframe) {
         setupIframeAttributes(iframe);
-        iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
-        console.log(`Loading Movie (vidsrc.me): ${id}`);
+        iframe.src = `https://multiembed.mov/?video_id=${id}`;
+        console.log(`Loading Movie (multiembed): ${id}`);
     }
 }
 
@@ -508,7 +508,10 @@ async function play(id, type, title, description) {
     const epBox = document.getElementById('episode-area');
     const epNav = document.getElementById('ep-nav-buttons');
 
-    if (overlay) { overlay.style.display = 'block'; overlay.scrollTo(0, 0); }
+    if (overlay) {
+        overlay.style.display = 'block';
+        overlay.scrollTo(0, 0);
+    }
     document.body.style.overflow = 'hidden';
     document.body.classList.add('playing');
     loadExtras(id, type);
@@ -522,14 +525,14 @@ async function play(id, type, title, description) {
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
-        if (iframe) iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
+        if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
             epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:20px;">Loading Seasons...</p>';
         }
-        if (iframe) iframe.src = `https://vidsrc.me/embed/tv?tmdb=${id}&s=1&e=1`;
+        if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&s=1&e=1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
@@ -568,7 +571,7 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
     if (!currentID || !iframe) return console.error("Missing currentID!");
 
-    iframe.src = `https://vidsrc.me/embed/tv?tmdb=${currentID}&s=${sNum}&e=${eNum}`;
+    iframe.src = `https://multiembed.mov/?video_id=${currentID}&s=${sNum}&e=${eNum}`;
 
     const overlay = document.getElementById('player-overlay');
     if (overlay) overlay.scrollTo({ top: 0, behavior: 'smooth' });
@@ -679,7 +682,7 @@ async function loadExtras(id, type) {
         html += `<p style="color:#E95420;font-size:11px;font-weight:bold;margin-bottom:6px;">📺 WHERE TO WATCH (PH)</p>`;
         if (ph.flatrate && ph.flatrate.length) html += `<p style="color:#bbb;font-size:12px;">Stream: ${names(ph.flatrate)}</p>`;
         if (ph.rent && ph.rent.length)         html += `<p style="color:#bbb;font-size:12px;">Rent: ${names(ph.rent)}</p>`;
-        if (ph.buy && ph.buy.length)           html += `<p style="color:#bbb;font-size:12px;">Buy: ${names(ph.buy)}</p>`;
+        if (ph.buy && ph.buy.length)             html += `<p style="color:#bbb;font-size:12px;">Buy: ${names(ph.buy)}</p>`;
         if (ph.link) html += `<a href="${ph.link}" target="_blank" rel="noopener" style="color:#ff8c00;font-size:12px;">See all options →</a>`;
         html += `<p style="color:#555;font-size:9px;margin-top:6px;">Data by JustWatch</p>`;
     }
@@ -728,6 +731,22 @@ async function loadSeason(sNum) {
     currentE = 1;
     if (currentID) await loadEpisodes(currentID, currentS);
 }
+
+// --- PLAY (MOVIE + TV) ---
+async function play(id, type, title, description) {
+    currentID = id;
+    currentType = type;
+    currentS = 1;
+    currentE = 1;
+    cancelAutoNext();
+
+    const overlay = document.getElementById('player-overlay');
+    const iframe = document.getElementById('video-iframe');
+    const epBox = document.getElementById('episode-area');
+    const epNav = document.getElementById('ep-nav-buttons');
+
+    if (overlay) { overlay.style.display = 'block'; overlay.scrollTo(0, 0); }
+ 
 
 // --- MATRIX INTRO ---
 function startMatrix() {
