@@ -757,22 +757,8 @@ async function loadSeason(sNum) {
     currentE = 1;
     if (currentID) await loadEpisodes(currentID, currentS);
 }
-// --- PLAY (MOVIE + TV) ---
-async function play(id, type, title, description) {
-    currentID = id;
-    currentType = type;
-    currentS = 1;
-    currentE = 1;
-    cancelAutoNext();
 
-    const overlay = document.getElementById('player-overlay');
-    const iframe = document.getElementById('video-iframe');
-    const epBox = document.getElementById('episode-area');
-    const epNav = document.getElementById('ep-nav-buttons');
-
-    if (overlay) { overlay.style.display = 'block'; overlay.scrollTo(0, 0); }
- 
-
+  
 // --- MATRIX INTRO ---
 function startMatrix() {
     const canvas = document.getElementById('matrix-canvas');
