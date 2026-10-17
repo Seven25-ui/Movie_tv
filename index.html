@@ -489,7 +489,7 @@ function playMovie(id, title = "", description = "") {
     if (epBox) epBox.style.display = 'none';
 
     if (iframe) {
-        setupIframeAttributes(iframe);
+        if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
         iframe.src = `https://multiembed.mov/?video_id=${id}`;
         console.log(`Loading Movie (multiembed): ${id}`);
     }
@@ -501,7 +501,7 @@ async function play(id, type, title, description) {
     currentType = type;
     currentS = 1;
     currentE = 1;
-    cancelAutoNext();
+    if (typeof cancelAutoNext === 'function') cancelAutoNext();
 
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
@@ -514,13 +514,20 @@ async function play(id, type, title, description) {
     }
     document.body.style.overflow = 'hidden';
     document.body.classList.add('playing');
-    loadExtras(id, type);
+    
+    if (typeof loadExtras === 'function') loadExtras(id, type);
 
-    document.getElementById('p-title').innerText = "| " + title;
-    document.getElementById('p-movie-name').innerText = title;
-    document.getElementById('p-desc').innerText = description || "No description available.";
+    const titleEl = document.getElementById('p-title');
+    const movieNameEl = document.getElementById('p-movie-name');
+    const descEl = document.getElementById('p-desc');
 
-    if (iframe) setupIframeAttributes(iframe);
+    if (titleEl) titleEl.innerText = "| " + title;
+    if (movieNameEl) movieNameEl.innerText = title;
+    if (descEl) descEl.innerText = description || "No description available.";
+
+    if (iframe && typeof setupIframeAttributes === 'function') {
+        setupIframeAttributes(iframe);
+    }
 
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
@@ -550,12 +557,24 @@ async function play(id, type, title, description) {
                         select.appendChild(opt);
                     }
                 });
-                currentSeasonsMeta = data.seasons
-                    .filter(s => s.season_number > 0)
-                    .map(s => ({ season_number: s.season_number, episode_count: s.episode_count }));
+                
+                if (typeof currentSeasonsMeta !== 'undefined') {
+                    currentSeasonsMeta = data.seasons
+                        .filter(s => s.season_number > 0)
+                        .map(s => ({ season_number: s.season_number, episode_count: s.episode_count }));
+                }
 
-                await loadEpisodes(id, 1);
-                apiCall(`/tv/${id}/season/1/episode/1`).then(epData => scheduleAutoNext(epData && epData.runtime));
+                if (typeof loadEpisodes === 'function') {
+                    await loadEpisodes(id, 1);
+                }
+                
+                if (typeof apiCall === 'function') {
+                    apiCall(`/tv/${id}/season/1/episode/1`).then(epData => {
+                        if (typeof scheduleAutoNext === 'function') {
+                            scheduleAutoNext(epData && epData.runtime);
+                        }
+                    });
+                }
             }
         } catch (err) {
             console.error("Error loading TV data:", err);
@@ -585,17 +604,21 @@ function playEp(sNum, eNum) {
         b.style.border = active ? "1px solid #ff8c00" : "1px solid #444";
     });
 
-    cancelAutoNext();
-    apiCall(`/tv/${currentID}/season/${sNum}/episode/${eNum}`).then(epData => scheduleAutoNext(epData && epData.runtime));
+    if (typeof cancelAutoNext === 'function') cancelAutoNext();
+    if (typeof apiCall === 'function') {
+        apiCall(`/tv/${currentID}/season/${sNum}/episode/${eNum}`).then(epData => {
+            if (typeof scheduleAutoNext === 'function') scheduleAutoNext(epData && epData.runtime);
+        });
+    }
 }
 
 // --- NEXT / PREVIOUS ---
 function changeEpisode(direction) {
     if (currentType !== 'tv') return;
-    cancelAutoNext();
+    if (typeof cancelAutoNext === 'function') cancelAutoNext();
 
-    const seasonMeta = currentSeasonsMeta.find(s => s.season_number === currentS);
-    const epCount = seasonMeta ? seasonMeta.episode_count : (episodeList.length || 1);
+    const seasonMeta = typeof currentSeasonsMeta !== 'undefined' ? currentSeasonsMeta.find(s => s.season_number === currentS) : null;
+    const epCount = seasonMeta ? seasonMeta.episode_count : (typeof episodeList !== 'undefined' ? episodeList.length : 1);
     let newE = currentE + direction;
     let newS = currentS;
 
@@ -618,14 +641,14 @@ function changeEpisode(direction) {
 function peekNextEpisode() {
     if (currentType !== 'tv') return null;
     const seasonMeta = currentSeasonsMeta.find(s => s.season_number === currentS);
-    const epCount = seasonMeta ? seasonMeta.episode_count : (episodeList.length || 1);
+    const epCount = seasonMeta ? seasonMeta.episode_count : (typeof episodeList !== 'undefined' ? episodeList.length : 1);
     if (currentE < epCount) return { season: currentS, episode: currentE + 1 };
     if (currentSeasonsMeta.find(s => s.season_number === currentS + 1)) return { season: currentS + 1, episode: 1 };
     return null;
 }
 
 function scheduleAutoNext(runtimeMinutes) {
-    cancelAutoNext();
+    if (typeof cancelAutoNext === 'function') cancelAutoNext();
     if (currentType !== 'tv' || !peekNextEpisode()) return;
     if (!runtimeMinutes || runtimeMinutes <= 0) runtimeMinutes = 24;
     autoNextTimer = setTimeout(autoPlayNext, runtimeMinutes * 60 * 1000);
@@ -649,7 +672,10 @@ function showAutoNextToast(next) {
 }
 
 function cancelAutoNext() {
-    if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = null; }
+    if (typeof autoNextTimer !== 'undefined' && autoNextTimer) { 
+        clearTimeout(autoNextTimer); 
+        autoNextTimer = null; 
+    }
     const overlay = document.getElementById('up-next-overlay');
     if (overlay) overlay.style.display = 'none';
 }
@@ -697,7 +723,7 @@ function closePlayer() {
     const ex = document.getElementById('extras-box');
 
     if (overlay) overlay.style.display = 'none';
-    cancelAutoNext();
+    if (typeof cancelAutoNext === 'function') cancelAutoNext();
     document.body.style.overflow = 'auto';
     document.body.classList.remove('playing');
     if (iframe) iframe.src = 'about:blank';
@@ -731,7 +757,6 @@ async function loadSeason(sNum) {
     currentE = 1;
     if (currentID) await loadEpisodes(currentID, currentS);
 }
-
 // --- PLAY (MOVIE + TV) ---
 async function play(id, type, title, description) {
     currentID = id;
