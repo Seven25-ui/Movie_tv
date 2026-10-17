@@ -461,7 +461,7 @@ function updatePlayerDetails(title, description) {
     if (movieNameEl) movieNameEl.innerText = title || "Movie Title";
     if (descEl) descEl.innerText = description || "No description available for this content.";
 }
-  
+
 // --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
@@ -490,8 +490,8 @@ function playMovie(id, title = "", description = "") {
 
     if (iframe) {
         if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
-        iframe.src = `https://embed.su/embed/movie/${id}`;
-        console.log(`Loading Movie (embed.su): ${id}`);
+        iframe.src = `https://www.2embed.cc/embed/${id}`;
+        console.log(`Loading Movie (2embed.cc): ${id}`);
     }
 }
 
@@ -529,25 +529,25 @@ async function play(id, type, title, description) {
         setupIframeAttributes(iframe);
     }
 
-    // 2. Load Video Source REKTA (Dili na maghulat sa uban API)
+    // 2. Load Video Source REKTA sa 2Embed
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
-        if (iframe) iframe.src = `https://embed.su/embed/movie/${id}`;
+        if (iframe) iframe.src = `https://www.2embed.cc/embed/${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
             epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:10px;">Loading Seasons...</p>';
         }
-        // Embed.su TV format: /embed/tv/{id}/{season}/{episode}
-        if (iframe) iframe.src = `https://embed.su/embed/tv/${id}/1/1`;
+        // 2Embed TV format: /embedtv/{id}&s={season}&e={episode}
+        if (iframe) iframe.src = `https://www.2embed.cc/embedtv/${id}&s=1&e=1`;
 
         // Load TV Seasons sa background
         loadTVSeasonsAsync(id);
     }
 
-    // 3. Load Extras (Trailers/Providers) sa background human na-load ang video
+    // 3. Load Extras (Trailers/Providers) sa background
     setTimeout(() => {
         if (typeof loadExtras === 'function') loadExtras(id, type);
     }, 200);
@@ -607,8 +607,8 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
     if (!currentID || !iframe) return console.error("Missing currentID!");
 
-    // Embed.su TV format: /embed/tv/{id}/{season}/{episode}
-    iframe.src = `https://embed.su/embed/tv/${currentID}/${sNum}/${eNum}`;
+    // 2Embed TV format: /embedtv/{id}&s={season}&e={episode}
+    iframe.src = `https://www.2embed.cc/embedtv/${currentID}&s=${sNum}&e=${eNum}`;
 
     const overlay = document.getElementById('player-overlay');
     if (overlay) overlay.scrollTo({ top: 0, behavior: 'smooth' });
@@ -775,7 +775,6 @@ async function loadSeason(sNum) {
     currentE = 1;
     if (currentID) await loadEpisodes(currentID, currentS);
 }
-
   
 // --- MATRIX INTRO ---
 function startMatrix() {
