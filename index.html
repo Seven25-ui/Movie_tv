@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SE7EN CINEMA | Free Movies, TV Shows & Streaming Deals</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SE7EN CINEMA | Free Movies, TV Shows & Streaming Deals</title>
 <meta name="description" content="Watch the latest movies and TV shows for free in HD on SE7EN CINEMA. High-quality streaming updated daily. Get the best deals on Android TV Boxes, Fire Sticks, and VPNs.">
 <meta name="keywords" content="free movies philippines, tagalog dubbed movies 2026, android tv box deals, best streaming devices, pinoy movies online, SE7EN CINEMA, free streaming site 2026">
 <meta name="author" content="SE7EN TEAM">
 <meta name="robots" content="index, follow">
-
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://seven25.click">
 <meta property="og:title" content="SE7EN CINEMA | Watch Movies for Free">
@@ -16,1556 +15,451 @@
 <meta property="og:image" content="https://seven25.click/media/poster.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:site_name" content="SE7EN CINEMA">
-
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SE7EN CINEMA">
 <meta name="mobile-web-app-capable" content="yes">
-
 <meta name="theme-color" content="#E95420">
-
-<link rel="apple-touch-icon" href="https://image.tmdb.org/t/p/w192/wwemzKWzjKYJFfCeiB57q3r4Bcm.png">
-
 <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="icon" type="image/jpeg" href="media/favicon.jpg">
-    <link rel="apple-touch-icon" href="media/favicon.jpg">     
-    <link rel="canonical" href="https://seven25.click">
-    <style>
-        :root {
-            --bg: #000000; --accent: #E95420; --card-bg: #111; --text: #ffffff;
-            --nav-width: 0px;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 90px; }
-
-        /* --- DESKTOP VIEW --- */
-        @media (min-width: 1024px) {
-    :root { --nav-width: 85px; }
-    body { padding-bottom: 0 !important; padding-left: var(--nav-width); }
-    #menu-icon {
-        top: 20px !important;
-        left: 20px !important;
-    }
-    .bottom-nav {
-        width: var(--nav-width) !important; height: 100vh !important;
-        flex-direction: column !important; left: 0 !important; top: 0 !important;
-        bottom: auto !important; border-top: none !important;
-        border-right: 1px solid #1a1a1a; padding: 100px 0 40px !important;
-        justify-content: flex-start !important; gap: 35px;
-    }
-    .nav-btn span { display: none; }
-    .nav-btn i { font-size: 24px !important; }
-    .top-bar { left: var(--nav-width); width: calc(100% - var(--nav-width)); padding: 15px 50px; }
-    .grid { grid-template-columns: repeat(6, 1fr) !important; gap: 25px !important; }
-}
-
-        /* --- UI COMPONENTS --- */
-        .top-bar { position: sticky; top: 0; background: rgba(0,0,0,0.9); padding: 12px 15px; z-index: 1000; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(15px); }
-        .logo { color: var(--accent); font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; }
-        #logout-btn { display: none; cursor: pointer; padding: 8px 15px; background: var(--accent); color: white; border: none; border-radius: 20px; font-weight: bold; font-size: 11px; }
-
-.search-box {
-    flex: 1;
-    background: #151515;
-    border: 1px solid #222;
-    border-radius: 25px;
-    padding: 5px 15px;
-    display: flex;
-    align-items: center;
-    max-width: 250px; /* Mao ni ang limit para dili dako kaayo */
-    margin: 0 10px;
-}
-
-.search-box input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 13px;
-    outline: none;
-    padding: 5px;
-}
-
-        .hero { height: 55vh; width: 100%; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 20px; background-image: linear-gradient(to top, #000 5%, transparent 95%); }
-        .hero-info h1 { font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
-        .hero-info p { font-size: 0.85rem; color: #bbb; margin-bottom: 20px; max-width: 600px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-
-        .row { padding: 30px 15px 0; }
-        .row h2 { font-size: 1rem; margin-bottom: 15px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .card { background: #111; border-radius: 8px; overflow: hidden; position: relative; aspect-ratio: 2/3; cursor: pointer; transition: 0.3s; border: 1px solid #222; }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 0 20px rgba(233, 84, 32, 0.3); }
-        .card img { width: 100%; height: 100%; object-fit: cover; }
-        .card-meta { position: absolute; bottom: 0; width: 100%; padding: 12px; background: linear-gradient(to top, #000, transparent); }
-        .card-meta h3 { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #080808; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; padding: 12px 5px; z-index: 2000; }
-        .nav-btn { color: #666; text-decoration: none; text-align: center; font-size: 10px; cursor: pointer; transition: 0.3s; }
-        .nav-btn i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .nav-btn.active, .nav-btn:hover { color: var(--accent); }
-
-        #player-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; overflow-y: auto; }
-        .player-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: #080808; position: sticky; top: 0; z-index: 10; }
-        .player-container { display: flex; flex-direction: column; }
-        @media (min-width: 1024px) {
-            .player-container { flex-direction: row; padding: 30px; gap: 30px; max-width: 1600px; margin: auto; }
-            .video-section { flex: 3; }
-            .episode-section { flex: 1; min-width: 350px; background: #080808; border-radius: 12px; padding: 15px; height: fit-content; }
-        }
-        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; background: #000; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-
-        select#season-select { width: 100%; padding: 12px; background: #111; color: #fff; border: 1px solid #222; border-radius: 8px; margin-bottom: 20px; outline: none; }
-        .ep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .ep-btn { background: #151515; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; }
-        .ep-btn.active { background: var(--accent); border-color: var(--accent); }
-
-        /* --- EFFECTS --- */
-        #hack-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; pointer-events: none; }
-        #matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .glitch-active { animation: shake 0.2s infinite; filter: hue-rotate(90deg) contrast(150%); }
-        @keyframes shake { 0% { transform: translate(0,0); } 25% { transform: translate(5px, -5px); } 50% { transform: translate(-5px, 5px); } 100% { transform: translate(0,0); } }
-
-        
-        footer { padding: 50px 20px; text-align: center; background: linear-gradient(to top, #0a0a0a, #000); border-top: 2px solid #FF4500; margin-top: 60px; position: relative; overflow: hidden; }
-        footer p { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px #FF4500; }
-        .footer-glow-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #FF4500; box-shadow: 0 0 20px #FF4500; animation: orange-pulse 2s infinite; }
-        @keyframes orange-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-
-/* 1. LOGIN SCREEN - Butangan og # kay ID man ni sa imong JS */
-#login-screen {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100vh;
-    /* Transparent Background nga naay poster sa luyo */
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
-                url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    padding: 20px;
-}
-
-/* 2. AUTH BOX - Himoon natong Glassmorphism */
-.auth-box {
-    background: rgba(17, 17, 17, 0.6); /* Transparent base */
-    backdrop-filter: blur(15px);       /* Blur effect sa luyo */
-    -webkit-backdrop-filter: blur(15px);
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 69, 0, 0.3); /* Orange tint border */
-    width: 100%;
-    max-width: 380px; 
-    text-align: center;
-    box-shadow: 0 0 30px rgba(233, 84, 32, 0.3);
-}
-
-/* 3. INPUTS UG WRAPPERS */
-.pass-container {
-    position: relative;
-    width: 100%;
-    display: flex; /* Gi-usa ang duha ka pass-container definitions */
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-/* I-apply ni para ma-fix ang tanang input sa sulod sa imong login box */
-.auth-box input {
-    width: 100%;
-    padding: 12px;
-    background: rgba(34, 34, 34, 0.8) !important; /* Semi-transparent */
-    border: 1px solid #444;
-    color: white;
-    border-radius: 8px;
-    box-sizing: border-box; /* Importante para sa mobile */
-    font-size: 16px;
-    margin-bottom: 20px !important; /* Kani ang mo-fix sa spacing */
-    display: block; /* Siguroha nga block para mo-apply ang margin */
-}
-
-/* Para sa focus (inig click na nimo sa box) */
-.auth-box input:focus {
-    border-color: #ff4500;
-    outline: none;
-    background: rgba(45, 45, 45, 0.9) !important;
-}
-
-/* 4. EYE ICON POSITIONING */
-.eye-icon {
-    position: absolute;
-    right: 15px;
-    cursor: pointer;
-    color: #888;
-    z-index: 10;
-    user-select: none;
-}
-
-/* 5. BUTTONS */
-.btn-auth {
-    width: 100%;
-    padding: 14px;
-    background: #ff4500;
-    color: white;
-    border: none;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 10px;
-    text-transform: uppercase;
-}
-
-.btn-auth:hover {
-    background: #cc3700;
-    transform: scale(1.02);
-}
-
-/* 6. TOGGLE LINK */
-.auth-toggle {
-    font-size: 13px;
-    margin-top: 20px;
-    color: #888;
-}
-
-.auth-toggle span {
-    color: #ff4500;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-/* PARA SA TRIAL TAG */
-.trial-tag {
-    color: #ff4500;
-    font-size: 12px;
-    margin-bottom: 15px;
-    background: rgba(255, 69, 0, 0.1);
-    padding: 5px;
-    border-radius: 4px;
-}
-
-/* 1. ANIMATED BORDER GLOW - Para dili boring ang box */
-@keyframes borderGlow {
-    0% { border-color: rgba(255, 69, 0, 0.2); }
-    50% { border-color: rgba(255, 69, 0, 0.7); box-shadow: 0 0 20px rgba(255, 69, 0, 0.2); }
-    100% { border-color: rgba(255, 69, 0, 0.2); }
-}
-
-.auth-box {
-    animation: borderGlow 4s infinite ease-in-out; /* Hinay nga siga-siga sa border */
-}
-
-/* 2. BUTTON HOVER SHINE - Para premium feel inig itungod ang mouse */
-.btn-auth {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease !important;
-}
-
-.btn-auth:hover {
-    transform: translateY(-2px); /* Mo-alsa gamay */
-    box-shadow: 0 8px 25px rgba(255, 69, 0, 0.5); /* Siga sa ubos sa button */
-    background: #ff5e1a !important;
-}
-
-/* 3. INPUT FOCUS GLOW - Para techy tan-awon inig type */
-.auth-box input:focus {
-    border-color: #ff4500 !important;
-    background: rgba(45, 45, 45, 0.9) !important;
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.1); /* Gamay nga glow sa input */
-}
-
-/* 4. SMOOTH TRANSITION PARA SA MATA (EYE ICON) */
-.eye-icon {
-    transition: transform 0.2s ease;
-}
-
-.eye-icon:hover {
-    transform: scale(1.2); /* Mo-dako gamay ang mata inig hover */
-    color: #ff4500;
-}
-
-/* --- TRIAL NOTIFICATION POP-UP --- */
-#trial-notif {
-    position: fixed;
-    top: 20px;
-    right: -350px; /* Tago una sa kilid */
-    width: 320px;
-    background: rgba(20, 20, 20, 0.85); /* Dark transparent */
-    backdrop-filter: blur(12px); /* Glass blur effect */
-    -webkit-backdrop-filter: blur(12px);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 12px;
-    border-left: 6px solid #ff4500; /* Orange signature ni Aloy */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    z-index: 99999; /* Siguroha nga naa sa pinakataas */
-    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Smooth bounce effect */
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Inig gawas sa notification */
-#trial-notif.show {
-    right: 20px;
-}
-
-#trial-notif h4 {
-    margin: 0 0 5px 0;
-    color: #ff4500;
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-#trial-notif p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
-    opacity: 0.9;
-}
-
-/* Optional: Gamay nga siga sa luyo para premium feel */
-#trial-notif::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at top right, rgba(255, 69, 0, 0.1), transparent);
-    pointer-events: none;
-}
-
-/* --- TOP BAR LAYOUT --- */
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: #000; /* Sigurado nga black ang background */
-    gap: 10px;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: 900;
-    color: #E95420; /* Imong signature orange */
-    letter-spacing: 2px;
-}
-
-/* --- MODERN SEARCH BOX (FIXED FOR MOBILE) --- */
-.search-box {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px; /* Mas lingin, mas modern */
-    padding: 0 12px;
-    flex-grow: 1; /* Para mo-expand ang search box */
-    max-width: 400px;
-    transition: all 0.3s ease;
-}
-
-.search-box i {
-    color: #E95420 !important; /* Gi-orange nako ang icon para catchy */
-    font-size: 14px;
-}
-
-#mSearch {
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-    color: #ffffff !important; /* Kani ang mo-fix sa "invisible" text */
-    font-size: 16px !important; /* Importante sa mobile para dili mo-auto zoom */
-    padding: 8px 10px !important;
-    width: 100%;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-#mSearch::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.search-box:focus-within {
-    border-color: #ff4d00;
-    box-shadow: 0 0 8px rgba(255, 77, 0, 0.3);
-    background: rgba(255, 255, 255, 0.15);
-}
-
-/* --- PREMIUM BUTTON (MODERN LOOK) --- */
-.premium-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
-    background: linear-gradient(135deg, #ff4d00 0%, #ff8c00 100%);
-
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 800;
-    cursor: pointer;
-    overflow: hidden;
-    white-space: nowrap; /* Para dili mabungkag ang text sa gamay nga screen */
-    box-shadow: 0 4px 15px rgba(233, 84, 32, 0.4);
-}
-
-.btn-icon {
-    font-size: 14px;
-    animation: pulseIcon 2s infinite;
-}
-
-/* Shimmer Animation */
-.shimmer {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    animation: shimmerEffect 3s infinite;
-}
-
-@keyframes shimmerEffect {
-    0% { left: -100%; }
-    20% { left: 100%; }
-    100% { left: 100%; }
-}
-
-@keyframes pulseIcon {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-/* --- RESPONSIVE ADJUSTMENT --- */
-@media (max-width: 480px) {
-    .logo { font-size: 18px; }
-    .btn-text { display: none; } /* Sa mobile, icon na lang ang ipakita para dili huot */
-    .premium-btn { padding: 8px 10px; }
-}
-
-#menu-icon {
-  font-size: 30px;
-  cursor: pointer;
-  padding: 10px;
-  color: white;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 2001;
-}
-
-#side-menu {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  z-index: 2002;
-  top: 0;
-  left: -250px;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.4s; /* Slide effect */
-  padding-top: 20px;
-  box-shadow: 2px 0px 10px rgba(0,0,0,0.5);
-}
-
-#side-menu ul { list-style: none; padding: 20px; }
-#side-menu ul li { padding: 15px 0; border-bottom: 1px solid #222; }
-#side-menu ul li a { color: white; text-decoration: none; font-size: 18px; }
-
-.menu-header { display: flex; justify-content: space-between; padding: 0 20px; color: #ff5500; }
-.close-btn { font-size: 30px; cursor: pointer; color: white; }
-
-/* Inig abli sa menu */
-#side-menu.active {
-  left: 0;
-}
-
-/* 1. SMOOTH SCROLLING - Para dili mo-lukso ang page */
-html {
-    scroll-behavior: smooth;
-}
-
-/* 2. MENU LIST STYLING */
-#side-menu ul {
-    list-style: none;
-    padding: 10px;
-    margin: 0;
-}
-
-#side-menu ul li {
-    margin-bottom: 8px;
-}
-
-/* 3. MODERN HOVER & CLICK EFFECT */
-#side-menu ul li a {
-    display: block;
-    padding: 12px 15px;
-    color: white;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    border-radius: 10px;
-    transition: all 0.3s ease-in-out;
-    border-left: 0px solid #ff8c00;
-}
-
-/* Kani ang mo-trigger inig hikap sa menu */
-#side-menu ul li a:hover {
-    background: rgba(255, 140, 0, 0.1); /* Subtle orange glow background */
-    color: #ffaa00; /* Mo-change ang text color */
-    padding-left: 25px; /* Mo-slide pa-tuo */
-    border-left: 5px solid #ff8c00; /* Naay orange bar sa kilid */
-}
-
-/* Icon Animation */
-#side-menu ul li a i {
-    margin-right: 12px;
-    transition: 0.3s;
-    color: #ffffff;
-}
-
-#side-menu ul li a:hover i {
-    color: #ffaa00;
-    transform: scale(1.2); /* Mo-dako ang icon */
-}
-
-/* --- OVERRIDE FOR STICKY MENU --- */
-.menu-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 15px 20px; 
-    color: #ff5500; 
-    /* Kani ang mo-fix sa menu sa taas */
-    position: sticky; 
-    top: 0; 
-    background: #000; 
-    z-index: 1100; 
-    border-bottom: 1px solid rgba(255, 85, 0, 0.2);
-}
-
-.close-btn { 
-    font-size: 30px; 
-    cursor: pointer; 
-    color: white; 
-    line-height: 1;
-}
-
-/* Para dili "maputol" ang content inig scroll */
-#side-menu {
-    overflow-y: auto;
-}
-
-/* Special Styling for GitHub Projects */
-.special-link {
-    position: relative;
-    display: flex;
-    align-items: center;
-    transition: 0.3s !important;
-}
-
-.special-link i {
-    width: 25px;
-    text-align: center;
-    filter: drop-shadow(0 0 5px currentColor); /* Mo-glow ang icon base sa iyang color */
-}
-
-/* Badge for "Live" or "New" */
-.badge-new {
-    background: #FF0000;
-    color: white;
-    font-size: 8px;
-    padding: 2px 5px;
-    border-radius: 4px;
-    margin-left: 10px;
-    font-weight: bold;
-    animation: blinker 1s linear infinite;
-}
-
-/* Icon Animation on Hover */
-.special-link:hover i {
-    transform: scale(1.3) rotate(10deg);
-}
-
-#side-menu {
-    background: rgba(15, 15, 15, 0.95) !important; /* Smoked black */
-    backdrop-filter: blur(15px); /* Para transparent glass effect */
-    border-right: 1px solid rgba(255, 85, 0, 0.1);
-    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-}
-
-/* Para sa spacing sa imohang Se7en Suite items */
-.special-link {
-    margin: 5px 15px;
-    padding: 15px !important;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.special-link:hover {
-    background: rgba(255, 85, 0, 0.1);
-    transform: translateX(10px); /* Mo-move gamay sa tuo */
-}
-
-/* I-adjust ang Search Bar para sa Mobile */
-.search-box {
-    flex: 1; /* Para mo-expand base sa space */
-    max-width: 150px; /* Limitahan ang gidak-on */
-    height: 35px; /* Pa-mub-on gamay */
-    margin: 0 10px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 15px;
-}
-
-.search-box input {
-    font-size: 13px; /* Pa-gamyan ang text */
-}
-
-/* Pa-gamyan pud ang SE7EN logo gamay para balance */
-.logo {
-    font-size: 18px;
-    letter-spacing: 1px;
-}
-
-/* 2. Glow & Pulse Animation para sa WATCH NOW Button (#h-btn) */
-#h-btn {
-    background: var(--accent) !important;
-    box-shadow: 0 0 15px rgba(255, 87, 34, 0.4);
-    transition: 0.3s;
-    animation: pulseGlow 2s infinite;
-}
-
-@keyframes pulseGlow {
-    0% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 87, 34, 0.4); }
-    50% { transform: scale(1.03); box-shadow: 0 0 20px rgba(255, 87, 34, 0.7); }
-    100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 87, 34, 0.4); }
-}
-
-/* I-target ang icon ug text kon ang class "active" naa */
-.nav-btn.active i, 
-.nav-btn.active span {
-    color: #ff5722 !important;
-    text-shadow: 0 0 10px rgba(255, 87, 34, 0.6); /* Glow effect */
-    transition: all 0.3s ease;
-}
-
-.nav-btn i {
-    font-size: 20px; /* Mas klaro nga icons */
-    margin-bottom: 4px;
-}
-
-.affiliate-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Duha ka column permi para balance */
-    gap: 12px;
-    padding: 10px 15px 25px 15px;
-}
-
-.mini-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 15px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    position: relative;
-    transition: 0.3s ease;
-}
-
-.mini-card:active {
-    transform: scale(0.95); /* Gamay nga "press" effect sa mobile */
-}
-
-/* 1. I-define ang animation movement */
-@keyframes breathingZoom {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); } /* Mo-zoom in og 15% para klaro ang lihok */
-    100% { transform: scale(1); }
-}
-
-/* 1. I-define ang Pulse Animation para sa Text */
-@keyframes textPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); } /* Gamay lang nga dako para sa text */
-    100% { transform: scale(1); }
-}
-
-/* 2. I-fix ang imong Image Container (Wala na'y zoom) */
-.img-container {
-    width: 65px;
-    height: 65px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-    overflow: hidden; /* Balik sa hidden para limpyo ang edges */
-}
-
-.img-container img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 8px;
-    object-fit: contain;
-    /* --- Gi-delete ang animation diri --- */
-    animation: none; 
-}
-
-/* 3. I-apply ang animation sa Lazada ug Amazon tags */
-.badge-lazada, .badge-amazon {
-    /* Siguroha nga naa kini nga class sa imong HTML text tags */
-    animation: textPulse 2s infinite ease-in-out;
-    display: inline-block; /* Importante para mo-epekto ang transform */
-}
-
-.store-tag {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 6px;
-    font-weight: 900;
-    padding: 2px 5px;
-    border-radius: 4px;
-    letter-spacing: 0.5px;
-}
-
-.lazada { background: #111873; color: #fff; }
-.amazon { background: #ff9900; color: #000; }
-
-.p-name {
-    color: #eee;
-    font-size: 10px;
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.2;
-    margin-bottom: 4px;
-}
-
-.p-price {
-    color: #00ff00; /* Green color para sa price */
-    font-size: 11px;
-    font-weight: 800;
-}
-
-/* I-style ang container sa VPN */
-.vpn-mini-banner {
-    margin-top: 15px;
-    max-width: 320px;
-}
-
-/* Ang Link box nga naay Glassmorphism effect */
-.vpn-link {
-    display: flex;
-    align-items: center;
-    background: rgba(0, 102, 255, 0.1); /* Subtle Blue */
-    border: 1px solid rgba(0, 102, 255, 0.3);
-    padding: 10px 14px;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-}
-
-/* Glow effect inig hover */
-.vpn-link:hover {
-    background: rgba(0, 102, 255, 0.2);
-    border-color: #0066ff;
-    box-shadow: 0 0 15px rgba(0, 102, 255, 0.4);
-    transform: translateY(-2px);
-}
-
-/* Icon style */
-.vpn-icon-box {
-    color: #0066ff;
-    font-size: 22px;
-    margin-right: 12px;
-}
-
-/* Text alignment */
-.vpn-text {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-/* Title style */
-.vpn-title {
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-/* Subtext style */
-.vpn-sub {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 9px;
-    margin-top: 2px;
-}
-
-/* Gamay nga arrow sa kilid */
-.vpn-arrow {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 10px;
-}
-
-#loader-wrapper {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #000; /* Dark theme */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100000; /* Labaw pa sa status bar */
-    transition: opacity 0.6s ease;
-}
-
-.loader-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.spinner {
-    width: 120px;
-    height: 120px;
-    border: 3px solid rgba(255, 87, 34, 0.1);
-    border-top: 3px solid #ff5722; /* Imong Orange Accent */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.loader-text {
-    position: absolute;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin: 0;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* 1. Ang Animation Logic para sa Pulse ug Glow */
-@keyframes pulseGlowLazada {
-    0% { transform: scale(1); box-shadow: 0 0 0px rgba(0, 0, 255, 0); }
-    50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(0, 123, 255, 0.7); }
-    100% { transform: scale(1); box-shadow: 0 0 0px rgba(0, 0, 255, 0); }
-}
-
-@keyframes pulseGlowAmazon {
-    0% { transform: scale(1); box-shadow: 0 0 0px rgba(255, 165, 0, 0); }
-    50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(255, 153, 0, 0.8); }
-    100% { transform: scale(1); box-shadow: 0 0 0px rgba(255, 165, 0, 0); }
-}
-
-/* 2. I-apply sa imong Amazon Tag */
-.store-tag.amazon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px 8px;
-    border-radius: 4px;
-    animation: pulseGlowAmazon 2s infinite ease-in-out;
-}
-
-/* 3. I-apply sa imong Lazada Tag */
-.store-tag.lazada {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px 8px;
-    border-radius: 4px;
-    animation: pulseGlowLazada 2s infinite ease-in-out;
-}
-
-/* Specific styling para sa Movie Library link */
-#side-menu ul li a[href="library.html"] {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    color: #ffffff;
-    text-decoration: none;
-    font-family: sans-serif;
-    transition: background 0.3s;
-}
-
-/* Icon style */
-#side-menu ul li a[href="library.html"] i {
-    margin-right: 12px;
-    color: #ff4500; /* SE7EN Orange */
-    width: 20px;
-    text-align: center;
-}
-
-/* Specific Badge Style */
-.badge-hot {
-    background: #ff4500;
-    color: white;
-    font-size: 9px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    animation: pulse-hot 1.5s infinite;
-    display: inline-block;
-}
-
-@keyframes pulse-hot {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); }
-    70% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(255, 69, 0, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); }
-}
-
-/* Siguradohon nato nga ang overlay motabon sa tibuok screen */
-#player-overlay {
-    display: none; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: #000; 
-    z-index: 9999; /* Pinaka-ibabaw gyud dapat */
-    overflow-y: auto;
-}
-
-/* Para sa nindot nga 16:9 ratio sa video */
-.video-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
-}
-
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    height: 0;
-    overflow: hidden;
-    background: #000;
-    border-radius: 8px;
-}
-
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-        @media (max-width: 600px) {
-  #side-menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: auto;
-    width: min(82vw, 320px);
-    height: 100dvh;
-    box-sizing: border-box;
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 10001;
-    transform: translateX(110%);
-    transition: transform 0.3s ease;
-    padding-bottom: 80px;
-  }
-
-  #side-menu.active {
-    transform: translateX(0);
-  }
-
-  #side-menu ul {
-    width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 10px 15px 30px;
-  }
-
-  #side-menu a {
-    max-width: 100%;
-    box-sizing: border-box;
-    word-break: break-word;
-  }
-
-  #side-menu .menu-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-  }
-
-  html,
-  body {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-}
-
-        .recommendation-tag {
-    background: #E95420;
-    color: #fff;
-    font-weight: 800;
-}
-
-.kdrama-tag {
-    background: #b00020;
-    color: #fff;
-}
-
-#recommendation-grid .mini-card {
-    cursor: pointer;
-}
-
-#recommendation-grid .mini-card:hover {
-    transform: translateY(-4px);
-    border-color: #E95420;
-}
-
-#recommendation-grid .img-container img {
-    width: 65px;
-    height: 65px;
-    object-fit: cover;
-}
-
-    </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="icon" type="image/jpeg" href="media/favicon.jpg">
+<link rel="apple-touch-icon" href="media/favicon.jpg">
+<link rel="canonical" href="https://seven25.click">
+<style>
+:root{--bg:#000;--accent:#E95420;--card-bg:#111;--text:#fff;--nav-width:0px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);overflow-x:hidden;padding-bottom:90px}
+@media(min-width:1024px){
+:root{--nav-width:85px}
+body{padding-bottom:0!important;padding-left:var(--nav-width)}
+#menu-icon{top:20px!important;left:20px!important}
+.bottom-nav{width:var(--nav-width)!important;height:100vh!important;flex-direction:column!important;left:0!important;top:0!important;bottom:auto!important;border-top:none!important;border-right:1px solid #1a1a1a;padding:100px 0 40px!important;justify-content:flex-start!important;gap:35px}
+.nav-btn span{display:none}
+.nav-btn i{font-size:24px!important}
+.grid{grid-template-columns:repeat(6,1fr)!important;gap:25px!important}
+.player-container{flex-direction:row}
+}
+/* top bar */
+.top-bar{position:sticky;top:0;background:#000;padding:10px 15px;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:10px;backdrop-filter:blur(15px)}
+.logo{color:var(--accent);font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:1px}
+.search-box{display:flex;align-items:center;flex:1;max-width:150px;height:35px;margin:0 10px;padding:0 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:15px;transition:all .3s ease}
+.search-box i{color:#E95420!important;font-size:14px}
+.search-box:focus-within{border-color:#ff4d00;box-shadow:0 0 8px rgba(255,77,0,.3);background:rgba(255,255,255,.15)}
+#mSearch{background:transparent!important;border:none!important;outline:none!important;color:#fff!important;font-size:16px!important;padding:8px 10px!important;width:100%;-webkit-appearance:none;appearance:none}
+#mSearch::placeholder{color:rgba(255,255,255,.4)}
+.premium-btn{position:relative;display:flex;align-items:center;gap:6px;padding:8px 12px;background:linear-gradient(135deg,#ff4d00,#ff8c00);color:#fff;border:none;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;overflow:hidden;white-space:nowrap;box-shadow:0 4px 15px rgba(233,84,32,.4)}
+.btn-icon{font-size:14px;animation:pulseIcon 2s infinite}
+.shimmer{position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmerEffect 3s infinite}
+@media(max-width:480px){.btn-text{display:none}.premium-btn{padding:8px 10px}}
+/* hero + grid */
+.hero{height:55vh;width:100%;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:20px;background-image:linear-gradient(to top,#000 5%,transparent 95%)}
+.hero-info h1{font-size:1.8rem;margin-bottom:10px;text-shadow:2px 2px 15px rgba(0,0,0,.9)}
+.hero-info p{font-size:.85rem;color:#bbb;margin-bottom:20px;max-width:600px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.row{padding:30px 15px 0}
+.row h2{font-size:1rem;margin-bottom:15px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;border-left:3px solid var(--accent);padding-left:10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:#111;border-radius:8px;overflow:hidden;position:relative;aspect-ratio:2/3;cursor:pointer;transition:.3s;border:1px solid #222}
+.card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 0 20px rgba(233,84,32,.3)}
+.card img{width:100%;height:100%;object-fit:cover}
+.card-meta{position:absolute;bottom:0;width:100%;padding:12px;background:linear-gradient(to top,#000,transparent)}
+.card-meta h3{font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#h-btn{background:var(--accent)!important;box-shadow:0 0 15px rgba(255,87,34,.4);transition:.3s;animation:pulseGlow 2s infinite}
+/* bottom nav */
+.bottom-nav{position:fixed;bottom:0;width:100%;background:#080808;border-top:1px solid #1a1a1a;display:flex;justify-content:space-around;padding:12px 5px;z-index:2000}
+.nav-btn{color:#666;text-decoration:none;text-align:center;font-size:10px;cursor:pointer;transition:.3s}
+.nav-btn i{font-size:20px;display:block;margin-bottom:4px}
+.nav-btn.active,.nav-btn:hover{color:var(--accent)}
+.nav-btn.active i,.nav-btn.active span{color:#ff5722!important;text-shadow:0 0 10px rgba(255,87,34,.6);transition:all .3s ease}
+/* player */
+#player-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;overflow-y:auto}
+#player-overlay::-webkit-scrollbar{width:5px}
+#player-overlay::-webkit-scrollbar-thumb{background:#E95420}
+.video-wrapper{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;border-radius:8px}
+.video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+/* effects */
+#hack-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;justify-content:center;align-items:center;pointer-events:none}
+#matrix-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
+#loader-wrapper{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;z-index:100000;transition:opacity .6s ease}
+.loader-container{position:relative;display:flex;justify-content:center;align-items:center}
+.spinner{width:120px;height:120px;border:3px solid rgba(255,87,34,.1);border-top:3px solid #ff5722;border-radius:50%;animation:spin 1s linear infinite}
+.loader-text{position:absolute;color:#fff;font-size:18px;font-weight:900;letter-spacing:2px;margin:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blinker{50%{opacity:.1}}
+@keyframes pulseGlow{0%{box-shadow:0 0 0 rgba(255,69,0,.4);transform:scale(1)}50%{box-shadow:0 0 15px rgba(255,69,0,.7);transform:scale(1.05)}100%{box-shadow:0 0 0 rgba(255,69,0,.4);transform:scale(1)}}
+@keyframes pulseIcon{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes shimmerEffect{0%{left:-100%}20%,100%{left:100%}}
+@keyframes textPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes pulse-hot{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,69,0,.7)}70%{transform:scale(1.05);box-shadow:0 0 0 5px rgba(255,69,0,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,69,0,0)}}
+@keyframes pulseGlowLazada{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(0,0,255,0)}50%{transform:scale(1.1);box-shadow:0 0 10px rgba(0,123,255,.7)}}
+@keyframes pulseGlowAmazon{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(255,165,0,0)}50%{transform:scale(1.1);box-shadow:0 0 10px rgba(255,153,0,.8)}}
+/* PERFORMANCE: pause heavy effects while video plays */
+body.playing *,body.playing *::before,body.playing *::after{animation:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* side menu */
+#menu-icon{font-size:30px;cursor:pointer;padding:10px;color:#fff;position:fixed;top:10px;left:10px;z-index:2001}
+#side-menu{height:100%;width:250px;position:fixed;z-index:2002;top:0;left:-250px;background:rgba(15,15,15,.95)!important;backdrop-filter:blur(15px);border-right:1px solid rgba(255,85,0,.1);box-shadow:10px 0 30px rgba(0,0,0,.5);overflow-x:hidden;overflow-y:auto;transition:.4s;padding-top:20px}
+#side-menu.active{left:0}
+#side-menu ul{list-style:none;padding:10px;margin:0}
+#side-menu ul li{margin-bottom:8px}
+#side-menu ul li a{display:block;padding:12px 15px;color:#fff;text-decoration:none;font-size:16px;border-radius:10px;transition:all .3s ease-in-out;border-left:0 solid #ff8c00}
+#side-menu ul li a:hover{background:rgba(255,140,0,.1);color:#ffaa00;padding-left:25px;border-left:5px solid #ff8c00}
+#side-menu ul li a i{margin-right:12px;transition:.3s;color:#fff}
+#side-menu ul li a:hover i{color:#ffaa00;transform:scale(1.2)}
+#side-menu ul li a[href="library.html"]{display:flex;align-items:center;padding:12px 20px}
+#side-menu ul li a[href="library.html"] i{color:#ff4500;width:20px;text-align:center}
+.menu-header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;color:#ff5500;position:sticky;top:0;background:#000;z-index:1100;border-bottom:1px solid rgba(255,85,0,.2)}
+.close-btn{font-size:30px;cursor:pointer;color:#fff;line-height:1}
+.special-link{position:relative;display:flex!important;align-items:center;margin:5px 15px;padding:15px!important;border-radius:12px;background:rgba(255,255,255,.03);transition:.3s!important}
+.special-link:hover{background:rgba(255,85,0,.1);transform:translateX(10px)}
+.special-link i{width:25px;text-align:center;filter:drop-shadow(0 0 5px currentColor)}
+.special-link:hover i{transform:scale(1.3) rotate(10deg)}
+.badge-new{background:red;color:#fff;font-size:8px;padding:2px 5px;border-radius:4px;margin-left:10px;font-weight:700;animation:blinker 1s linear infinite}
+.badge-hot{background:#ff4500;color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;margin-left:10px;font-weight:700;text-transform:uppercase;animation:pulse-hot 1.5s infinite;display:inline-block}
+@media(max-width:600px){
+#side-menu{right:0;left:auto;width:min(82vw,320px);height:100dvh;z-index:10001;transform:translateX(110%);transition:transform .3s ease;padding-bottom:80px}
+#side-menu.active{transform:translateX(0)}
+#side-menu a{max-width:100%;word-break:break-word}
+html,body{max-width:100%;overflow-x:hidden}
+}
+/* VPN banner + recommendations */
+.vpn-mini-banner{margin-top:15px;max-width:320px}
+.vpn-link{display:flex;align-items:center;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.3);padding:10px 14px;border-radius:12px;text-decoration:none;transition:all .3s ease;backdrop-filter:blur(5px)}
+.vpn-link:hover{background:rgba(0,102,255,.2);border-color:#06f;box-shadow:0 0 15px rgba(0,102,255,.4);transform:translateY(-2px)}
+.vpn-icon-box{color:#06f;font-size:22px;margin-right:12px}
+.vpn-text{display:flex;flex-direction:column;flex-grow:1}
+.vpn-title{color:#fff;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.vpn-sub{color:rgba(255,255,255,.6);font-size:9px;margin-top:2px}
+.vpn-arrow{color:rgba(255,255,255,.3);font-size:10px}
+.affiliate-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:10px 15px 25px}
+.mini-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:15px;padding:12px;display:flex;flex-direction:column;align-items:center;text-decoration:none;position:relative;transition:.3s ease;cursor:pointer}
+.mini-card:active{transform:scale(.95)}
+.mini-card:hover{transform:translateY(-4px);border-color:#E95420}
+.img-container{width:65px;height:65px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden}
+.img-container img{width:65px;height:65px;object-fit:cover;border-radius:8px}
+.store-tag{position:absolute;top:8px;right:8px;font-size:6px;font-weight:900;padding:2px 5px;border-radius:4px;letter-spacing:.5px}
+.recommendation-tag{background:#E95420;color:#fff;font-weight:800}
+.kdrama-tag{background:#b00020;color:#fff}
+.p-name{color:#eee;font-size:10px;font-weight:600;text-align:center;line-height:1.2;margin-bottom:4px}
+/* footer */
+footer{padding:30px 10px;text-align:center;background:#000;border-top:2px solid #FF4500;margin-top:60px;position:relative;font-family:sans-serif}
+.footer-glow-line{height:1px;width:100%;background:linear-gradient(90deg,transparent,#FF4500,transparent);margin-bottom:20px}
+.toast{background:#FFDD00;color:#000;padding:10px 20px;border-radius:5px;font-weight:700;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:10001}
+/* greeting modal */
+#greeting-modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.92);backdrop-filter:blur(15px);animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-content{background:linear-gradient(145deg,#1e1e1e,#000);color:#fff;margin:20% auto;padding:40px 30px;border-radius:28px;width:85%;max-width:380px;text-align:center;box-shadow:0 15px 50px rgba(0,0,0,.8),0 0 20px rgba(255,136,0,.15);border:1px solid rgba(255,136,0,.4);animation:slideUp .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.welcome-icon{font-size:55px;margin-bottom:20px;display:inline-block}
+.modal-title{color:#ff8800;margin:0 0 12px;font-size:1.8rem;font-weight:800;text-transform:uppercase}
+.modal-text{margin-bottom:35px;font-size:15px;color:#aeaeae;line-height:1.6}
+.modal-btn-enter{width:100%;background:#ff8800;color:#000!important;padding:16px;border-radius:14px;font-weight:700;border:none;cursor:pointer;font-size:16px;transition:all .3s ease;text-transform:uppercase;letter-spacing:1.5px;box-shadow:0 8px 20px rgba(255,136,0,.3)}
+.modal-btn-enter:active{transform:scale(.96);background:#e67a00}
+.footer-tag{margin-top:30px;font-size:10px;color:#555;text-transform:uppercase;letter-spacing:3px;font-weight:600}
+/* viewer toast */
+.se7en-toast{background:rgba(15,15,15,.85);color:#fff;padding:14px 22px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:12px;border:1px solid rgba(255,140,0,.2);border-left:4px solid #ff8c00;box-shadow:0 10px 30px rgba(0,0,0,.5);backdrop-filter:blur(10px);animation:toast-in .6s cubic-bezier(.175,.885,.32,1.275) forwards,toast-out .5s 4s forwards;pointer-events:auto;min-width:250px}
+.toast-icon{background:#ff8c00;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
+@keyframes toast-in{0%{transform:translateX(120%);opacity:0}100%{transform:translateX(0);opacity:1}}
+@keyframes toast-out{0%{transform:scale(1);opacity:1}100%{transform:scale(.9);opacity:0}}
+/* SE7EN AI widget */
+#se7en-ai-button{position:fixed;right:20px;bottom:20px;z-index:99999;border:0;border-radius:30px;padding:14px 18px;background:#ff4500;color:#fff;font-weight:700;cursor:grab;box-shadow:0 4px 18px #0008;touch-action:none;user-select:none;-webkit-user-select:none}
+#se7en-ai-button.se7en-dragging,#se7en-ai-header.se7en-dragging{cursor:grabbing}
+#se7en-ai-panel{position:fixed;right:20px;bottom:82px;z-index:99999;width:min(350px,calc(100vw - 32px));height:430px;max-height:calc(100vh - 16px);display:none;flex-direction:column;overflow:hidden;border:1px solid #ff4500;border-radius:16px;background:#111;color:#fff;box-shadow:0 8px 35px #000a;font:14px Arial,sans-serif}
+#se7en-ai-header{padding:15px;background:#ff4500;font-weight:700;display:flex;justify-content:space-between;align-items:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+#se7en-ai-close{border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer}
+#se7en-ai-messages{flex:1;overflow-y:auto;padding:12px}
+.se7en-ai-msg{white-space:pre-wrap;overflow-wrap:anywhere;padding:10px 12px;margin:8px 0;border-radius:12px;line-height:1.45}
+.se7en-ai-bot{background:#292929;margin-right:24px}
+.se7en-ai-user{background:#713019;margin-left:24px}
+#se7en-ai-form{display:flex;gap:8px;padding:10px;border-top:1px solid #333}
+#se7en-ai-input{min-width:0;flex:1;padding:11px;border:1px solid #555;border-radius:9px;background:#202020;color:#fff;font-size:16px}
+#se7en-ai-form button{padding:10px 13px;border:0;border-radius:9px;background:#ff4500;color:#fff;cursor:pointer}
+@media(max-width:1023px){
+#se7en-ai-button{bottom:80px;right:14px;padding:12px 15px;font-size:13px}
+#se7en-ai-panel{right:16px;bottom:136px;height:430px;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px)}
+}
+</style>
 </head>
 <body>
 
-<body>
-
 <div id="loader-wrapper">
-    <div class="loader-container">
-        <div class="spinner"></div>
-        <h1 class="loader-text">SE7EN</h1>
-    </div>
+  <div class="loader-container"><div class="spinner"></div><h1 class="loader-text">SE7EN</h1></div>
 </div>
 
-<div id="menu-icon" onclick="toggleMenu()" style="display: flex; flex-direction: column; gap: 4px; cursor: pointer; padding: 5px;">
-  <span style="display: block; width: 25px; height: 3px; background-color: #ff5722; border-radius: 2px;"></span>
-  <span style="display: block; width: 25px; height: 3px; background-color: #ff5722; border-radius: 2px;"></span>
-  <span style="display: block; width: 25px; height: 3px; background-color: #ff5722; border-radius: 2px;"></span>
+<div id="menu-icon" onclick="toggleMenu()" style="display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:5px;">
+  <span style="display:block;width:25px;height:3px;background:#ff5722;border-radius:2px;"></span>
+  <span style="display:block;width:25px;height:3px;background:#ff5722;border-radius:2px;"></span>
+  <span style="display:block;width:25px;height:3px;background:#ff5722;border-radius:2px;"></span>
 </div>
 
 <nav id="side-menu">
-  <div class="menu-header">
-    <h3>SE7EN MENU</h3>
-    <span class="close-btn" onclick="toggleMenu()">×</span>
-  </div>
+  <div class="menu-header"><h3>SE7EN MENU</h3><span class="close-btn" onclick="toggleMenu()">×</span></div>
   <ul>
-  <li><a href="javascript:void(0)" onclick="location.reload()"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
-
-<li style="list-style: none; margin-bottom: 15px;">
-    <a href="https://ouo.io/4YjmLf" 
-       target="_blank" 
-       style="text-decoration: none; display: flex; align-items: center; padding: 5px 10px; transition: 0.3s;">
-        
-        <div style="width: 38px; height: 38px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.3); margin-right: 15px; flex-shrink: 0;">
-            <span style="font-size: 18px; color: #ff8800;">📥</span>
+    <li><a href="javascript:void(0)" onclick="location.reload()"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
+    <li style="list-style:none;margin-bottom:15px;">
+      <a href="https://ouo.io/4YjmLf" target="_blank" style="text-decoration:none;display:flex;align-items:center;padding:5px 10px;transition:.3s;">
+        <div style="width:38px;height:38px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3);margin-right:15px;flex-shrink:0;"><span style="font-size:18px;color:#ff8800;">📥</span></div>
+        <div style="display:flex;flex-direction:column;">
+          <span style="color:#fff;font-weight:600;font-size:14px;letter-spacing:.3px;">Download App</span>
+          <span style="color:#ff8800;font-size:9px;font-weight:700;text-transform:uppercase;margin-top:1px;">Official APK</span>
         </div>
-
-        <div style="display: flex; flex-direction: column;">
-            <span style="color: #fff; font-weight: 600; font-size: 14px; font-family: sans-serif; letter-spacing: 0.3px;">
-                Download App
-            </span>
-            <span style="color: #ff8800; font-size: 9px; font-weight: bold; text-transform: uppercase; margin-top: 1px;">
-                Official APK
-            </span>
-        </div>
-    </a>
-    
-    <div style="padding-left: 63px; margin-top: -2px;">
-        <p style="color: #555; font-size: 9px; line-height: 1.2; margin: 0; font-style: italic;">
-            *Select "Install Anyway" if warned. Verified safe.
-        </p>
-    </div>
-</li>
-
-  <li>
-  <a href="library.html">
-    <i class="fa-solid fa-film"></i> Movie Library 
-    <span class="badge-hot">HOT</span>
-  </a>
-</li>
-
-  <li><a href="https://seven25-ui.github.io/" target="_blank" style="color: #ffaa00; font-weight: bold;">
-    <i class="fa-solid fa-fire-flame-curved"></i> Movie Gadgets
-  </a></li>
-  
-  <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
-<p style="color: #888; font-size: 10px; padding-left: 20px; text-transform: uppercase; letter-spacing: 2px;">Se7en Suite (Mini Apps)</p>
-
-<li><a href="https://seven25-ui.github.io/Yt7_clone/" target="_blank" class="special-link">
-    <i class="fa-brands fa-youtube" style="color: #FF0000;"></i> 
-    <span>YouTube Clone</span>
-    <span class="badge-new">Live</span>
-</a></li>
-
-<li><a href="https://seven25-ui.github.io/My-livetv/" target="_blank" class="special-link">
-    <i class="fa-solid fa-satellite-dish" style="color: #00d4ff;"></i> 
-    <span>My Live TV</span>
-</a></li>
-
-<li><a href="https://seven25-ui.github.io/My_music/" target="_blank" class="special-link">
-    <i class="fa-solid fa-compact-disc fa-spin" style="--fa-animation-duration: 3s; color: #ff00ff;"></i> 
-    <span>Se7en Music</span>
-</a></li>
-
-<li><a href="https://seven25-ui.github.io/Weather-app" target="_blank" class="special-link">
-    <i class="fa-solid fa-cloud-sun-rain" style="color: #ffaa00;"></i> 
-    <span>Weather Update</span>
-</a></li>
-
-<li><a href="https://flask-blog-v2.onrender.com/" target="_blank" class="special-link">
-    <i class="fa-solid fa-feather-pointed" style="color: #2ecc71;"></i> 
-    <span>Community Blog</span>
-</a></li>
-  
-  <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
-
-  <li><a href="javascript:void(0)" onclick="fetchType('movie'); toggleMenu()"><i class="fa-solid fa-clapperboard"></i> Movies</a></li>
-  <li><a href="javascript:void(0)" onclick="fetchType('tv'); toggleMenu()"><i class="fa-solid fa-display"></i> TV Shows</a></li>
-  <li><a href="javascript:void(0)" onclick="fetchLang('ko'); toggleMenu()"><i class="fa-solid fa-wand-magic-sparkles"></i> K-Drama</a></li>
-  <li><a href="javascript:void(0)" onclick="fetchLang('ja'); toggleMenu()"><i class="fa-solid fa-mask-up"></i> Anime</a></li>
-
-  <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0;">
-
-  <li><a href="https://m.me/61583698191336" target="_blank">
-    <i class="fa-solid fa-paper-plane"></i> Request a Movie
-  </a></li>
-</ul>
+      </a>
+      <div style="padding-left:63px;margin-top:-2px;"><p style="color:#555;font-size:9px;line-height:1.2;margin:0;font-style:italic;">*Select "Install Anyway" if warned. Verified safe.</p></div>
+    </li>
+    <li><a href="library.html"><i class="fa-solid fa-film"></i> Movie Library <span class="badge-hot">HOT</span></a></li>
+    <li><a href="https://seven25-ui.github.io/" target="_blank" style="color:#ffaa00;font-weight:700;"><i class="fa-solid fa-fire-flame-curved"></i> Movie Gadgets</a></li>
+    <hr style="border:.5px solid rgba(255,255,255,.1);margin:15px 0;">
+    <p style="color:#888;font-size:10px;padding-left:20px;text-transform:uppercase;letter-spacing:2px;">Se7en Suite (Mini Apps)</p>
+    <li><a href="https://seven25-ui.github.io/Yt7_clone/" target="_blank" class="special-link"><i class="fa-brands fa-youtube" style="color:#FF0000;"></i><span>YouTube Clone</span><span class="badge-new">Live</span></a></li>
+    <li><a href="https://seven25-ui.github.io/My-livetv/" target="_blank" class="special-link"><i class="fa-solid fa-satellite-dish" style="color:#00d4ff;"></i><span>My Live TV</span></a></li>
+    <li><a href="https://seven25-ui.github.io/My_music/" target="_blank" class="special-link"><i class="fa-solid fa-compact-disc fa-spin" style="--fa-animation-duration:3s;color:#ff00ff;"></i><span>Se7en Music</span></a></li>
+    <li><a href="https://seven25-ui.github.io/Weather-app" target="_blank" class="special-link"><i class="fa-solid fa-cloud-sun-rain" style="color:#ffaa00;"></i><span>Weather Update</span></a></li>
+    <li><a href="https://flask-blog-v2.onrender.com/" target="_blank" class="special-link"><i class="fa-solid fa-feather-pointed" style="color:#2ecc71;"></i><span>Community Blog</span></a></li>
+    <hr style="border:.5px solid rgba(255,255,255,.1);margin:15px 0;">
+    <li><a href="javascript:void(0)" onclick="fetchType('movie');toggleMenu()"><i class="fa-solid fa-clapperboard"></i> Movies</a></li>
+    <li><a href="javascript:void(0)" onclick="fetchType('tv');toggleMenu()"><i class="fa-solid fa-display"></i> TV Shows</a></li>
+    <li><a href="javascript:void(0)" onclick="fetchLang('ko');toggleMenu()"><i class="fa-solid fa-wand-magic-sparkles"></i> K-Drama</a></li>
+    <li><a href="javascript:void(0)" onclick="fetchLang('ja');toggleMenu()"><i class="fa-solid fa-mask-up"></i> Anime</a></li>
+    <hr style="border:.5px solid rgba(255,255,255,.1);margin:15px 0;">
+    <li><a href="https://m.me/61583698191336" target="_blank"><i class="fa-solid fa-paper-plane"></i> Request a Movie</a></li>
+  </ul>
 </nav>
 
-<div id="status-bar" style="background: rgba(0, 0, 0, 0.6); padding: 5px 12px; border-radius: 30px; width: fit-content; margin: 10px auto; border: 1px solid rgba(0, 255, 0, 0.2); display: flex; align-items: center; gap: 8px; z-index: 10001; backdrop-filter: blur(10px);">
-    <div style="height: 6px; width: 6px; background-color: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: blinker 1.5s linear infinite;"></div>
-
-    <span id="user-count" style="color: white; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;">--</span>
-
-    <span style="color: rgba(255, 255, 255, 0.7); font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px;">Live</span>
+<div id="status-bar" style="background:rgba(0,0,0,.6);padding:5px 12px;border-radius:30px;width:fit-content;margin:10px auto;border:1px solid rgba(0,255,0,.2);display:flex;align-items:center;gap:8px;z-index:10001;backdrop-filter:blur(10px);">
+  <div style="height:6px;width:6px;background:#0f0;border-radius:50%;box-shadow:0 0 8px #0f0;animation:blinker 1.5s linear infinite;"></div>
+  <span id="user-count" style="color:#fff;font-size:13px;font-weight:700;">--</span>
+  <span style="color:rgba(255,255,255,.7);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">Live</span>
 </div>
 
-<style>
-@keyframes blinker {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1); }
-}
-</style>
-
-<div id="hack-overlay" style="display:none;">
-    <canvas id="matrix-canvas"></canvas>
-    <div style="position: absolute; color: #0f0; font-family: 'Orbitron'; font-size: 18px; text-shadow: 0 0 10px #0f0; text-align: center; width: 100%;">
-        
-    </div>
-</div>
+<div id="hack-overlay" style="display:none;"><canvas id="matrix-canvas"></canvas></div>
 
 <div id="player-overlay">
-    <div style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #080808; border-bottom: 1px solid #111;">
-        <div style="font-size: 1.2rem; color: var(--accent); font-family: 'Orbitron';">
-            SE7EN PLAY <span id="p-title" style="font-size: 0.9rem; color: #666; margin-left: 10px;"></span>
-        </div>
-        <button onclick="closePlayer()" style="background:none; border:none; color:#fff; font-size:35px; cursor:pointer;">&times;</button>
-    </div>
+  <div style="padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#080808;border-bottom:1px solid #111;">
+    <div style="font-size:1.2rem;color:var(--accent);font-family:'Orbitron';">SE7EN PLAY <span id="p-title" style="font-size:.9rem;color:#666;margin-left:10px;"></span></div>
+    <button onclick="closePlayer()" style="background:none;border:none;color:#fff;font-size:35px;cursor:pointer;">&times;</button>
+  </div>
 
-    <div class="video-wrapper">
+  <div class="video-wrapper">
     <iframe id="video-iframe" src="" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture" referrerpolicy="no-referrer"></iframe>
+  </div>
+
+  <div style="margin:15px 0;text-align:center;padding:0 20px;">
+    <p style="color:#666;font-size:11px;font-family:monospace;margin-bottom:8px;">Server slow? Try high speed options.</p>
+    <a href="https://doctoredits.com/1877110" target="_blank" style="background:#e64a19;color:#fff;padding:12px 0;border-radius:5px;text-decoration:none;font-weight:700;display:block;width:100%;max-width:350px;margin:0 auto 12px;text-align:center;text-transform:uppercase;font-size:13px;border:1px solid #ff5722;">🚀 WATCH IN HIGH SPEED (VIP)</a>
+    <a href="https://www.effectivegatecpm.com/fg756im2nw?key=d3235d932cc1b738b04b2390dd0a6226" target="_blank" style="background:#ff3d00;color:#fff;padding:12px 0;border-radius:5px;text-decoration:none;font-weight:700;display:block;width:100%;max-width:350px;margin:0 auto;text-align:center;text-transform:uppercase;font-size:13px;border:1px solid #ff6e40;">📥 DOWNLOAD IN 1080P</a>
+  </div>
+
+  <div style="margin:20px;padding:15px;background:rgba(255,255,255,.05);border-radius:10px;border:1px dashed #E95420;text-align:center;">
+    <p style="color:#E95420;font-size:10px;font-weight:700;margin-bottom:10px;text-transform:uppercase;">🔥 Special Offers for Viewers:</p>
+    <div style="display:flex;justify-content:space-around;align-items:center;">
+      <a href="https://seven25-ui.github.io/" target="_blank" style="text-decoration:none;color:#fff;flex:1;"><i class="fas fa-headset fa-beat" style="color:#ffaa00;font-size:1.2rem;display:block;margin-bottom:5px;"></i><span style="font-size:9px;">Headset</span></a>
+      <a href="https://seven25-ui.github.io/" target="_blank" style="text-decoration:none;color:#fff;flex:1;"><i class="fas fa-mobile-alt" style="color:#ffaa00;font-size:1.2rem;display:block;margin-bottom:5px;animation:blinker 1.5s linear infinite;"></i><span style="font-size:9px;">Mobile</span></a>
+      <a href="https://seven25-ui.github.io/" target="_blank" style="text-decoration:none;color:#fff;flex:1;"><i class="fas fa-laptop" style="color:#ffaa00;font-size:1.2rem;display:block;margin-bottom:5px;animation:blinker 1.5s linear infinite;"></i><span style="font-size:9px;">Laptop</span></a>
+    </div>
+  </div>
+
+  <div style="padding:0 20px 20px;">
+    <h1 id="p-movie-name" style="font-size:1.5rem;color:#E95420;margin-bottom:10px;">Movie Title</h1>
+    <p id="p-desc" style="color:#bbb;font-size:.85rem;line-height:1.5;">Description...</p>
+    <div id="extras-box" style="padding-top:15px;"></div>
+  </div>
+
+  <div id="ep-nav-buttons" style="display:none;justify-content:center;gap:15px;margin:0 20px 15px;">
+    <button onclick="changeEpisode(-1)" style="flex:1;max-width:150px;padding:12px;background:#222;color:#fff;border:1px solid #444;border-radius:8px;font-weight:700;cursor:pointer;">⏮ Previous</button>
+    <button onclick="changeEpisode(1)" style="flex:1;max-width:150px;padding:12px;background:#E95420;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Next ⏭</button>
+  </div>
+
+  <div class="episode-section" id="episode-area" style="display:none;padding:0 20px 40px;"></div>
 </div>
 
-    <div style="margin: 15px 0; text-align: center; padding: 0 20px;">
-        <p style="color: #666; font-size: 11px; font-family: monospace; margin-bottom: 8px;">Server slow? Try high speed options.</p>
-        <a href="https://doctoredits.com/1877110" target="_blank" style="background: #e64a19; color: white; padding: 12px 0; border-radius: 5px; text-decoration: none; font-weight: bold; display: block; width: 100%; max-width: 350px; margin: 0 auto 12px auto; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #ff5722;">🚀 WATCH IN HIGH SPEED (VIP)</a>
-        <a href="https://www.effectivegatecpm.com/fg756im2nw?key=d3235d932cc1b738b04b2390dd0a6226" target="_blank" style="background: #ff3d00; color: white; padding: 12px 0; border-radius: 5px; text-decoration: none; font-weight: bold; display: block; width: 100%; max-width: 350px; margin: 0 auto; text-align: center; text-transform: uppercase; font-size: 13px; border: 1px solid #ff6e40;">📥 DOWNLOAD IN 1080P</a>
-    </div>
-
-    <div style="margin: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px dashed #E95420; text-align: center;">
-        <p style="color: #E95420; font-size: 10px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">🔥 Special Offers for Viewers:</p>
-        <div style="display: flex; justify-content: space-around; align-items: center;">
-            <a href="https://seven25-ui.github.io/" target="_blank" style="text-decoration: none; color: white; flex: 1;">
-                <i class="fas fa-headset fa-beat" style="color: #ffaa00; font-size: 1.2rem; display: block; margin-bottom: 5px;"></i>
-                <span style="font-size: 9px;">Headset</span>
-            </a>
-            <a href="https://seven25-ui.github.io/" target="_blank" style="text-decoration: none; color: white; flex: 1;">
-                <i class="fas fa-mobile-alt" style="color: #ffaa00; font-size: 1.2rem; display: block; margin-bottom: 5px; animation: blinker 1.5s linear infinite;"></i>
-                <span style="font-size: 9px;">Mobile</span>
-            </a>
-            <a href="https://seven25-ui.github.io/" target="_blank" style="text-decoration: none; color: white; flex: 1;">
-                <i class="fas fa-laptop" style="color: #ffaa00; font-size: 1.2rem; display: block; margin-bottom: 5px; animation: blinker 1.5s linear infinite;"></i>
-                <span style="font-size: 9px;">Laptop</span>
-            </a>
-        </div>
-    </div>
-
-    <div style="padding: 0 20px 20px;">
-        <h1 id="p-movie-name" style="font-size: 1.5rem; color: #E95420; margin-bottom: 10px;">Movie Title</h1>
-        <p id="p-desc" style="color: #bbb; font-size: 0.85rem; line-height: 1.5;">Description...</p>
-    </div>
-
-    <div id="ep-nav-buttons" style="display:none; justify-content:center; gap:15px; margin:0 20px 15px;">
-        <button onclick="changeEpisode(-1)" style="flex:1; max-width:150px; padding:12px; background:#222; color:#fff; border:1px solid #444; border-radius:8px; font-weight:bold; cursor:pointer;">⏮ Previous</button>
-        <button onclick="changeEpisode(1)" style="flex:1; max-width:150px; padding:12px; background:#E95420; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Next ⏭</button>
-    </div>
-
-    <div class="episode-section" id="episode-area" style="display:none; padding: 0 20px 40px;">
-        <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; border-radius:5px; margin-bottom:15px;"></select>
-        <div class="ep-grid" id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap:10px;"></div>
-    </div>
-
+<div id="up-next-overlay" style="display:none;position:fixed;bottom:20px;right:20px;z-index:10002;background:rgba(15,15,15,.95);border:1px solid #E95420;border-radius:14px;padding:14px 20px;max-width:280px;box-shadow:0 10px 30px rgba(0,0,0,.6);backdrop-filter:blur(10px);pointer-events:none;">
+  <p style="color:#E95420;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:4px;">▶ Playing Next</p>
+  <p id="up-next-title" style="color:#fff;font-size:13px;font-weight:700;margin:0;">Episode Title</p>
 </div>
-
-<div id="up-next-overlay" style="display:none; position:fixed; bottom:20px; right:20px; z-index:10002; background:rgba(15,15,15,0.95); border:1px solid #E95420; border-radius:14px; padding:14px 20px; max-width:280px; box-shadow:0 10px 30px rgba(0,0,0,0.6); backdrop-filter: blur(10px); pointer-events:none;">
-    <p style="color:#E95420; font-size:11px; font-weight:800; text-transform:uppercase; margin-bottom:4px;">▶ Playing Next</p>
-    <p id="up-next-title" style="color:#fff; font-size:13px; font-weight:700; margin:0;">Episode Title</p>
-</div>
-
-<style>
-@keyframes blinker { 50% { opacity: 0.1; } }
-/* I-ensure nato nga dili maputol ang content sa gagmay nga phone */
-#player-overlay::-webkit-scrollbar { width: 5px; }
-#player-overlay::-webkit-scrollbar-thumb { background: #E95420; }
-</style>
 
 <div id="main-content" style="display:none;">
-    <div class="top-bar">
-        <div class="logo">SE7EN</div>
-        <div class="search-box">
-            <i class="fas fa-search" style="color:#444;"></i>
-            <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
-        </div>
-        <button class="premium-btn">
-    <span class="btn-icon">📽️</span>
-    <span class="btn-text">PREMIUM ACCESS</span>
-    <div class="shimmer"></div>
-</button>
+  <div class="top-bar">
+    <div class="logo">SE7EN</div>
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="mSearch" placeholder="Search..." onkeypress="if(event.key==='Enter') search(this.value)">
     </div>
+    <button class="premium-btn"><span class="btn-icon">📽️</span><span class="btn-text">PREMIUM ACCESS</span><div class="shimmer"></div></button>
+  </div>
 
-    <div class="hero" id="hero">
+  <div class="hero" id="hero">
     <div class="hero-info">
-        <h1 id="h-title">Loading...</h1>
-        <p id="h-desc">...</p>
-        
-        <button id="h-btn" onclick="triggerWatchAd()" style="background:var(--accent); color:#fff; border:none; padding:12px 28px; border-radius:6px; font-weight:bold; cursor:pointer;">
-    <i class="fas fa-play"></i> &nbsp;WATCH NOW
-</button>
-
-        <div class="vpn-mini-banner">
-            <a href="https://doctoredits.com/1877110" target="_blank" class="vpn-link">
-                <div class="vpn-icon-box">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <div class="vpn-text">
-                    <span class="vpn-title">SECURE YOUR STREAM</span>
-                    <span class="vpn-sub">Bypass Buffering & Hide IP</span>
-                </div>
-                <div class="vpn-arrow">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="affiliate-grid" id="recommendation-grid">
-
-    <div class="mini-card" id="tv-recommendation">
-        <div class="store-tag recommendation-tag">
-            TV SHOWS
-        </div>
-
-        <div class="img-container">
-            <img id="tv-rec-img" src="" alt="Recommended TV Show">
-        </div>
-
-        <div class="mini-info">
-            <span class="p-name" id="tv-rec-title">
-                Loading TV Shows...
-            </span>
-        </div>
-    </div>
-
-
-    <div class="mini-card" id="kdrama-recommendation">
-        <div class="store-tag recommendation-tag kdrama-tag">
-            K-DRAMA
-        </div>
-
-        <div class="img-container">
-            <img id="kdrama-rec-img" src="" alt="Recommended K-Drama">
-        </div>
-
-        <div class="mini-info">
-            <span class="p-name" id="kdrama-rec-title">
-                Loading K-Drama...
-            </span>
-        </div>
-    </div>
-
-</div>
-
-    <div class="row">
-        <h2 id="row-title">🔥 Trending Today</h2>
-        <div class="grid" id="main-grid"></div>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-btn active" onclick="location.reload()"><i class="fas fa-home"></i><span>Home</span></div>
-        <div class="nav-btn" onclick="fetchType('movie')"><i class="fas fa-film"></i><span>Movies</span></div>
-        <div class="nav-btn" onclick="fetchType('tv')"><i class="fas fa-tv"></i><span>TV Shows</span></div>
-        <div class="nav-btn" onclick="fetchLang('ko')"><i class="fas fa-heart"></i><span>K-Drama</span></div>
-        <div class="nav-btn" onclick="fetchLang('ja')"><i class="fas fa-dragon"></i><span>Anime</span></div>
-    </div>
-</div>
-
-<footer style="text-align: center; padding: 30px 10px; background: #000; position: relative; font-family: sans-serif;">
-    <div class="footer-glow-line"></div>
-
-    <div style="margin-bottom: 20px;">
-        <a href="https://seven25-ui.github.io/" id="footer-stealth-link" onclick="handleFooterAction(event)" style="
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center; gap: 8px;
-            background: rgba(255, 69, 0, 0.1);
-            padding: 8px 15px; border-radius: 50px;
-            border: 1px solid #FF4500;
-            transition: 0.3s;
-            animation: pulseGlow 2s infinite;">
-            <span style="font-size: 14px;">🎁</span>
-            <span style="color: #FF4500; font-weight: bold; font-size: 12px; letter-spacing: 1px;">
-                SHOP NOW! HOT DEAL! 
-            </span>
+      <h1 id="h-title">Loading...</h1>
+      <p id="h-desc">...</p>
+      <button id="h-btn" onclick="triggerWatchAd()" style="color:#fff;border:none;padding:12px 28px;border-radius:6px;font-weight:700;cursor:pointer;"><i class="fas fa-play"></i> &nbsp;WATCH NOW</button>
+      <div class="vpn-mini-banner">
+        <a href="https://doctoredits.com/1877110" target="_blank" class="vpn-link">
+          <div class="vpn-icon-box"><i class="fas fa-user-shield"></i></div>
+          <div class="vpn-text"><span class="vpn-title">SECURE YOUR STREAM</span><span class="vpn-sub">Bypass Buffering & Hide IP</span></div>
+          <div class="vpn-arrow"><i class="fas fa-chevron-right"></i></div>
         </a>
+      </div>
     </div>
+  </div>
 
-    <div style="margin-bottom: 20px;">
-        <button type="button" onclick="openDonation()" style="
-            background: #FFDD00; color: #000;
-            border: none; padding: 10px 20px;
-            border-radius: 50px; font-weight: bold;
-            font-size: 13px; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 15px rgba(255, 221, 0, 0.3);
-            transition: 0.3s;">
-            <span>☕</span> Buy me a coffee
-        </button>
+  <div class="affiliate-grid" id="recommendation-grid">
+    <div class="mini-card" id="tv-recommendation">
+      <div class="store-tag recommendation-tag">TV SHOWS</div>
+      <div class="img-container"><img id="tv-rec-img" src="" alt="Recommended TV Show"></div>
+      <div class="mini-info"><span class="p-name" id="tv-rec-title">Loading TV Shows...</span></div>
     </div>
+    <div class="mini-card" id="kdrama-recommendation">
+      <div class="store-tag recommendation-tag kdrama-tag">K-DRAMA</div>
+      <div class="img-container"><img id="kdrama-rec-img" src="" alt="Recommended K-Drama"></div>
+      <div class="mini-info"><span class="p-name" id="kdrama-rec-title">Loading K-Drama...</span></div>
+    </div>
+  </div>
 
-<div style="margin-top: 20px; text-align: center; padding: 10px;">
-    <p style="font-size: 11px; color: #555; margin-bottom: 5px;">Need help or have requests?</p>
-    <a href="https://m.me/61573130129204" target="_blank" 
-       style="color: #0084ff; text-decoration: none; font-size: 13px; font-weight: 500; font-family: sans-serif;">
-       📩 Message Us on Messenger
-    </a>
+  <div class="row">
+    <h2 id="row-title">🔥 Trending Today</h2>
+    <div class="grid" id="main-grid"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-btn active" onclick="location.reload()"><i class="fas fa-home"></i><span>Home</span></div>
+    <div class="nav-btn" onclick="fetchType('movie')"><i class="fas fa-film"></i><span>Movies</span></div>
+    <div class="nav-btn" onclick="fetchType('tv')"><i class="fas fa-tv"></i><span>TV Shows</span></div>
+    <div class="nav-btn" onclick="fetchLang('ko')"><i class="fas fa-heart"></i><span>K-Drama</span></div>
+    <div class="nav-btn" onclick="fetchLang('ja')"><i class="fas fa-dragon"></i><span>Anime</span></div>
+  </div>
 </div>
 
-    <p style="font-size: 11px; color: #666;">
-    © 2026 SE7EN CINEMA | 
-    <span style="color:#FF4500">POWERED BY ALOYGENE & SE7EN TEAM</span> | 
-    <a href="privacy.html" style="color: #666; text-decoration: none; border-bottom: 1px solid #444;">Privacy & Terms</a>
-</p>
+<footer>
+  <div class="footer-glow-line"></div>
+  <div style="margin-bottom:20px;">
+    <a href="https://seven25-ui.github.io/" id="footer-stealth-link" onclick="handleFooterAction(event)" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;background:rgba(255,69,0,.1);padding:8px 15px;border-radius:50px;border:1px solid #FF4500;transition:.3s;animation:pulseGlow 2s infinite;">
+      <span style="font-size:14px;">🎁</span>
+      <span style="color:#FF4500;font-weight:700;font-size:12px;letter-spacing:1px;">SHOP NOW! HOT DEAL!</span>
+    </a>
+  </div>
+  <div style="margin-bottom:20px;">
+    <button type="button" onclick="openDonation()" style="background:#FFDD00;color:#000;border:none;padding:10px 20px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(255,221,0,.3);transition:.3s;"><span>☕</span> Buy me a coffee</button>
+  </div>
+  <div style="margin-top:20px;text-align:center;padding:10px;">
+    <p style="font-size:11px;color:#555;margin-bottom:5px;">Need help or have requests?</p>
+    <a href="https://m.me/61573130129204" target="_blank" style="color:#0084ff;text-decoration:none;font-size:13px;font-weight:500;">📩 Message Us on Messenger</a>
+  </div>
+  <p style="font-size:11px;color:#666;">© 2026 SE7EN CINEMA | <span style="color:#FF4500">POWERED BY ALOYGENE & SE7EN TEAM</span> | <a href="privacy.html" style="color:#666;text-decoration:none;border-bottom:1px solid #444;">Privacy & Terms</a></p>
 
-    <div id="donationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-        <div style="background: #111; padding: 25px; border-radius: 20px; border: 1px solid #FFDD00; text-align: center; position: relative; max-width: 90%;">
-            <span onclick="closeDonation()" style="position: absolute; top: 10px; right: 15px; color: #fff; font-size: 24px; cursor: pointer;">&times;</span>
-            <p style="color: #FFDD00; font-weight: bold; margin-bottom: 15px;">SCAN TO SUPPORT SE7EN 🎬</p>
-            <img src="media/GCash-MyQR-12022026103101.PNG" alt="GCash QR" style="width: 250px; height: auto; border-radius: 10px; margin-bottom: 15px;">
-            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px;">
-                <p style="color: #fff; font-size: 14px; font-family: monospace; margin: 0;">paypal.me/guardianag</p>
-                <button type="button" onclick="copyGcash()" style="background: #FFDD00; border: none; padding: 5px 15px; border-radius: 5px; margin-top: 10px; font-size: 11px; font-weight: bold; cursor: pointer;">COPY NUMBER</button>
-            </div>
-        </div>
+  <div id="donationModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:99998;justify-content:center;align-items:center;flex-direction:column;">
+    <div style="background:#111;padding:25px;border-radius:20px;border:1px solid #FFDD00;text-align:center;position:relative;max-width:90%;">
+      <span onclick="closeDonation()" style="position:absolute;top:10px;right:15px;color:#fff;font-size:24px;cursor:pointer;">&times;</span>
+      <p style="color:#FFDD00;font-weight:700;margin-bottom:15px;">SCAN TO SUPPORT SE7EN 🎬</p>
+      <img src="media/GCash-MyQR-12022026103101.PNG" alt="GCash QR" style="width:250px;height:auto;border-radius:10px;margin-bottom:15px;">
+      <div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;">
+        <p style="color:#fff;font-size:14px;font-family:monospace;margin:0;">paypal.me/guardianag</p>
+        <button type="button" onclick="copyGcash()" style="background:#FFDD00;border:none;padding:5px 15px;border-radius:5px;margin-top:10px;font-size:11px;font-weight:700;cursor:pointer;">COPY NUMBER</button>
+      </div>
     </div>
-
-    <style>
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
-            50% { box-shadow: 0 0 15px rgba(255, 69, 0, 0.7); transform: scale(1.05); }
-            100% { box-shadow: 0 0 0px rgba(255, 69, 0, 0.4); transform: scale(1); }
-        }
-        .footer-glow-line { height: 1px; width: 100%; background: linear-gradient(90deg, transparent, #FF4500, transparent); margin-bottom: 20px; }
-        .toast { background: #FFDD00; color: #000; padding: 10px 20px; border-radius: 5px; font-weight: bold; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10001; }
-    </style>
-
-    <div id="notification-area"></div>
-
-    <script>
-        function openDonation() {
-            document.getElementById('donationModal').style.display = 'flex';
-        }
-        function closeDonation() {
-            document.getElementById('donationModal').style.display = 'none';
-        }
-        function copyGcash() {
-            navigator.clipboard.writeText("09489108928").then(() => {
-                const area = document.getElementById('notification-area');
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.innerHTML = "📋 Number Copied! Salamat, Aloy!";
-                area.appendChild(toast);
-                setTimeout(() => { toast.remove(); }, 3000);
-            });
-        }
-        function handleFooterAction(event) {
-            var link = document.getElementById('footer-stealth-link').getAttribute('href');
-            if (link === "#") {
-                event.preventDefault();
-                alert("Sorry! Free keys are currently out of stock. Check back later.");
-            }
-        }
-    </script>
+  </div>
+  <div id="notification-area"></div>
 </footer>
 
+<div id="greeting-modal">
+  <div class="modal-content">
+    <div class="welcome-icon">🎬</div>
+    <h2 class="modal-title">WELCOME</h2>
+    <p class="modal-text">Thank you for choosing <b>Free Movie's</b>.<br>Experience seamless streaming of your favorite movies and series in high definition.</p>
+    <button class="modal-btn-enter" onclick="closeModal()">Start Watching</button>
+    <div class="footer-tag">Official Release • Se7en Matrix</div>
+  </div>
+</div>
+
+<div id="toast-container" style="position:fixed;bottom:30px;right:20px;z-index:10005;display:flex;flex-direction:column-reverse;gap:12px;pointer-events:none;"></div>
+
+<button id="se7en-ai-button" type="button">🎬 Ask SE7EN AI</button>
+<section id="se7en-ai-panel" aria-label="SE7EN CINEMA AI chat">
+  <div id="se7en-ai-header" title="Drag to move">
+    <span>🎬 SE7EN CINEMA AI</span>
+    <button id="se7en-ai-close" type="button" aria-label="Close chat">×</button>
+  </div>
+  <div id="se7en-ai-messages" aria-live="polite">
+    <div class="se7en-ai-msg se7en-ai-bot">Yo! Welcome to SE7EN CINEMA. 🍿
+Ask me for movie recommendations!</div>
+  </div>
+  <form id="se7en-ai-form">
+    <input id="se7en-ai-input" placeholder="Ask about movies..." maxlength="1000" autocomplete="off" required>
+    <button type="submit">Send</button>
+  </form>
+</section>
+
 <script>
-const _mask = "ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKaGRXUWlPaUl6TkRVMVpXSmtPV0ptTVRaaU1HSXpNR1JlWldRel1URXlPR0ptT1RNell5SXNJbTVpWmlJNk1UYzJOVGczTVRnd05TNDVNeklpSW5OMVlpSTZJakU1TkRFeE1HSmtPREJsTmpkaFpqVmtNalpqWVRJNE1TSXNJbk5qYjNCbGNpSTZXYmxoY0dsZmNtVmhaQ0pkTENKMmZYTnphVzl1SWpveE1YMC5QdkQ2WjhaREN6ck9FeHRJYlpuRldjcTAxU1JIM3ZuUkp4dlN6cUxJQmdr";
-    const TMDB = 'https://api.themoviedb.org/3';
-    const IMG = 'https://image.tmdb.org/t/p/w500';
-    const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
+const TMDB = 'https://api.themoviedb.org/3';
+const IMG = 'https://image.tmdb.org/t/p/w500';
+const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
 const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let currentID, currentType, currentS=1, currentE=1, episodeList = [];
-    let currentSeasonsMeta = [];
-    let autoNextTimer = null;
-    
-    async function apiCall(endpoint) {
-    
-    const _mask = "MzQ1NWViZDliZjE2ZjBiMzBkMmVkMzExMjhiZjkzM2M=";
-    const API_KEY = atob(_mask);
-    
+let currentID, currentType, currentS = 1, currentE = 1, episodeList = [];
+let currentSeasonsMeta = [];
+let autoNextTimer = null;
+
+async function apiCall(endpoint) {
+    const API_KEY = atob("MzQ1NWViZDliZjE2ZjBiMzBkMmVkMzExMjhiZjkzM2M=");
     const connector = endpoint.includes('?') ? '&' : '?';
-    const url = `${TMDB}${endpoint}${connector}api_key=${API_KEY}`;
-    
     try {
-        const r = await fetch(url);
+        const r = await fetch(`${TMDB}${endpoint}${connector}api_key=${API_KEY}`);
         return r.ok ? await r.json() : null;
-    } catch(e) { 
-        return null; 
-    }
+    } catch (e) { return null; }
 }
 
-    async function init() {
-    const data1 = await apiCall('/trending/all/day?page=1');
-    const data2 = await apiCall('/trending/all/day?page=2');
-
+async function init() {
+    const [data1, data2] = await Promise.all([
+        apiCall('/trending/all/day?page=1'),
+        apiCall('/trending/all/day?page=2')
+    ]);
     if (!data1) return;
-
-    const allResults = [
-        ...(data1.results || []),
-        ...(data2?.results || [])
-    ];
-
-    // Kuhaa lang ang naay poster
-    const validResults = allResults.filter(m => m.poster_path);
-
-    // 18 ka complete tiles
-    const results = validResults.slice(0, 18);
-
+    const results = [...(data1.results || []), ...((data2 && data2.results) || [])]
+        .filter(m => m.poster_path).slice(0, 18);
     if (!results.length) return;
 
     const top = results[0];
-
-    document.getElementById('h-title').innerText =
-        top.title || top.name;
-
-    document.getElementById('h-desc').innerText =
-        top.overview || '';
-
+    document.getElementById('h-title').innerText = top.title || top.name;
+    document.getElementById('h-desc').innerText = top.overview || '';
     document.getElementById('hero').style.backgroundImage =
-        `linear-gradient(to top, #000 5%, transparent),
-         url('https://image.tmdb.org/t/p/original${top.backdrop_path}')`;
-
+        `linear-gradient(to top, #000 5%, transparent), url('https://image.tmdb.org/t/p/original${top.backdrop_path}')`;
     document.getElementById('h-btn').onclick = () =>
-        play(
-            top.id,
-            top.media_type || 'movie',
-            top.title || top.name
-        );
-
+        play(top.id, top.media_type || 'movie', top.title || top.name, top.overview);
     render(results);
 }
 
-    function render(list) {
+function render(list) {
     const g = document.getElementById('main-grid');
     g.innerHTML = '';
     list.forEach(m => {
-        if(!m.poster_path) return;
+        if (!m.poster_path) return;
         const type = m.media_type || (m.first_air_date ? 'tv' : 'movie');
+        const title = m.title || m.name;
         const card = document.createElement('div');
         card.className = 'card';
-
-        const title = m.title || m.name;
-        const description = m.overview; // Gikuha nato ang overview gikan sa API
-
-        card.onclick = () => { 
-            // 1. Gi-change nato sa 'play' para match sa imong existing function
-            // 2. Gipasa nato ang type (para mahibalo kon movie o tv)
-            // 3. Gipasa nato ang description (para dili na blanko sa ubos)
-            play(m.id, type, title, description); 
-            window.scrollTo({top:0, behavior:'smooth'});
-        };                                         
-        
-        card.innerHTML = `
-            <img src="${IMG + m.poster_path}">
-            <div class="card-meta">
-                <h3>${title}</h3>
-            </div>
-        `;
+        card.onclick = () => { play(m.id, type, title, m.overview); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+        card.innerHTML = `<img src="${IMG + m.poster_path}" alt=""><div class="card-meta"><h3></h3></div>`;
+        card.querySelector('h3').textContent = title;
         g.appendChild(card);
     });
 }
 
-
-// --- HELPER FUNCTION: PARA SA DESCRIPTION UG TITLE FIX ---
-function updatePlayerDetails(title, description) {
-    const movieNameEl = document.getElementById('p-movie-name');
-    const descEl = document.getElementById('p-desc');
-    const titleEl = document.getElementById('p-title');
-
-    // I-update ang header title (tupad sa SE7EN PLAY)
-    if (titleEl) titleEl.innerText = title ? "| " + title : "";
-    
-    // FIX: I-update ang Dako nga Title sa ubos sa player
-    if (movieNameEl) {
-        movieNameEl.innerText = title || "Movie Title";
-    }
-    
-    // FIX: I-update ang Description sa ubos sa player
-    if (descEl) {
-        descEl.innerText = description || "No description available for this content.";
-    }
-}
-
-// --- HELPER FUNCTION PARA SA PLAYER SETUP ---
 function setupIframeAttributes(iframe) {
     iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
     iframe.allowFullscreen = true;
     iframe.setAttribute('webkitallowfullscreen', '');
     iframe.setAttribute('mozallowfullscreen', '');
+}
+
+// --- HELPER: description ug title sa player ---
+function updatePlayerDetails(title, description) {
+    const movieNameEl = document.getElementById('p-movie-name');
+    const descEl = document.getElementById('p-desc');
+    const titleEl = document.getElementById('p-title');
+    if (titleEl) titleEl.innerText = title ? "| " + title : "";
+    if (movieNameEl) movieNameEl.innerText = title || "Movie Title";
+    if (descEl) descEl.innerText = description || "No description available for this content.";
 }
 
 // --- PLAY MOVIE ONLY FUNCTION ---
@@ -1601,137 +495,98 @@ function playMovie(id, title = "", description = "") {
     }
 }
 
-// --- PLAY MASTER FUNCTION (MOVIE + TV) ---
+// --- PLAY (MOVIE + TV) ---
 async function play(id, type, title, description) {
     currentID = id;
     currentType = type;
-    currentS = 1; 
+    currentS = 1;
     currentE = 1;
     cancelAutoNext();
 
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
-    const titleEl = document.getElementById('p-title');
-    const movieNameEl = document.getElementById('p-movie-name');
-    const descEl = document.getElementById('p-desc');
     const epBox = document.getElementById('episode-area');
     const epNav = document.getElementById('ep-nav-buttons');
 
-    if (overlay) {
-        overlay.style.display = 'block';
-        overlay.scrollTo(0, 0);
-    }
+    if (overlay) { overlay.style.display = 'block'; overlay.scrollTo(0, 0); }
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('playing');
+    loadExtras(id, type);
 
-    if (titleEl) titleEl.innerText = "| " + title;
-    if (movieNameEl) movieNameEl.innerText = title;
-    if (descEl) descEl.innerText = description || "No description available.";
+    document.getElementById('p-title').innerText = "| " + title;
+    document.getElementById('p-movie-name').innerText = title;
+    document.getElementById('p-desc').innerText = description || "No description available.";
 
-    if (iframe) {
-        setupIframeAttributes(iframe);
-    }
+    if (iframe) setupIframeAttributes(iframe);
 
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
-        if (iframe) {
-            iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
-            console.log(`Loading Movie: ${id}`);
-        }
+        if (iframe) iframe.src = `https://vidsrc.me/embed/movie?tmdb=${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
-            epBox.innerHTML = '<p style="text-align:center; color:#E95420; padding:20px;">Loading Seasons...</p>';
+            epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:20px;">Loading Seasons...</p>';
         }
-
-        if (iframe) {
-            iframe.src = `https://vidsrc.me/embed/tv?tmdb=${id}&s=1&e=1`;
-            console.log(`Loading TV Show: ${id} (S1:E1)`);
-        }
+        if (iframe) iframe.src = `https://vidsrc.me/embed/tv?tmdb=${id}&s=1&e=1`;
 
         try {
             const data = await apiCall(`/tv/${id}`);
+            if (currentID !== id) return;
             if (epBox && data && data.seasons) {
-                let html = `                               
-                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:15px; border-radius:5px; outline:none;">
-                    </select>
-                    <div id="episodes-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap:10px;">
-                    </div>
-                `;
-                epBox.innerHTML = html;
-
+                epBox.innerHTML = `
+                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%;padding:12px;background:#111;color:#fff;border:1px solid #333;margin-bottom:15px;border-radius:5px;outline:none;"></select>
+                    <div id="episodes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(55px,1fr));gap:10px;"></div>`;
                 const select = document.getElementById('season-select');
-                if (select) {
-                    data.seasons.forEach(s => {
-                        if (s.season_number > 0) {
-                            const opt = document.createElement('option');
-                            opt.value = s.season_number;
-                            opt.innerText = s.name || `Season ${s.season_number}`;
-                            select.appendChild(opt);
-                        }
-                    });
-                }
-
+                data.seasons.forEach(s => {
+                    if (s.season_number > 0) {
+                        const opt = document.createElement('option');
+                        opt.value = s.season_number;
+                        opt.innerText = s.name || `Season ${s.season_number}`;
+                        select.appendChild(opt);
+                    }
+                });
                 currentSeasonsMeta = data.seasons
                     .filter(s => s.season_number > 0)
                     .map(s => ({ season_number: s.season_number, episode_count: s.episode_count }));
 
-                if (typeof loadEpisodes === 'function') {
-                    await loadEpisodes(id, 1);
-                }
-
-                apiCall(`/tv/${id}/season/1/episode/1`).then(epData => {
-                    scheduleAutoNext(epData && epData.runtime);
-                });
+                await loadEpisodes(id, 1);
+                apiCall(`/tv/${id}/season/1/episode/1`).then(epData => scheduleAutoNext(epData && epData.runtime));
             }
         } catch (err) {
             console.error("Error loading TV data:", err);
-            if (epBox) epBox.innerHTML = '<p style="color:red; text-align:center; padding:20px;">Failed to load episodes.</p>';
+            if (epBox) epBox.innerHTML = '<p style="color:red;text-align:center;padding:20px;">Failed to load episodes.</p>';
         }
     }
 }
 
-// --- PLAY EPISODE FUNCTION ---                           
+// --- PLAY EPISODE ---
 function playEp(sNum, eNum) {
     currentS = sNum;
     currentE = eNum;
-
     const iframe = document.getElementById('video-iframe');
+    if (!currentID || !iframe) return console.error("Missing currentID!");
 
-    if (currentID && iframe) {                                     
-        iframe.src = `https://vidsrc.me/embed/tv?tmdb=${currentID}&s=${sNum}&e=${eNum}`;
-                                                                   
-        if (typeof switchServer === 'function') {
-            switchServer('vidsrc_me');
-        }
+    iframe.src = `https://vidsrc.me/embed/tv?tmdb=${currentID}&s=${sNum}&e=${eNum}`;
 
-        const overlay = document.getElementById('player-overlay');                                                          
-        if (overlay) {                                                                                                      
-            overlay.scrollTo({ top: 0, behavior: 'smooth' });                                                          
-        }
+    const overlay = document.getElementById('player-overlay');
+    if (overlay) overlay.scrollTo({ top: 0, behavior: 'smooth' });
 
-        const seasonSelect = document.getElementById('season-select');
-        if (seasonSelect && parseInt(seasonSelect.value) !== sNum) seasonSelect.value = sNum;
+    const seasonSelect = document.getElementById('season-select');
+    if (seasonSelect && parseInt(seasonSelect.value) !== sNum) seasonSelect.value = sNum;
 
-        document.querySelectorAll('#episodes-grid button').forEach(b => {
-            const active = parseInt(b.innerText) === eNum;
-            b.style.background = active ? "#E95420" : "#222";
-            b.style.border = active ? "1px solid #ff8c00" : "1px solid #444";
-        });
+    document.querySelectorAll('#episodes-grid button').forEach(b => {
+        const active = parseInt(b.innerText) === eNum;
+        b.style.background = active ? "#E95420" : "#222";
+        b.style.border = active ? "1px solid #ff8c00" : "1px solid #444";
+    });
 
-        cancelAutoNext();
-        apiCall(`/tv/${currentID}/season/${sNum}/episode/${eNum}`).then(epData => {
-            scheduleAutoNext(epData && epData.runtime);
-        });
-
-        console.log(`Playing S${sNum} E${eNum}`);
-    } else {                                               
-        console.error("Missing currentID!");                                                                                                               
-    }                                                       
+    cancelAutoNext();
+    apiCall(`/tv/${currentID}/season/${sNum}/episode/${eNum}`).then(epData => scheduleAutoNext(epData && epData.runtime));
 }
 
-// --- NEXT / PREVIOUS EPISODE NAVIGATION ---
+// --- NEXT / PREVIOUS ---
 function changeEpisode(direction) {
     if (currentType !== 'tv') return;
     cancelAutoNext();
@@ -1742,46 +597,37 @@ function changeEpisode(direction) {
     let newS = currentS;
 
     if (newE > epCount) {
-        const nextSeason = currentSeasonsMeta.find(s => s.season_number === currentS + 1);
-        if (!nextSeason) return; // last episode na, wala nay sunod
+        if (!currentSeasonsMeta.find(s => s.season_number === currentS + 1)) return;
         newS = currentS + 1;
         newE = 1;
     } else if (newE < 1) {
-        const prevSeason = currentSeasonsMeta.find(s => s.season_number === currentS - 1);
-        if (!prevSeason) return; // una na nga episode
+        const prev = currentSeasonsMeta.find(s => s.season_number === currentS - 1);
+        if (!prev) return;
         newS = currentS - 1;
-        newE = prevSeason.episode_count;
+        newE = prev.episode_count;
     }
 
-    if (newS !== currentS) {
-        loadEpisodes(currentID, newS).then(() => playEp(newS, newE));
-    } else {
-        playEp(newS, newE);
-    }
+    if (newS !== currentS) loadEpisodes(currentID, newS).then(() => playEp(newS, newE));
+    else playEp(newS, newE);
 }
 
-// --- AUTO-NEXT LOGIC ---
+// --- AUTO-NEXT ---
 function peekNextEpisode() {
     if (currentType !== 'tv') return null;
     const seasonMeta = currentSeasonsMeta.find(s => s.season_number === currentS);
     const epCount = seasonMeta ? seasonMeta.episode_count : (episodeList.length || 1);
     if (currentE < epCount) return { season: currentS, episode: currentE + 1 };
-    const nextSeason = currentSeasonsMeta.find(s => s.season_number === currentS + 1);
-    if (nextSeason) return { season: currentS + 1, episode: 1 };
+    if (currentSeasonsMeta.find(s => s.season_number === currentS + 1)) return { season: currentS + 1, episode: 1 };
     return null;
 }
 
 function scheduleAutoNext(runtimeMinutes) {
     cancelAutoNext();
-    if (currentType !== 'tv') return;
-    const next = peekNextEpisode();
-    if (!next) return; // last episode na sa tibuok series
-
-    if (!runtimeMinutes || runtimeMinutes <= 0) runtimeMinutes = 24; // fallback guess (anime avg)
+    if (currentType !== 'tv' || !peekNextEpisode()) return;
+    if (!runtimeMinutes || runtimeMinutes <= 0) runtimeMinutes = 24;
     autoNextTimer = setTimeout(autoPlayNext, runtimeMinutes * 60 * 1000);
 }
 
-// Tinuod nga automatic: mo-play dayon dayon, gamay ra nga toast nga mawala ra iyaha
 function autoPlayNext() {
     const next = peekNextEpisode();
     if (!next) return;
@@ -1805,97 +651,103 @@ function cancelAutoNext() {
     if (overlay) overlay.style.display = 'none';
 }
 
-// --- CLOSE PLAYER FUNCTION ---
+// --- TRAILER + WHERE TO WATCH (TMDB, legal) ---
+async function loadExtras(id, type) {
+    const box = document.getElementById('extras-box');
+    if (!box) return;
+    box.innerHTML = '';
+
+    const [vids, prov] = await Promise.all([
+        apiCall(`/${type}/${id}/videos`),
+        apiCall(`/${type}/${id}/watch/providers`)
+    ]);
+    if (currentID !== id) return;
+
+    let html = '';
+    const list = (vids && vids.results) || [];
+    const trailer = list.find(v => v.site === 'YouTube' && v.type === 'Trailer') || list.find(v => v.site === 'YouTube');
+    if (trailer) {
+        html += `<p style="color:#E95420;font-size:11px;font-weight:bold;margin-bottom:8px;">▶ OFFICIAL TRAILER</p>
+        <div class="video-wrapper" style="margin-bottom:15px;">
+            <iframe src="https://www.youtube-nocookie.com/embed/${trailer.key}" loading="lazy" allowfullscreen></iframe>
+        </div>`;
+    }
+
+    const ph = prov && prov.results && prov.results.PH;
+    if (ph) {
+        const names = (arr) => (arr || []).map(p => p.provider_name).join(', ');
+        html += `<p style="color:#E95420;font-size:11px;font-weight:bold;margin-bottom:6px;">📺 WHERE TO WATCH (PH)</p>`;
+        if (ph.flatrate && ph.flatrate.length) html += `<p style="color:#bbb;font-size:12px;">Stream: ${names(ph.flatrate)}</p>`;
+        if (ph.rent && ph.rent.length)         html += `<p style="color:#bbb;font-size:12px;">Rent: ${names(ph.rent)}</p>`;
+        if (ph.buy && ph.buy.length)           html += `<p style="color:#bbb;font-size:12px;">Buy: ${names(ph.buy)}</p>`;
+        if (ph.link) html += `<a href="${ph.link}" target="_blank" rel="noopener" style="color:#ff8c00;font-size:12px;">See all options →</a>`;
+        html += `<p style="color:#555;font-size:9px;margin-top:6px;">Data by JustWatch</p>`;
+    }
+    box.innerHTML = html;
+}
+
+// --- CLOSE PLAYER ---
 function closePlayer() {
     const overlay = document.getElementById('player-overlay');
     const iframe = document.getElementById('video-iframe');
     const epBox = document.getElementById('episode-area');
-    
+    const ex = document.getElementById('extras-box');
+
     if (overlay) overlay.style.display = 'none';
     cancelAutoNext();
     document.body.style.overflow = 'auto';
+    document.body.classList.remove('playing');
     if (iframe) iframe.src = 'about:blank';
     if (epBox) epBox.style.display = 'none';
+    if (ex) ex.innerHTML = '';
 }
 
-// --- LOAD EPISODES FUNCTION ---
+// --- EPISODES ---
 async function loadEpisodes(id, sNum) {
     const data = await apiCall(`/tv/${id}/season/${sNum}`);
-    if(!data) return;
-
-    episodeList = data.episodes;                           
+    if (!data) return;
+    episodeList = data.episodes;
     const epG = document.getElementById('episodes-grid');
     if (!epG) return;
     epG.innerHTML = '';
 
-    data.episodes.forEach(ep => {                          
-        const btn = document.createElement('button');      
+    data.episodes.forEach(ep => {
+        const btn = document.createElement('button');
         const isActive = ep.episode_number === currentE;
-
-        btn.style.padding = "10px";
-        btn.style.background = isActive ? "#E95420" : "#222";
-        btn.style.color = "#fff";                          
-        btn.style.border = isActive ? "1px solid #ff8c00" : "1px solid #444";
-        btn.style.cursor = "pointer";                      
-        btn.style.borderRadius = "5px";                    
-        btn.style.transition = "0.3s";                     
+        btn.style.cssText = `padding:10px;color:#fff;cursor:pointer;border-radius:5px;transition:.3s;background:${isActive ? "#E95420" : "#222"};border:${isActive ? "1px solid #ff8c00" : "1px solid #444"}`;
         btn.innerText = ep.episode_number;
-
-        btn.onmouseover = () => { if(ep.episode_number !== currentE) btn.style.background = "#444"; };
-        btn.onmouseout = () => { if(ep.episode_number !== currentE) btn.style.background = "#222"; };
-
-        btn.onclick = () => {
-            playEp(sNum, ep.episode_number);
-            document.querySelectorAll('#episodes-grid button').forEach(b => {
-                b.style.background = "#222";               
-                b.style.border = "1px solid #444";
-            });                                            
-            btn.style.background = "#E95420";
-            btn.style.border = "1px solid #ff8c00";
-        };
-
+        btn.onmouseover = () => { if (ep.episode_number !== currentE) btn.style.background = "#444"; };
+        btn.onmouseout = () => { if (ep.episode_number !== currentE) btn.style.background = "#222"; };
+        btn.onclick = () => playEp(sNum, ep.episode_number);
         epG.appendChild(btn);
-    });                                                    
+    });
 }
 
 async function loadSeason(sNum) {
-    // 1. Siguraduhon nga number ang value
-    const selectedSeason = parseInt(sNum);
-    currentS = selectedSeason;
-    
-    // 2. Reset episode back to 1 inig balhin og season
-    currentE = 1; 
-
-    // 3. I-load ang mga bag-ong buttons (Dili nato usbon ang loadEpisodes)
-    if (currentID) {
-        await loadEpisodes(currentID, selectedSeason);
-    }
+    currentS = parseInt(sNum);
+    currentE = 1;
+    if (currentID) await loadEpisodes(currentID, currentS);
 }
 
-    function startMatrix() {
+// --- MATRIX INTRO ---
+function startMatrix() {
     const canvas = document.getElementById('matrix-canvas');
     const overlay = document.getElementById('hack-overlay');
-    
-    // Check kung naa ba ang elements para dili mo-error ang script
-    if (!canvas || !overlay) {
-        init(); // Load dritso movies kung wala ang matrix elements
-        return;
-    }
+    if (!canvas || !overlay) { init(); return; }
 
     overlay.style.display = 'flex';
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; 
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
+
     const chars = "0101010101010101ALOYGENEX";
     const drops = Array(Math.floor(canvas.width / 16)).fill(1);
-    
+
     const draw = () => {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; 
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0f0"; 
+        ctx.fillStyle = "#0f0";
         ctx.font = "16px monospace";
-        
         drops.forEach((y, i) => {
             ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 16, y * 16);
             if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
@@ -1903,753 +755,179 @@ async function loadSeason(sNum) {
         });
     };
 
+    init(); // i-load dayon ang posters samtang nagdagan ang effect
     const int = setInterval(draw, 40);
-
-    setTimeout(() => { 
-        overlay.style.display = "none"; 
-        init(); // Mao ni ang mo-load sa trending movies
-        clearInterval(int); 
-    }, 3000);
+    setTimeout(() => { overlay.style.display = "none"; clearInterval(int); }, 3000);
 }
 
-// KANI ANG IMPORTANTE: Pulihi ang imong karaan nga window.onload ani
 window.onload = () => {
-    // Ipakita ang main content dritso kay wala naman kay login screen
     const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-        mainContent.style.display = 'block';
-    }
-    
-    // Sugdan ang matrix effect
+    if (mainContent) mainContent.style.display = 'block';
     startMatrix();
+    setTimeout(() => {
+        const loader = document.getElementById('loader-wrapper');
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 600);
+    }, 1000);
 };
 
-    async function fetchType(t) {
-    const d1 = await apiCall(
-        `/discover/${t}?sort_by=popularity.desc&page=1`
-    );
-
-    const d2 = await apiCall(
-        `/discover/${t}?sort_by=popularity.desc&page=2`
-    );
-
+// --- BROWSE ---
+async function fetchType(t) {
+    const [d1, d2] = await Promise.all([
+        apiCall(`/discover/${t}?sort_by=popularity.desc&page=1`),
+        apiCall(`/discover/${t}?sort_by=popularity.desc&page=2`)
+    ]);
     if (!d1) return;
-
-    const results = [
-        ...(d1.results || []),
-        ...(d2?.results || [])
-    ]
-    .filter(i => i.poster_path)
-    .slice(0, 24)
-    .map(i => ({
-        ...i,
-        media_type: t
-    }));
-
+    const results = [...(d1.results || []), ...((d2 && d2.results) || [])]
+        .filter(i => i.poster_path).slice(0, 24).map(i => ({ ...i, media_type: t }));
     document.getElementById('hero').style.display = 'none';
-
-    document.getElementById('row-title').innerText =
-        t === 'movie'
-            ? "🎬 Popular Movies"
-            : "📺 Popular TV Shows";
-
+    document.getElementById('row-title').innerText = t === 'movie' ? "🎬 Popular Movies" : "📺 Popular TV Shows";
     render(results);
 }
 
-    async function fetchLang(l) {
-    const d1 = await apiCall(
-        `/discover/tv?with_original_language=${l}&sort_by=popularity.desc&page=1`
-    );
-
-    const d2 = await apiCall(
-        `/discover/tv?with_original_language=${l}&sort_by=popularity.desc&page=2`
-    );
-
+async function fetchLang(l) {
+    const [d1, d2] = await Promise.all([
+        apiCall(`/discover/tv?with_original_language=${l}&sort_by=popularity.desc&page=1`),
+        apiCall(`/discover/tv?with_original_language=${l}&sort_by=popularity.desc&page=2`)
+    ]);
     if (!d1) return;
-
-    const results = [
-        ...(d1.results || []),
-        ...(d2?.results || [])
-    ]
-    .filter(i => i.poster_path)
-    .slice(0, 24)
-    .map(i => ({
-        ...i,
-        media_type: 'tv'
-    }));
-
+    const results = [...(d1.results || []), ...((d2 && d2.results) || [])]
+        .filter(i => i.poster_path).slice(0, 24).map(i => ({ ...i, media_type: 'tv' }));
     document.getElementById('hero').style.display = 'none';
-
-    document.getElementById('row-title').innerText =
-        l === 'ko'
-            ? "🇰🇷 K-Drama"
-            : "🇯🇵 Anime";
-
+    document.getElementById('row-title').innerText = l === 'ko' ? "🇰🇷 K-Drama" : "🇯🇵 Anime";
     render(results);
 }
 
-    async function search(q) {
-    // KINI ANG PINAKA-IMPORTANTE: Multi-search!
+async function search(q) {
     const d = await apiCall(`/search/multi?query=${encodeURIComponent(q)}`);
-    
-    // I-hide ang hero banner
     const hero = document.getElementById('hero');
     if (hero) hero.style.display = "none";
-    
-    // I-update ang title
     const rowTitle = document.getElementById('row-title');
     if (rowTitle) rowTitle.innerText = `Search Results for: ${q}`;
-    
-    // I-display ang results
-    if (d && d.results) {
-        render(d.results);
-    }
+    if (d && d.results) render(d.results);
 }
 
-// LIVE SEARCH TRIGGER PARA SA CLASS "search-box"
+// --- LIVE SEARCH (fixed) ---
 let typingTimer;
-const doneTypingInterval = 500; 
-const searchInputField = document.querySelector('.search-box');
-
-if (searchInputField) {
-    searchInputField.addEventListener('input', function() {
+const searchInput = document.getElementById('mSearch');
+if (searchInput) {
+    searchInput.addEventListener('input', function () {
         clearTimeout(typingTimer);
-        const query = this.value.trim();
-        
-        // Kon ang gi-type labaw sa 2 ka characters
-        if (query.length > 2) {
-            typingTimer = setTimeout(() => {
-                // Tawgon ang imong existing search function
-                search(query); 
-            }, doneTypingInterval);
-        } 
-        // Kon gi-delete tanan (empty)
-        else if (query.length === 0) {
+        const q = this.value.trim();
+        if (q.length > 2) {
+            typingTimer = setTimeout(() => search(q), 500);
+        } else if (q.length === 0) {
             const hero = document.getElementById('hero');
-            if(hero) hero.style.display = "block"; 
-            
-            // I-clear ang listahan sa movies sa screen
-            // Mas maayo kon naa kay container (e.g., 'movie-list') nga i-clear
-            const resultsGrid = document.querySelector('.movies-grid'); // I-adjust ni kon lahi imong class
-            if (resultsGrid) resultsGrid.innerHTML = '';
+            if (hero) hero.style.display = 'flex';
+            document.getElementById('row-title').innerText = '🔥 Trending Today';
+            init();
         }
     });
 }
 
 function toggleMenu() {
-  const menu = document.getElementById('side-menu');
-  menu.classList.toggle('active');
+    document.getElementById('side-menu').classList.toggle('active');
 }
 
 function setActive(element) {
-    // Tangtangon ang "active" class sa tanang buttons
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    // I-add ang "active" sa gi-click nga button
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
     element.classList.add('active');
 }
 
-// I-update imong HTML onclick:
-// <div class="nav-btn" onclick="setActive(this); fetchType('movie')">...</div>
-  
-function simulateLiveTraffic() {
-    const userCountElement = document.getElementById('user-count');
-    
-    // Mag-generate og random number tali sa 120 hangtod 350
-    // Para dili stagnant tan-awon ang imong site
-    let currentUsers = Math.floor(Math.random() * (350 - 120 + 1)) + 120;
-    
-    userCountElement.innerText = currentUsers.toLocaleString();
-
-    // Kada 4 ka segundo, naay gamay nga kausaban (taas o ubos)
-    setInterval(() => {
-        let change = Math.floor(Math.random() * 5) - 2; // -2, -1, 0, 1, 2
-        currentUsers += change;
-        
-        // Siguroha nga dili moubos sa 100 ang display
-        if (currentUsers < 100) currentUsers = 120;
-        
-        userCountElement.innerText = currentUsers.toLocaleString();
-    }, 4000);
-}
-
-// Sugdan ang simulation inig load sa page
-simulateLiveTraffic();
-
+// --- RECOMMENDATION CARDS ---
 async function loadRecommendationCards() {
+    const [tvData, kData] = await Promise.all([
+        apiCall('/tv/popular?page=1'),
+        apiCall('/discover/tv?with_original_language=ko&sort_by=popularity.desc&page=1')
+    ]);
+    const tv = tvData && tvData.results && tvData.results.find(x => x.poster_path);
+    const kdrama = kData && kData.results && kData.results.find(x => x.poster_path);
 
-    // Recommended TV Shows
-    const tvData = await apiCall(
-        '/tv/popular?page=1'
-    );
-
-    // Recommended K-Dramas
-    const kData = await apiCall(
-        '/discover/tv?with_original_language=ko&sort_by=popularity.desc&page=1'
-    );
-
-    const tv = tvData?.results?.find(x => x.poster_path);
-    const kdrama = kData?.results?.find(x => x.poster_path);
-
-    // TV SHOW
-    if (tv) {
-        const img = document.getElementById('tv-rec-img');
-        const title = document.getElementById('tv-rec-title');
-        const card = document.getElementById('tv-recommendation');
-
-        img.src = IMG + tv.poster_path;
-        title.innerText = tv.name;
-
-        card.onclick = () => {
-            play(tv.id, 'tv', tv.name, tv.overview);
+    [['tv', tv], ['kdrama', kdrama]].forEach(([key, item]) => {
+        if (!item) return;
+        document.getElementById(`${key}-rec-img`).src = IMG + item.poster_path;
+        document.getElementById(`${key}-rec-title`).innerText = item.name;
+        document.getElementById(`${key}-recommendation`).onclick = () => {
+            play(item.id, 'tv', item.name, item.overview);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-    }
-
-    // K-DRAMA
-    if (kdrama) {
-        const img = document.getElementById('kdrama-rec-img');
-        const title = document.getElementById('kdrama-rec-title');
-        const card = document.getElementById('kdrama-recommendation');
-
-        img.src = IMG + kdrama.poster_path;
-        title.innerText = kdrama.name;
-
-        card.onclick = () => {
-            play(
-                kdrama.id,
-                'tv',
-                kdrama.name,
-                kdrama.overview
-            );
-
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        };
-    }
+    });
 }
+document.addEventListener('DOMContentLoaded', loadRecommendationCards);
 
-document.addEventListener(
-    'DOMContentLoaded',
-    loadRecommendationCards
-);
-
-window.addEventListener('load', function() {
-    const loader = document.getElementById('loader-wrapper');
-    // Hatagan nato og 1 second nga display para ma-appreciate ang spinner
-    setTimeout(() => {
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-        }, 600);
-    }, 1000);
-});
-
-  function triggerWatchAd() {
-    // 1. I-abli ang imong Smart Link sa bag-ong tab
+function triggerWatchAd() {
     window.open("https://www.effectivegatecpm.com/dngbcut70?key=b92254846ce4324f02b4201a926307f6", "_blank");
+}
 
-    // 2. (Optional) I-scroll sila paubos sa movie list o i-redirect sa player
-    // Pananglitan, i-scroll sa movie section:
-    const movieSection = document.getElementById('movie-list'); // usba ang ID depende sa imong code
-    if (movieSection) {
-      movieSection.scrollIntoView({ behavior: 'smooth' });
+// --- FOOTER / DONATION ---
+function openDonation() { document.getElementById('donationModal').style.display = 'flex'; }
+function closeDonation() { document.getElementById('donationModal').style.display = 'none'; }
+function copyGcash() {
+    navigator.clipboard.writeText("09489108928").then(() => {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = "📋 Number Copied! Salamat, Aloy!";
+        document.getElementById('notification-area').appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    });
+}
+function handleFooterAction(event) {
+    if (document.getElementById('footer-stealth-link').getAttribute('href') === "#") {
+        event.preventDefault();
+        alert("Sorry! Free keys are currently out of stock. Check back later.");
     }
-  }
+}
 
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-    (function() {
-        const SB_URL = "https://sshdWibEnypCekGczPgc.supabase.co";
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaGR3aWJlbnlwY2VrZ2N6cGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NjE2MjAsImV4cCI6MjA4NTAzNzYyMH0.URDJTCvM4a5DBfgrp3me7vlMxlP9m8uo5oxXpbP60Zg";
-
-        if (typeof supabase === 'undefined') {
-            console.error("Supabase library missing!");
-            return;
-        }
-
-        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
-
-        async function trackVisitor() {
-            try {
-                // 1. Fetch detailed location info
-                const response = await fetch('https://ipapi.co/json/');
-                const loc = await response.json();
-
-                // 2. Prepare "Enhanced" User Agent (Phone Model + Browser + Source)
-                const referrer = document.referrer ? ` | Source: ${document.referrer}` : " | Direct Access";
-                const screenRes = ` | Screen: ${window.screen.width}x${window.screen.height}`;
-                const enhancedUA = navigator.userAgent + referrer + screenRes;
-
-                // 3. Insert into Supabase
-                const { error } = await supabaseClient
-                    .from('visitor_logs')
-                    .insert([{
-                        ip_address: loc.ip,
-                        city: loc.city,
-                        country: loc.country_name,
-                        region: loc.region,
-                        user_agent: enhancedUA // Atong gi-combine para dili na ka magdugang og column sa DB
-                    }]);
-
-                if (error) {
-                    console.error("DB Error:", error.message);
-                } else {
-                    console.log(`Logged Matrix Data: ${loc.ip} gikan sa ${loc.city}`);
-                }
-            } catch (err) {
-                console.error("Fetch Error:", err.message);
-            }
-        }
-
-        trackVisitor();
-    })();
-</script>            
-
-<style>
-  #greeting-modal {
-    display: none;
-    position: fixed; 
-    z-index: 9999; 
-    left: 0; 
-    top: 0; 
-    width: 100%; 
-    height: 100%;
-    background-color: rgba(0,0,0,0.92); /* Deeper dark for focus */
-    backdrop-filter: blur(15px);
-    animation: fadeIn 0.5s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .modal-content {
-    background: linear-gradient(145deg, #1e1e1e, #000000);
-    color: white; 
-    margin: 20% auto; 
-    padding: 40px 30px; 
-    border-radius: 28px;
-    width: 85%; 
-    max-width: 380px; 
-    text-align: center;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 136, 0, 0.15);
-    border: 1px solid rgba(255, 136, 0, 0.4);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(40px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .welcome-icon {
-    font-size: 55px;
-    margin-bottom: 20px;
-    display: inline-block;
-    filter: drop-shadow(0 5px 15px rgba(255, 136, 0, 0.3));
-  }
-
-  .modal-title {
-    color: #ff8800; 
-    margin: 0 0 12px 0; 
-    font-size: 1.8rem; 
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    text-transform: uppercase;
-  }
-
-  .modal-text {
-    margin-bottom: 35px; 
-    font-size: 15px; 
-    color: #aeaeae; 
-    line-height: 1.6;
-    font-weight: 400;
-  }
-
-  .modal-btn-enter {
-    width: 100%; 
-    background: #ff8800; 
-    color: #000 !important;
-    padding: 16px; 
-    border-radius: 14px; 
-    font-weight: 700;
-    border: none;
-    cursor: pointer; 
-    font-size: 16px; 
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    box-shadow: 0 8px 20px rgba(255, 136, 0, 0.3);
-  }
-
-  .modal-btn-enter:active {
-    transform: scale(0.96);
-    background: #e67a00;
-  }
-
-  .footer-tag {
-    margin-top: 30px; 
-    font-size: 10px; 
-    color: #555; 
-    text-transform: uppercase; 
-    letter-spacing: 3px;
-    font-weight: 600;
-  }
-</style>
-
-<div id="greeting-modal">
-  <div class="modal-content">
-    <div class="welcome-icon">🎬</div>
-    <h2 class="modal-title">WELCOME</h2>
-    <p class="modal-text">
-        Thank you for choosing <b>Free Movie's</b>.<br>
-        Experience seamless streaming of your favorite movies and series in high definition.
-    </p>
-
-    <button class="modal-btn-enter" onclick="closeModal()">
-        Start Watching
-    </button>
-
-    <div class="footer-tag">
-        Official Release • Se7en Matrix
-    </div>
-  </div>
-</div>
-
-<script>
-  const isEnabled = true;
-  const delayInSeconds = 3;
-
-  if (isEnabled) {
-    setTimeout(() => {
-      const modal = document.getElementById('greeting-modal');
-      if (modal) {
-        modal.style.display = 'block';
-      }
-    }, delayInSeconds * 1000);
-  }
-
-  function closeModal() {
+// --- GREETING MODAL ---
+setTimeout(() => {
     const modal = document.getElementById('greeting-modal');
-    if (modal) {
-      modal.style.display = 'none';
-    }
-  }
-</script>
+    if (modal) modal.style.display = 'block';
+}, 3000);
+function closeModal() { document.getElementById('greeting-modal').style.display = 'none'; }
 
-<div id="toast-container" style="position: fixed; bottom: 30px; right: 20px; z-index: 10005; display: flex; flex-direction: column-reverse; gap: 12px; pointer-events: none;"></div>
-
-<style>
-/* Design sa Toast */
-.se7en-toast {
-    background: rgba(15, 15, 15, 0.85); /* Dark theme match sa SE7EN */
-    color: #fff;
-    padding: 14px 22px;
-    border-radius: 12px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-left: 4px solid #ff8c00; /* Orange accent */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 140, 0, 0.2);
-    
-    /* Animation settings */
-    animation: toast-slide-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
-               toast-fade-out 0.5s 4s forwards;
-    pointer-events: auto;
-    min-width: 250px;
-}
-
-.toast-icon {
-    background: #ff8c00;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
-}
-
-/* Animations */
-@keyframes toast-slide-in {
-    0% { transform: translateX(120%); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes toast-fade-out {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0.9); opacity: 0; }
-}
-</style>
-<script>
-// Function para mugawas ang nindot nga notification
+// --- VIEWER TOAST ---
 function showWelcomeToast() {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = 'se7en-toast';
-    
-    // Ang sulod sa imong notification
-    toast.innerHTML = `
-        <div class="toast-icon">🎥</div>
-        <div>
-            <div style="color: #ff8c00; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">New Activity</div>
-            <div style="margin-top: 2px;">A new viewer just joined!</div>
-        </div>
-    `;
-    
+    toast.innerHTML = `<div class="toast-icon">🎥</div><div><div style="color:#ff8c00;font-size:10px;text-transform:uppercase;letter-spacing:1px;">New Activity</div><div style="margin-top:2px;">A new viewer just joined!</div></div>`;
     container.appendChild(toast);
-    
-    // Tangtangon sa DOM human sa 5 segundos
-    setTimeout(() => {
-        toast.remove();
-    }, 5000);
+    setTimeout(() => toast.remove(), 5000);
 }
 
-// I-integrate nato sa imong Supabase Presence
-// (Siguroha nga ang imong supabaseClient variables sakto na)
-const toastChannel = supabaseClient.channel('streaming-alerts', {
-    config: { presence: { key: 'viewer' } }
-});
-
-toastChannel
-    .on('presence', { event: 'join' }, ({ newPresences }) => {
-        // Kada naay mo-join nga dili ikaw, pakit-on ang tanan og notification
-        newPresences.forEach(() => {
-            showWelcomeToast();
-        });
+// --- LIVE VIEWERS (usa ra ka channel, unique key kada viewer) ---
+const myKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2);
+const presenceCh = supabaseClient.channel('se7en-presence', { config: { presence: { key: myKey } } });
+presenceCh
+    .on('presence', { event: 'sync' }, () => {
+        const n = Object.keys(presenceCh.presenceState()).length;
+        const el = document.getElementById('user-count');
+        if (el) el.innerText = n > 0 ? n : 1;
     })
+    .on('presence', { event: 'join' }, ({ key }) => { if (key !== myKey) showWelcomeToast(); })
     .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-            await toastChannel.track({ online_at: new Date().toISOString() });
-        }
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-// --- LIVE COUNTER ---
-// (Gigamit na lang nato ang SB_URL / SB_KEY / supabaseClient nga na-declare na sa taas
-//  nga script para dili mag "already declared" error)
-
-// 1. Ang Real-time Function
-function startRealtimeCount() {
-    const channel = supabaseClient.channel('online-viewers', {
-        config: {
-            presence: {
-                key: 'user',
-            },
-        },
+        if (status === 'SUBSCRIBED') await presenceCh.track({ online_at: new Date().toISOString() });
     });
 
-    channel
-        .on('presence', { event: 'sync' }, () => {
-            const newState = channel.presenceState();
-            const count = Object.keys(newState).length; 
-
-            const countElement = document.getElementById('user-count');
-            if (countElement) {
-                // I-set og 1 kon ikaw ra usa para dili "--" ang mugawas
-                countElement.innerText = count > 0 ? count : "1"; 
-            }
-        })
-        .subscribe(async (status) => {
-            if (status === 'SUBSCRIBED') {
-                await channel.track({ online_at: new Date().toISOString() });
-            }
-        });
-}
-
-// 3. Pag-run sa Function
-startRealtimeCount();
+// --- VISITOR LOG ---
+(async function trackVisitor() {
+    try {
+        const loc = await (await fetch('https://ipapi.co/json/')).json();
+        const referrer = document.referrer ? ` | Source: ${document.referrer}` : " | Direct Access";
+        const screenRes = ` | Screen: ${window.screen.width}x${window.screen.height}`;
+        const { error } = await supabaseClient.from('visitor_logs').insert([{
+            ip_address: loc.ip, city: loc.city, country: loc.country_name, region: loc.region,
+            user_agent: navigator.userAgent + referrer + screenRes
+        }]);
+        if (error) console.error("DB Error:", error.message);
+    } catch (err) { console.error("Fetch Error:", err.message); }
+})();
 </script>
 
-    
 <!-- SE7EN CINEMA AI -->
-<style>
-  #se7en-ai-button {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 99999;
-    border: 0;
-    border-radius: 30px;
-    padding: 14px 18px;
-    background: #ff4500;
-    color: white;
-    font-weight: 700;
-    cursor: grab;
-    box-shadow: 0 4px 18px #0008;
-    touch-action: none;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  #se7en-ai-button.se7en-dragging,
-  #se7en-ai-header.se7en-dragging {
-    cursor: grabbing;
-  }
-
-  #se7en-ai-panel {
-    position: fixed;
-    right: 20px;
-    bottom: 82px;
-    z-index: 99999;
-    width: min(350px, calc(100vw - 32px));
-    height: 430px;
-    max-height: calc(100vh - 16px);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #ff4500;
-    border-radius: 16px;
-    background: #111;
-    color: #fff;
-    box-shadow: 0 8px 35px #000a;
-    font: 14px Arial, sans-serif;
-  }
-
-  #se7en-ai-header {
-    padding: 15px;
-    background: #ff4500;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: grab;
-    touch-action: none;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  #se7en-ai-close {
-    border: 0;
-    background: transparent;
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-  }
-
-  #se7en-ai-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 12px;
-  }
-
-  .se7en-ai-msg {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    padding: 10px 12px;
-    margin: 8px 0;
-    border-radius: 12px;
-    line-height: 1.45;
-  }
-
-  .se7en-ai-bot {
-    background: #292929;
-    margin-right: 24px;
-  }
-
-  .se7en-ai-user {
-    background: #713019;
-    margin-left: 24px;
-  }
-
-  #se7en-ai-form {
-    display: flex;
-    gap: 8px;
-    padding: 10px;
-    border-top: 1px solid #333;
-  }
-
-  #se7en-ai-input {
-    min-width: 0;
-    flex: 1;
-    padding: 11px;
-    border: 1px solid #555;
-    border-radius: 9px;
-    background: #202020;
-    color: white;
-    font-size: 16px; /* prevents auto-zoom on phones */
-  }
-
-  #se7en-ai-form button {
-    padding: 10px 13px;
-    border: 0;
-    border-radius: 9px;
-    background: #ff4500;
-    color: white;
-    cursor: pointer;
-  }
-
-  /* Phone/tablet: the site's bottom nav is visible below 1024px,
-     so lift the button and panel above it */
-  @media (max-width: 1023px) {
-    #se7en-ai-button {
-      bottom: 80px;
-      right: 14px;
-      padding: 12px 15px;
-      font-size: 13px;
-    }
-
-    #se7en-ai-panel {
-      right: 16px;
-      bottom: 136px;
-      height: 430px;
-      max-height: calc(100vh - 150px);
-      max-height: calc(100dvh - 150px);
-    }
-  }
-</style>
-
-<button id="se7en-ai-button" type="button">
-  🎬 Ask SE7EN AI
-</button>
-
-<section id="se7en-ai-panel" aria-label="SE7EN CINEMA AI chat">
-  <div id="se7en-ai-header" title="Drag to move">
-    <span>🎬 SE7EN CINEMA AI</span>
-    <button id="se7en-ai-close" type="button"
-      aria-label="Close chat">×</button>
-  </div>
-
-  <div id="se7en-ai-messages" aria-live="polite">
-    <div class="se7en-ai-msg se7en-ai-bot">
-      Yo! Welcome to SE7EN CINEMA. 🍿
-      Ask me for movie recommendations!
-    </div>
-  </div>
-
-  <form id="se7en-ai-form">
-    <input id="se7en-ai-input"
-      placeholder="Ask about movies..."
-      maxlength="1000"
-      autocomplete="off"
-      required />
-    <button type="submit">Send</button>
-  </form>
-</section>
-
 <script>
 (() => {
-  const API =
-    "https://se7en-cinema-ai.guardianagene6.workers.dev/api/chat";
-
+  const API = "https://se7en-cinema-ai.guardianagene6.workers.dev/api/chat";
   const button = document.getElementById("se7en-ai-button");
   const panel = document.getElementById("se7en-ai-panel");
   const header = document.getElementById("se7en-ai-header");
@@ -2658,40 +936,20 @@ startRealtimeCount();
   const form = document.getElementById("se7en-ai-form");
   const input = document.getElementById("se7en-ai-input");
 
-  // Last few messages, so the bot remembers the conversation.
-  // Only successful exchanges are stored (not errors or "Thinking...").
   const history = [];
   const MAX_HISTORY = 8;
 
-  function openPanel() {
-    panel.style.display = "flex";
-    keepInView(panel);
-    input.focus();
-  }
-
-  function closePanel() {
-    panel.style.display = "none";
-  }
-
+  function openPanel() { panel.style.display = "flex"; keepInView(panel); input.focus(); }
+  function closePanel() { panel.style.display = "none"; }
   close.addEventListener("click", closePanel);
+  button.addEventListener("click", (e) => { if (e.detail === 0) openPanel(); });
 
-  // Keyboard activation (Enter/Space) on the button
-  button.addEventListener("click", (e) => {
-    if (e.detail === 0) openPanel();
-  });
+  function clamp(v, min, max) { return Math.max(min, Math.min(v, max)); }
 
-  // ---------- DRAG LOGIC (mouse + touch + pen) ----------
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(value, max));
-  }
-
-  // Keep an element fully inside the screen
   function keepInView(el) {
-    if (!el.style.left) return; // never dragged, default position is fine
-    const maxLeft = window.innerWidth - el.offsetWidth;
-    const maxTop = window.innerHeight - el.offsetHeight;
-    el.style.left = clamp(el.offsetLeft, 0, Math.max(0, maxLeft)) + "px";
-    el.style.top = clamp(el.offsetTop, 0, Math.max(0, maxTop)) + "px";
+    if (!el.style.left) return;
+    el.style.left = clamp(el.offsetLeft, 0, Math.max(0, window.innerWidth - el.offsetWidth)) + "px";
+    el.style.top = clamp(el.offsetTop, 0, Math.max(0, window.innerHeight - el.offsetHeight)) + "px";
   }
 
   function makeDraggable(el, handle, onTap) {
@@ -2700,72 +958,47 @@ startRealtimeCount();
     handle.addEventListener("pointerdown", (e) => {
       if (e.button !== undefined && e.button !== 0) return;
       if (e.target.closest("#se7en-ai-close")) return;
-
       const rect = el.getBoundingClientRect();
-      startX = e.clientX;
-      startY = e.clientY;
-      startLeft = rect.left;
-      startTop = rect.top;
-      moved = false;
-      active = true;
-
-      // Switch from right/bottom anchoring to left/top
-      el.style.left = rect.left + "px";
-      el.style.top = rect.top + "px";
-      el.style.right = "auto";
-      el.style.bottom = "auto";
-
+      startX = e.clientX; startY = e.clientY;
+      startLeft = rect.left; startTop = rect.top;
+      moved = false; active = true;
+      el.style.left = rect.left + "px"; el.style.top = rect.top + "px";
+      el.style.right = "auto"; el.style.bottom = "auto";
       handle.setPointerCapture(e.pointerId);
     });
 
     handle.addEventListener("pointermove", (e) => {
       if (!active) return;
-
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-
+      const dx = e.clientX - startX, dy = e.clientY - startY;
       if (!moved && Math.abs(dx) + Math.abs(dy) < 5) return;
       moved = true;
       handle.classList.add("se7en-dragging");
-
-      const maxLeft = window.innerWidth - el.offsetWidth;
-      const maxTop = window.innerHeight - el.offsetHeight;
-
-      el.style.left = clamp(startLeft + dx, 0, Math.max(0, maxLeft)) + "px";
-      el.style.top = clamp(startTop + dy, 0, Math.max(0, maxTop)) + "px";
+      el.style.left = clamp(startLeft + dx, 0, Math.max(0, window.innerWidth - el.offsetWidth)) + "px";
+      el.style.top = clamp(startTop + dy, 0, Math.max(0, window.innerHeight - el.offsetHeight)) + "px";
     });
 
     function endDrag(e) {
       if (!active) return;
       active = false;
       handle.classList.remove("se7en-dragging");
-      if (handle.hasPointerCapture(e.pointerId)) {
-        handle.releasePointerCapture(e.pointerId);
-      }
+      if (handle.hasPointerCapture(e.pointerId)) handle.releasePointerCapture(e.pointerId);
       if (!moved && onTap) onTap();
     }
-
     handle.addEventListener("pointerup", endDrag);
     handle.addEventListener("pointercancel", endDrag);
   }
 
-  // Panel: drag by the orange header
   makeDraggable(panel, header);
-
-  // Button: drag anywhere, a simple tap still opens the chat
   makeDraggable(button, button, openPanel);
 
-  // Re-clamp if the screen size or phone orientation changes
   window.addEventListener("resize", () => {
     keepInView(button);
     if (panel.style.display !== "none") keepInView(panel);
   });
 
-  // ---------- CHAT LOGIC ----------
   function addMessage(text, type) {
     const item = document.createElement("div");
-    item.className = "se7en-ai-msg " +
-      (type === "user" ? "se7en-ai-user" : "se7en-ai-bot");
+    item.className = "se7en-ai-msg " + (type === "user" ? "se7en-ai-user" : "se7en-ai-bot");
     item.textContent = text;
     messages.appendChild(item);
     messages.scrollTop = messages.scrollHeight;
@@ -2774,17 +1007,14 @@ startRealtimeCount();
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-
     const message = input.value.trim();
     if (!message) return;
 
     addMessage(message, "user");
     input.value = "";
     input.disabled = true;
-
     const sendButton = form.querySelector("button");
     sendButton.disabled = true;
-
     const loading = addMessage("Thinking...", "bot");
 
     try {
@@ -2793,23 +1023,17 @@ startRealtimeCount();
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, history })
       });
-
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "AI request failed.");
-      }
+      if (!response.ok) throw new Error(data.error || "AI request failed.");
 
       loading.textContent = data.reply || "No reply received.";
-
       if (data.reply) {
         history.push({ role: "user", text: message });
         history.push({ role: "model", text: data.reply });
         while (history.length > MAX_HISTORY) history.shift();
       }
     } catch (error) {
-      loading.textContent =
-        "AI error: " + (error.message || "Unknown error");
+      loading.textContent = "AI error: " + (error.message || "Unknown error");
       console.error("SE7EN AI error:", error);
     } finally {
       input.disabled = false;
@@ -2820,7 +1044,5 @@ startRealtimeCount();
   });
 })();
 </script>
-<!-- END SE7EN CINEMA AI -->
-    
 </body>
 </html>
