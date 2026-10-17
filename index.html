@@ -494,8 +494,7 @@ function playMovie(id, title = "", description = "") {
         console.log(`Loading Movie (vidlink): ${id}`);
     }
 }
-
-// --- PLAY (MOVIE + TV) ---
+// --- PLAY (MOVIE + TV) - OPTIMIZED FOR SPEED ---
 async function play(id, type, title, description) {
     currentID = id;
     currentType = type;
@@ -508,15 +507,15 @@ async function play(id, type, title, description) {
     const epBox = document.getElementById('episode-area');
     const epNav = document.getElementById('ep-nav-buttons');
 
+    // 1. Instant open sa overlay ug video player
     if (overlay) {
         overlay.style.display = 'block';
         overlay.scrollTo(0, 0);
     }
     document.body.style.overflow = 'hidden';
     document.body.classList.add('playing');
-    
-    if (typeof loadExtras === 'function') loadExtras(id, type);
 
+    // Set text info dayon
     const titleEl = document.getElementById('p-title');
     const movieNameEl = document.getElementById('p-movie-name');
     const descEl = document.getElementById('p-desc');
@@ -529,6 +528,7 @@ async function play(id, type, title, description) {
         setupIframeAttributes(iframe);
     }
 
+    // 2. Load Video Source REKTA (Dili na maghulat sa uban API)
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
@@ -537,50 +537,64 @@ async function play(id, type, title, description) {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
-            epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:20px;">Loading Seasons...</p>';
+            epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:10px;">Loading Seasons...</p>';
         }
-        // VidLink TV format: /tv/{id}/{season}/{episode}
         if (iframe) iframe.src = `https://vidlink.pro/tv/${id}/1/1`;
 
-        try {
-            const data = await apiCall(`/tv/${id}`);
-            if (currentID !== id) return;
-            if (epBox && data && data.seasons) {
-                epBox.innerHTML = `
-                    <select id="season-select" onchange="loadSeason(this.value)" style="width:100%;padding:12px;background:#111;color:#fff;border:1px solid #333;margin-bottom:15px;border-radius:5px;outline:none;"></select>
-                    <div id="episodes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(55px,1fr));gap:10px;"></div>`;
-                const select = document.getElementById('season-select');
-                data.seasons.forEach(s => {
-                    if (s.season_number > 0) {
-                        const opt = document.createElement('option');
-                        opt.value = s.season_number;
-                        opt.innerText = s.name || `Season ${s.season_number}`;
-                        select.appendChild(opt);
+        // Load TV Seasons sa background
+        loadTVSeasonsAsync(id);
+    }
+
+    // 3. Load Extras (Trailers/Providers) sa background human na-load ang video
+    setTimeout(() => {
+        if (typeof loadExtras === 'function') loadExtras(id, type);
+    }, 200);
+}
+
+// Separate helper para dili maka-block sa UI
+async function loadTVSeasonsAsync(id) {
+    try {
+        const data = await apiCall(`/tv/${id}`);
+        if (currentID !== id) return;
+        const epBox = document.getElementById('episode-area');
+        
+        if (epBox && data && data.seasons) {
+            epBox.innerHTML = `
+                <select id="season-select" onchange="loadSeason(this.value)" style="width:100%;padding:10px;background:#111;color:#fff;border:1px solid #333;margin-bottom:10px;border-radius:5px;outline:none;"></select>
+                <div id="episodes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:8px;"></div>`;
+            
+            const select = document.getElementById('season-select');
+            data.seasons.forEach(s => {
+                if (s.season_number > 0) {
+                    const opt = document.createElement('option');
+                    opt.value = s.season_number;
+                    opt.innerText = s.name || `Season ${s.season_number}`;
+                    select.appendChild(opt);
+                }
+            });
+            
+            if (typeof currentSeasonsMeta !== 'undefined') {
+                currentSeasonsMeta = data.seasons
+                    .filter(s => s.season_number > 0)
+                    .map(s => ({ season_number: s.season_number, episode_count: s.episode_count }));
+            }
+
+            if (typeof loadEpisodes === 'function') {
+                await loadEpisodes(id, 1);
+            }
+            
+            if (typeof apiCall === 'function') {
+                apiCall(`/tv/${id}/season/1/episode/1`).then(epData => {
+                    if (typeof scheduleAutoNext === 'function') {
+                        scheduleAutoNext(epData && epData.runtime);
                     }
                 });
-                
-                if (typeof currentSeasonsMeta !== 'undefined') {
-                    currentSeasonsMeta = data.seasons
-                        .filter(s => s.season_number > 0)
-                        .map(s => ({ season_number: s.season_number, episode_count: s.episode_count }));
-                }
-
-                if (typeof loadEpisodes === 'function') {
-                    await loadEpisodes(id, 1);
-                }
-                
-                if (typeof apiCall === 'function') {
-                    apiCall(`/tv/${id}/season/1/episode/1`).then(epData => {
-                        if (typeof scheduleAutoNext === 'function') {
-                            scheduleAutoNext(epData && epData.runtime);
-                        }
-                    });
-                }
             }
-        } catch (err) {
-            console.error("Error loading TV data:", err);
-            if (epBox) epBox.innerHTML = '<p style="color:red;text-align:center;padding:20px;">Failed to load episodes.</p>';
         }
+    } catch (err) {
+        console.error("Error loading TV data:", err);
+        const epBox = document.getElementById('episode-area');
+        if (epBox) epBox.innerHTML = '<p style="color:red;text-align:center;padding:15px;">Failed to load episodes.</p>';
     }
 }
 
