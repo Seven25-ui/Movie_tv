@@ -461,6 +461,7 @@ function updatePlayerDetails(title, description) {
     if (movieNameEl) movieNameEl.innerText = title || "Movie Title";
     if (descEl) descEl.innerText = description || "No description available for this content.";
 }
+
 // --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
@@ -489,8 +490,8 @@ function playMovie(id, title = "", description = "") {
 
     if (iframe) {
         if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
-        iframe.src = `https://player.autoembed.cc/embed/movie/${id}`;
-        console.log(`Loading Movie (autoembed): ${id}`);
+        iframe.src = `https://vidsrc.xyz/embed/movie/${id}`;
+        console.log(`Loading Movie (vidsrc.xyz): ${id}`);
     }
 }
 
@@ -507,6 +508,7 @@ async function play(id, type, title, description) {
     const epBox = document.getElementById('episode-area');
     const epNav = document.getElementById('ep-nav-buttons');
 
+    // 1. Instant open sa overlay ug video player
     if (overlay) {
         overlay.style.display = 'block';
         overlay.scrollTo(0, 0);
@@ -514,6 +516,7 @@ async function play(id, type, title, description) {
     document.body.style.overflow = 'hidden';
     document.body.classList.add('playing');
 
+    // Set text info dayon
     const titleEl = document.getElementById('p-title');
     const movieNameEl = document.getElementById('p-movie-name');
     const descEl = document.getElementById('p-desc');
@@ -526,22 +529,25 @@ async function play(id, type, title, description) {
         setupIframeAttributes(iframe);
     }
 
+    // 2. Load Video Source REKTA sa VidSrc
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
-        if (iframe) iframe.src = `https://player.autoembed.cc/embed/movie/${id}`;
+        if (iframe) iframe.src = `https://vidsrc.xyz/embed/movie/${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
             epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:10px;">Loading Seasons...</p>';
         }
-        // AutoEmbed TV format: /embed/tv/{id}/{season}/{episode}
-        if (iframe) iframe.src = `https://player.autoembed.cc/embed/tv/${id}/1/1`;
+        // VidSrc TV format: /embed/tv/{id}/{season}/{episode}
+        if (iframe) iframe.src = `https://vidsrc.xyz/embed/tv/${id}/1/1`;
 
+        // Load TV Seasons sa background
         loadTVSeasonsAsync(id);
     }
 
+    // 3. Load Extras (Trailers/Providers) sa background
     setTimeout(() => {
         if (typeof loadExtras === 'function') loadExtras(id, type);
     }, 200);
@@ -601,7 +607,8 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
     if (!currentID || !iframe) return console.error("Missing currentID!");
 
-    iframe.src = `https://player.autoembed.cc/embed/tv/${currentID}/${sNum}/${eNum}`;
+    // VidSrc TV format: /embed/tv/{id}/{season}/{episode}
+    iframe.src = `https://vidsrc.xyz/embed/tv/${currentID}/${sNum}/${eNum}`;
 
     const overlay = document.getElementById('player-overlay');
     if (overlay) overlay.scrollTo({ top: 0, behavior: 'smooth' });
