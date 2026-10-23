@@ -1085,5 +1085,92 @@ presenceCh
   });
 })();
 </script>
+
+  <!-- SE7EN HALLOWEEN PRANK -->
+<style>
+#se7en-scare {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #000;
+  color: #ff1a00;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: monospace;
+}
+
+#se7en-scare .zombie {
+  font-size: min(55vw, 300px);
+  animation: zombie-shake .08s infinite;
+  filter: drop-shadow(0 0 30px red);
+}
+
+#se7en-scare h1 {
+  font-size: clamp(25px, 6vw, 55px);
+  animation: zombie-flash .15s infinite;
+}
+
+@keyframes zombie-shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-10px, 5px) scale(1.1); }
+  50% { transform: translate(10px, -5px) scale(1.2); }
+  75% { transform: translate(-5px, -5px); }
+}
+
+@keyframes zombie-flash {
+  50% { color: white; }
+}
+</style>
+
+<div id="se7en-scare">
+  <h1>⚠ SYSTEM BREACH ⚠</h1>
+  <div class="zombie">🧟‍♂️</div>
+  <h1>I'M RIGHT BEHIND YOU!</h1>
+  <p>🎃 HAPPY HALLOWEEN — SE7EN</p>
+</div>
+
+<script>
+(function () {
+  const modal = document.getElementById("greeting-modal");
+  const scare = document.getElementById("se7en-scare");
+
+  if (!modal || !scare) return;
+
+  let prankStarted = false;
+
+  const watcher = new MutationObserver(() => {
+    if (prankStarted) return;
+
+    // Hulata nga ang welcome modal sa user
+    if (getComputedStyle(modal).display === "none") {
+      prankStarted = true;
+
+      // Normal nga website una, unya jumpscare human 10 seconds
+      setTimeout(() => {
+        scare.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        // Balik sa normal nga website human sa 4 seconds
+        setTimeout(() => {
+          scare.style.display = "none";
+          document.body.style.overflow = "";
+        }, 4000);
+      }, 10000);
+
+      watcher.disconnect();
+    }
+  });
+
+  watcher.observe(modal, {
+    attributes: true,
+    attributeFilter: ["style", "class"]
+  });
+})();
+</script>
+<!-- END SE7EN HALLOWEEN PRANK -->
+  
 </body>
 </html>
