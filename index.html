@@ -462,18 +462,17 @@ function updatePlayerDetails(title, description) {
     if (descEl) descEl.innerText = description || "No description available for this content.";
 }
 
-// --- CENTRAL CONFIG PARA SA VIDEO PROVIDER ---
-const VIDEO_PROVIDER = "https://vidsrc.pm/embed";
+const VIDEO_PROVIDER = "https://multiembed.mov";
 
-// Helper function para sa saktong URL format sa VidSrc.cc
 function getProviderUrl(type, id, season = 1, episode = 1) {
     if (type === 'movie') {
-        return `${VIDEO_PROVIDER}/movie/${id}`;
+        return `${VIDEO_PROVIDER}/?video_id=${id}&tmdb=1`;
     } else {
-        return `${VIDEO_PROVIDER}/tv/${id}/${season}/${episode}`;
+        return `${VIDEO_PROVIDER}/?video_id=${id}&tmdb=1&s=${season}&e=${episode}`;
     }
 }
 
+  
 // --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "", description = "") {
     const overlay = document.getElementById('player-overlay');
