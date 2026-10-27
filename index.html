@@ -461,15 +461,18 @@ function updatePlayerDetails(title, description) {
     if (movieNameEl) movieNameEl.innerText = title || "Movie Title";
     if (descEl) descEl.innerText = description || "No description available for this content.";
 }
-// --- CENTRAL CONFIG PARA SA VIDEO PROVIDER ---
-// Kon ma-block na pud, ilisi ra dinhi (e.g., https://vidsrc.vip)
-const VIDEO_PROVIDER = "https://vidsrc.vip"; 
 
-// Helper function para sa saktong URL format
+// --- CENTRAL CONFIG PARA SA VIDEO PROVIDER ---
+// Kapag na-block ang provider, palitan lang ang URL dito (halimbawa: https://superembed.stream)
+const VIDEO_PROVIDER = "https://superembed.stream"; 
+
+// Helper function para sa tamang URL format ng SuperEmbed
 function getProviderUrl(type, id, season = 1, episode = 1) {
-    return type === 'movie' 
-        ? `${VIDEO_PROVIDER}/embed/movie/${id}` 
-        : `${VIDEO_PROVIDER}/embed/tv/${id}/${season}/${episode}`;
+    if (type === 'movie') {
+        return `${VIDEO_PROVIDER}/?video_id=${id}&tmdb=1`;
+    } else {
+        return `${VIDEO_PROVIDER}/?video_id=${id}&tmdb=1&s=${season}&e=${episode}`;
+    }
 }
 
 // --- PLAY MOVIE ONLY FUNCTION ---
@@ -501,7 +504,7 @@ function playMovie(id, title = "", description = "") {
     if (iframe) {
         if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
         iframe.src = getProviderUrl('movie', id);
-        console.log(`Loading Movie: ${iframe.src}`);
+        console.log(`Loading Movie (SuperEmbed): ${iframe.src}`);
     }
 }
 
@@ -557,7 +560,7 @@ async function play(id, type, title, description) {
     }, 200);
 }
 
-// Separate helper para dili maka-block sa UI
+// Separate helper para hindi ma-block ang UI
 async function loadTVSeasonsAsync(id) {
     try {
         const data = await apiCall(`/tv/${id}`);
