@@ -461,10 +461,16 @@ function updatePlayerDetails(title, description) {
     if (movieNameEl) movieNameEl.innerText = title || "Movie Title";
     if (descEl) descEl.innerText = description || "No description available for this content.";
 }
-
 // --- CENTRAL CONFIG PARA SA VIDEO PROVIDER ---
-// Kon ma-block gani kini, i-ilis ra dinhi ang bag-ong URL (e.g., https://vidsrc.xyz o uban pa)
-const VIDEO_PROVIDER = "https://vidlink.pro"; 
+// Kon ma-block na pud, ilisi ra dinhi (e.g., https://vidsrc.vip)
+const VIDEO_PROVIDER = "https://vidsrc.vip"; 
+
+// Helper function para sa saktong URL format
+function getProviderUrl(type, id, season = 1, episode = 1) {
+    return type === 'movie' 
+        ? `${VIDEO_PROVIDER}/embed/movie/${id}` 
+        : `${VIDEO_PROVIDER}/embed/tv/${id}/${season}/${episode}`;
+}
 
 // --- PLAY MOVIE ONLY FUNCTION ---
 function playMovie(id, title = "", description = "") {
@@ -494,7 +500,7 @@ function playMovie(id, title = "", description = "") {
 
     if (iframe) {
         if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
-        iframe.src = `${VIDEO_PROVIDER}/movie/${id}`;
+        iframe.src = getProviderUrl('movie', id);
         console.log(`Loading Movie: ${iframe.src}`);
     }
 }
@@ -534,14 +540,14 @@ async function play(id, type, title, description) {
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
-        if (iframe) iframe.src = `${VIDEO_PROVIDER}/movie/${id}`;
+        if (iframe) iframe.src = getProviderUrl('movie', id);
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
             epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:10px;">Loading Seasons...</p>';
         }
-        if (iframe) iframe.src = `${VIDEO_PROVIDER}/tv/${id}/1/1`;
+        if (iframe) iframe.src = getProviderUrl('tv', id, 1, 1);
 
         loadTVSeasonsAsync(id);
     }
@@ -605,7 +611,7 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
     if (!currentID || !iframe) return console.error("Missing currentID!");
 
-    iframe.src = `${VIDEO_PROVIDER}/tv/${currentID}/${sNum}/${eNum}`;
+    iframe.src = getProviderUrl('tv', currentID, sNum, eNum);
 
     const overlay = document.getElementById('player-overlay');
     if (overlay) overlay.scrollTo({ top: 0, behavior: 'smooth' });
