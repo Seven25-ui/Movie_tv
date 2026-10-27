@@ -463,15 +463,14 @@ function updatePlayerDetails(title, description) {
 }
 
 // --- CENTRAL CONFIG PARA SA VIDEO PROVIDER ---
-// Kapag na-block ang provider, palitan lang ang URL dito (halimbawa: https://superembed.stream)
-const VIDEO_PROVIDER = "https://superembed.stream"; 
+const VIDEO_PROVIDER = "https://vidsrc.cc/v2/embed"; 
 
-// Helper function para sa tamang URL format ng SuperEmbed
+// Helper function para sa saktong URL format sa VidSrc.cc
 function getProviderUrl(type, id, season = 1, episode = 1) {
     if (type === 'movie') {
-        return `${VIDEO_PROVIDER}/?video_id=${id}&tmdb=1`;
+        return `${VIDEO_PROVIDER}/movie/${id}`;
     } else {
-        return `${VIDEO_PROVIDER}/?video_id=${id}&tmdb=1&s=${season}&e=${episode}`;
+        return `${VIDEO_PROVIDER}/tv/${id}/${season}/${episode}`;
     }
 }
 
@@ -504,7 +503,7 @@ function playMovie(id, title = "", description = "") {
     if (iframe) {
         if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
         iframe.src = getProviderUrl('movie', id);
-        console.log(`Loading Movie (SuperEmbed): ${iframe.src}`);
+        console.log(`Loading Movie (VidSrc.cc): ${iframe.src}`);
     }
 }
 
@@ -560,7 +559,7 @@ async function play(id, type, title, description) {
     }, 200);
 }
 
-// Separate helper para hindi ma-block ang UI
+// Separate helper para dili maka-block sa UI
 async function loadTVSeasonsAsync(id) {
     try {
         const data = await apiCall(`/tv/${id}`);
