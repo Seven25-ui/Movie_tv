@@ -490,8 +490,8 @@ function playMovie(id, title = "", description = "") {
 
     if (iframe) {
         if (typeof setupIframeAttributes === 'function') setupIframeAttributes(iframe);
-        iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
-        console.log(`Loading Movie (multiembed): ${id}`);
+        iframe.src = `https://embed.su/embed/movie/${id}`;
+        console.log(`Loading Movie (embed.su): ${id}`);
     }
 }
 
@@ -530,15 +530,15 @@ async function play(id, type, title, description) {
     if (type === 'movie') {
         if (epBox) epBox.style.display = 'none';
         if (epNav) epNav.style.display = 'none';
-        if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1`;
+        if (iframe) iframe.src = `https://embed.su/embed/movie/${id}`;
     } else {
         if (epBox) {
             epBox.style.display = 'block';
             if (epNav) epNav.style.display = 'flex';
             epBox.innerHTML = '<p style="text-align:center;color:#E95420;padding:10px;">Loading Seasons...</p>';
         }
-        // MultiEmbed TV format: ?video_id={id}&tmdb=1&s={season}&e={episode}
-        if (iframe) iframe.src = `https://multiembed.mov/?video_id=${id}&tmdb=1&s=1&e=1`;
+        // Embed.su TV format: /embed/tv/{id}/{season}/{episode}
+        if (iframe) iframe.src = `https://embed.su/embed/tv/${id}/1/1`;
 
         loadTVSeasonsAsync(id);
     }
@@ -602,7 +602,7 @@ function playEp(sNum, eNum) {
     const iframe = document.getElementById('video-iframe');
     if (!currentID || !iframe) return console.error("Missing currentID!");
 
-    iframe.src = `https://multiembed.mov/?video_id=${currentID}&tmdb=1&s=${sNum}&e=${eNum}`;
+    iframe.src = `https://embed.su/embed/tv/${currentID}/${sNum}/${eNum}`;
 
     const overlay = document.getElementById('player-overlay');
     if (overlay) overlay.scrollTo({ top: 0, behavior: 'smooth' });
