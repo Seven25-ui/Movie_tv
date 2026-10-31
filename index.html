@@ -1168,24 +1168,58 @@ presenceCh
 <!-- END SE7EN HALLOWEEN JUMPSCARE -->  
 
 
-<!-- SE7EN REAL FLOATING GHOST -->
+<!-- SE7EN 5-WAY FLOATING GHOSTS -->
 <style>
-#se7en-ghost {
+.se7en-ghost {
   position: fixed;
-  width: 180px;
   height: auto;
-  left: -220px;
-  top: 38%;
   z-index: 99999;
-  opacity: 0.72;
   pointer-events: none;
+  opacity: .65;
   background: transparent;
-  filter: drop-shadow(0 0 10px rgba(160, 190, 255, 0.35));
-  animation: se7enGhostFloat 32s linear infinite;
-  will-change: left, transform;
+  filter: drop-shadow(0 0 9px rgba(160,190,255,.35));
+  will-change: left, right, transform;
 }
 
-@keyframes se7enGhostFloat {
+/* 3 GHOSTS: LEFT TO RIGHT */
+.se7en-ghost:nth-child(1) {
+  width: 180px;
+  top: 15%;
+  animation: ghost-right 34s linear infinite;
+  animation-delay: -5s;
+}
+
+.se7en-ghost:nth-child(2) {
+  width: 125px;
+  top: 42%;
+  animation: ghost-right 39s linear infinite;
+  animation-delay: -17s;
+}
+
+.se7en-ghost:nth-child(3) {
+  width: 150px;
+  top: 72%;
+  animation: ghost-right 36s linear infinite;
+  animation-delay: -26s;
+}
+
+/* 2 GHOSTS: RIGHT TO LEFT */
+.se7en-ghost:nth-child(4) {
+  width: 95px;
+  top: 28%;
+  animation: ghost-left 42s linear infinite;
+  animation-delay: -12s;
+}
+
+.se7en-ghost:nth-child(5) {
+  width: 140px;
+  top: 58%;
+  animation: ghost-left 38s linear infinite;
+  animation-delay: -23s;
+}
+
+/* LEFT TO RIGHT */
+@keyframes ghost-right {
   0% {
     left: -220px;
     transform: translateY(0) rotate(-3deg);
@@ -1205,21 +1239,45 @@ presenceCh
   }
 }
 
-@media (max-width: 600px) {
-  #se7en-ghost {
-    width: 115px;
+/* RIGHT TO LEFT */
+@keyframes ghost-left {
+  0% {
+    right: -220px;
+    transform: translateY(0) rotate(3deg);
   }
+  25% {
+    transform: translateY(18px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+  75% {
+    transform: translateY(15px) rotate(-2deg);
+  }
+  100% {
+    right: calc(100vw + 220px);
+    transform: translateY(0) rotate(3deg);
+  }
+}
+
+/* MOBILE SIZES */
+@media (max-width: 600px) {
+  .se7en-ghost:nth-child(1) { width: 115px; }
+  .se7en-ghost:nth-child(2) { width: 80px; }
+  .se7en-ghost:nth-child(3) { width: 100px; }
+  .se7en-ghost:nth-child(4) { width: 65px; }
+  .se7en-ghost:nth-child(5) { width: 90px; }
 }
 </style>
 
-<img
-  id="se7en-ghost"
-  src="media/ghost.png"
-  alt=""
-  aria-hidden="true"
->
-
-<!-- END SE7EN FLOATING GHOST -->
+<div id="se7en-ghost-container">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+</div>
+<!-- END SE7EN GHOSTS -->
   
 </body>
 </html>
