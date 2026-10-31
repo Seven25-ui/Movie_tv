@@ -1172,43 +1172,47 @@ presenceCh
 <style>
 #se7en-ghost {
   position: fixed;
-  left: -120px;
-  bottom: 15%;
-  z-index: 99998;
-  font-size: clamp(55px, 8vw, 100px);
+  z-index: 9999;
+  width: 230px;
+  height: auto;
+  left: -250px;
+  top: 35%;
   opacity: 0;
   pointer-events: none;
-  filter: drop-shadow(0 0 18px rgba(180, 220, 255, .8));
-  animation: ghost-float 18s linear infinite;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 8px #9bbcff);
+  animation: se7enGhostFloat 35s linear infinite;
 }
 
-@keyframes ghost-float {
+@keyframes se7enGhostFloat {
   0% {
-    left: -120px;
-    bottom: 15%;
+    left: -250px;
+    top: 35%;
     opacity: 0;
-    transform: rotate(-10deg);
+    transform: translateY(0);
   }
-  8% { opacity: .85; }
-  25% { bottom: 25%; }
-  50% { bottom: 18%; }
-  75% { bottom: 30%; }
-  92% { opacity: .85; }
+  8% { opacity: .65; }
+  25% { transform: translateY(-25px); }
+  50% { transform: translateY(15px); }
+  75% { transform: translateY(-20px); }
+  92% { opacity: .65; }
   100% {
     left: 110%;
-    bottom: 20%;
+    top: 35%;
     opacity: 0;
-    transform: rotate(10deg);
+    transform: translateY(0);
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #se7en-ghost { animation: none; display: none; }
 }
 </style>
 
-<div id="se7en-ghost">👻</div>
-<!-- END SE7EN FLOATING GHOST -->
+<img
+  id="se7en-ghost"
+  src="media/ghost.png"
+  alt=""
+>
+
+<!-- END SE7EN GHOST -->
+
 
   
 </body>
