@@ -1168,20 +1168,30 @@ presenceCh
 <!-- END SE7EN HALLOWEEN JUMPSCARE -->  
 
 
-<!-- SE7EN 5-WAY FLOATING GHOSTS -->
+<!-- =====================================
+     SE7EN CINEMA - FLOATING GHOSTS
+===================================== -->
+
 <style>
+#se7en-ghost-container {
+  position: relative;
+  z-index: 99999;
+  pointer-events: none;
+}
+
 .se7en-ghost {
   position: fixed;
   height: auto;
   z-index: 99999;
   pointer-events: none;
-  opacity: .65;
+  opacity: 0.65;
   background: transparent;
-  filter: drop-shadow(0 0 9px rgba(160,190,255,.35));
+  filter: drop-shadow(0 0 9px rgba(160, 190, 255, 0.35));
   will-change: left, right, transform;
 }
 
 /* 3 GHOSTS: LEFT TO RIGHT */
+
 .se7en-ghost:nth-child(1) {
   width: 180px;
   top: 15%;
@@ -1204,6 +1214,7 @@ presenceCh
 }
 
 /* 2 GHOSTS: RIGHT TO LEFT */
+
 .se7en-ghost:nth-child(4) {
   width: 95px;
   top: 28%;
@@ -1218,49 +1229,60 @@ presenceCh
   animation-delay: -23s;
 }
 
-/* LEFT TO RIGHT */
+/* LEFT TO RIGHT ANIMATION */
+
 @keyframes ghost-right {
   0% {
     left: -220px;
     transform: translateY(0) rotate(-3deg);
   }
+
   25% {
     transform: translateY(-18px) rotate(2deg);
   }
+
   50% {
     transform: translateY(12px) rotate(-2deg);
   }
+
   75% {
     transform: translateY(-15px) rotate(2deg);
   }
+
   100% {
     left: calc(100vw + 220px);
     transform: translateY(0) rotate(-3deg);
   }
 }
 
-/* RIGHT TO LEFT */
+/* RIGHT TO LEFT - MIRRORED IMAGE */
+
 @keyframes ghost-left {
   0% {
     right: -220px;
-    transform: translateY(0) rotate(3deg);
+    transform: scaleX(-1) translateY(0) rotate(3deg);
   }
+
   25% {
-    transform: translateY(18px) rotate(-2deg);
+    transform: scaleX(-1) translateY(18px) rotate(-2deg);
   }
+
   50% {
-    transform: translateY(-12px) rotate(2deg);
+    transform: scaleX(-1) translateY(-12px) rotate(2deg);
   }
+
   75% {
-    transform: translateY(15px) rotate(-2deg);
+    transform: scaleX(-1) translateY(15px) rotate(-2deg);
   }
+
   100% {
     right: calc(100vw + 220px);
-    transform: translateY(0) rotate(3deg);
+    transform: scaleX(-1) translateY(0) rotate(3deg);
   }
 }
 
 /* MOBILE SIZES */
+
 @media (max-width: 600px) {
   .se7en-ghost:nth-child(1) { width: 115px; }
   .se7en-ghost:nth-child(2) { width: 80px; }
@@ -1271,13 +1293,19 @@ presenceCh
 </style>
 
 <div id="se7en-ghost-container">
-  <img class="se7en-ghost" src="media/ghost.png" alt="">
-  <img class="se7en-ghost" src="media/ghost.png" alt="">
-  <img class="se7en-ghost" src="media/ghost.png" alt="">
-  <img class="se7en-ghost" src="media/ghost.png" alt="">
-  <img class="se7en-ghost" src="media/ghost.png" alt="">
+
+  <!-- LEFT TO RIGHT -->
+  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
+  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
+  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
+
+  <!-- RIGHT TO LEFT -->
+  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
+  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
+
 </div>
-<!-- END SE7EN GHOSTS -->
+
+<!-- END SE7EN FLOATING GHOSTS -->
   
 </body>
 </html>
