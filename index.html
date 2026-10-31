@@ -1242,6 +1242,12 @@ body.playing #se7en-ghost-container{display:none !important}
 })();
 </script>
 <!-- END SE7EN FLOATING GHOSTS -->
+
+       <script>
+       if ('serviceWorker' in navigator) {
+         navigator.serviceWorker.register('/sw.js');
+       }
+     </script>
   
 </body>
 </html>
