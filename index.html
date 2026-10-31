@@ -1167,144 +1167,80 @@ presenceCh
 </script>
 <!-- END SE7EN HALLOWEEN JUMPSCARE -->  
 
-
 <!-- =====================================
-     SE7EN CINEMA - FLOATING GHOSTS
+     SE7EN CINEMA - FLOATING GHOSTS (UPDATED)
+     Ilisi ang tibuok daan nga ghost block gikan sa
+     "SE7EN CINEMA - FLOATING GHOSTS" hangtod "END SE7EN FLOATING GHOSTS"
 ===================================== -->
-
 <style>
-#se7en-ghost-container {
-  position: relative;
-  z-index: 99999;
-  pointer-events: none;
-}
-
-.se7en-ghost {
-  position: fixed;
-  height: auto;
-  z-index: 99999;
-  pointer-events: none;
-  opacity: 0.65;
-  background: transparent;
-  filter: drop-shadow(0 0 9px rgba(160, 190, 255, 0.35));
-  will-change: left, right, transform;
-}
+#se7en-ghost-container{position:fixed;inset:0;z-index:99998;pointer-events:none;overflow:hidden}
+.se7en-ghost{position:absolute;left:0;height:auto;pointer-events:none;opacity:.65;
+  filter:drop-shadow(0 0 9px rgba(160,190,255,.35));will-change:transform}
 
 /* 3 GHOSTS: LEFT TO RIGHT */
+.se7en-ghost:nth-child(1){width:180px;top:15%;animation:ghost-right 34s linear infinite;animation-delay:-5s}
+.se7en-ghost:nth-child(2){width:125px;top:42%;animation:ghost-right 39s linear infinite;animation-delay:-17s}
+.se7en-ghost:nth-child(3){width:150px;top:72%;animation:ghost-right 36s linear infinite;animation-delay:-26s}
 
-.se7en-ghost:nth-child(1) {
-  width: 180px;
-  top: 15%;
-  animation: ghost-right 34s linear infinite;
-  animation-delay: -5s;
+/* 2 GHOSTS: RIGHT TO LEFT (MIRRORED) */
+.se7en-ghost:nth-child(4){width:95px;top:28%;animation:ghost-left 42s linear infinite;animation-delay:-12s}
+.se7en-ghost:nth-child(5){width:140px;top:58%;animation:ghost-left 38s linear infinite;animation-delay:-23s}
+
+@keyframes ghost-right{
+  0%{transform:translate(-250px,0) rotate(-3deg)}
+  25%{transform:translate(25vw,-18px) rotate(2deg)}
+  50%{transform:translate(50vw,12px) rotate(-2deg)}
+  75%{transform:translate(75vw,-15px) rotate(2deg)}
+  100%{transform:translate(calc(100vw + 250px),0) rotate(-3deg)}
+}
+@keyframes ghost-left{
+  0%{transform:translate(calc(100vw + 250px),0) scaleX(-1) rotate(3deg)}
+  25%{transform:translate(75vw,18px) scaleX(-1) rotate(-2deg)}
+  50%{transform:translate(50vw,-12px) scaleX(-1) rotate(2deg)}
+  75%{transform:translate(25vw,15px) scaleX(-1) rotate(-2deg)}
+  100%{transform:translate(-250px,0) scaleX(-1) rotate(3deg)}
 }
 
-.se7en-ghost:nth-child(2) {
-  width: 125px;
-  top: 42%;
-  animation: ghost-right 39s linear infinite;
-  animation-delay: -17s;
+@media(max-width:600px){
+  .se7en-ghost:nth-child(1){width:115px}
+  .se7en-ghost:nth-child(2){width:80px}
+  .se7en-ghost:nth-child(3){width:100px}
+  .se7en-ghost:nth-child(4){width:65px}
+  .se7en-ghost:nth-child(5){width:90px}
 }
 
-.se7en-ghost:nth-child(3) {
-  width: 150px;
-  top: 72%;
-  animation: ghost-right 36s linear infinite;
-  animation-delay: -26s;
-}
+/* Itago ang ghosts samtang nag-play ang video (dili makasamok, dili makabug sa performance) */
+body.playing #se7en-ghost-container{display:none !important}
 
-/* 2 GHOSTS: RIGHT TO LEFT */
-
-.se7en-ghost:nth-child(4) {
-  width: 95px;
-  top: 28%;
-  animation: ghost-left 42s linear infinite;
-  animation-delay: -12s;
-}
-
-.se7en-ghost:nth-child(5) {
-  width: 140px;
-  top: 58%;
-  animation: ghost-left 38s linear infinite;
-  animation-delay: -23s;
-}
-
-/* LEFT TO RIGHT ANIMATION */
-
-@keyframes ghost-right {
-  0% {
-    left: -220px;
-    transform: translateY(0) rotate(-3deg);
-  }
-
-  25% {
-    transform: translateY(-18px) rotate(2deg);
-  }
-
-  50% {
-    transform: translateY(12px) rotate(-2deg);
-  }
-
-  75% {
-    transform: translateY(-15px) rotate(2deg);
-  }
-
-  100% {
-    left: calc(100vw + 220px);
-    transform: translateY(0) rotate(-3deg);
-  }
-}
-
-/* RIGHT TO LEFT - MIRRORED IMAGE */
-
-@keyframes ghost-left {
-  0% {
-    right: -220px;
-    transform: scaleX(-1) translateY(0) rotate(3deg);
-  }
-
-  25% {
-    transform: scaleX(-1) translateY(18px) rotate(-2deg);
-  }
-
-  50% {
-    transform: scaleX(-1) translateY(-12px) rotate(2deg);
-  }
-
-  75% {
-    transform: scaleX(-1) translateY(15px) rotate(-2deg);
-  }
-
-  100% {
-    right: calc(100vw + 220px);
-    transform: scaleX(-1) translateY(0) rotate(3deg);
-  }
-}
-
-/* MOBILE SIZES */
-
-@media (max-width: 600px) {
-  .se7en-ghost:nth-child(1) { width: 115px; }
-  .se7en-ghost:nth-child(2) { width: 80px; }
-  .se7en-ghost:nth-child(3) { width: 100px; }
-  .se7en-ghost:nth-child(4) { width: 65px; }
-  .se7en-ghost:nth-child(5) { width: 90px; }
+/* Keep ghosts moving bisan naa'y global reduced-motion rule */
+@media (prefers-reduced-motion: reduce){
+  .se7en-ghost:nth-child(1){animation:ghost-right 34s linear infinite !important;animation-delay:-5s !important}
+  .se7en-ghost:nth-child(2){animation:ghost-right 39s linear infinite !important;animation-delay:-17s !important}
+  .se7en-ghost:nth-child(3){animation:ghost-right 36s linear infinite !important;animation-delay:-26s !important}
+  .se7en-ghost:nth-child(4){animation:ghost-left 42s linear infinite !important;animation-delay:-12s !important}
+  .se7en-ghost:nth-child(5){animation:ghost-left 38s linear infinite !important;animation-delay:-23s !important}
 }
 </style>
 
-<div id="se7en-ghost-container">
-
-  <!-- LEFT TO RIGHT -->
-  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
-  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
-  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
-
-  <!-- RIGHT TO LEFT -->
-  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
-  <img class="se7en-ghost" src="media/ghost.png" alt="" aria-hidden="true">
-
+<div id="se7en-ghost-container" aria-hidden="true">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
+  <img class="se7en-ghost" src="media/ghost.png" alt="">
 </div>
 
+<script>
+(function(){
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 72'>" +
+    "<path d='M8 68V30C8 14 18 4 32 4s24 10 24 26v38l-8-8-8 8-8-8-8 8-8-8z' fill='#dfe8ff'/>" +
+    "<circle cx='24' cy='30' r='4' fill='#0d1117'/><circle cx='40' cy='30' r='4' fill='#0d1117'/></svg>";
+  var fallback = "data:image/svg+xml," + encodeURIComponent(svg);
+  document.querySelectorAll(".se7en-ghost").forEach(function(img){
+    img.addEventListener("error", function(){ img.src = fallback; }, { once: true });
+  });
+})();
+</script>
 <!-- END SE7EN FLOATING GHOSTS -->
   
 </body>
