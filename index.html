@@ -1166,5 +1166,50 @@ presenceCh
 })();
 </script>
 <!-- END SE7EN HALLOWEEN JUMPSCARE -->  
+
+
+<!-- SE7EN FLOATING GHOST -->
+<style>
+#se7en-ghost {
+  position: fixed;
+  left: -120px;
+  bottom: 15%;
+  z-index: 99998;
+  font-size: clamp(55px, 8vw, 100px);
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 18px rgba(180, 220, 255, .8));
+  animation: ghost-float 18s linear infinite;
+}
+
+@keyframes ghost-float {
+  0% {
+    left: -120px;
+    bottom: 15%;
+    opacity: 0;
+    transform: rotate(-10deg);
+  }
+  8% { opacity: .85; }
+  25% { bottom: 25%; }
+  50% { bottom: 18%; }
+  75% { bottom: 30%; }
+  92% { opacity: .85; }
+  100% {
+    left: 110%;
+    bottom: 20%;
+    opacity: 0;
+    transform: rotate(10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #se7en-ghost { animation: none; display: none; }
+}
+</style>
+
+<div id="se7en-ghost">👻</div>
+<!-- END SE7EN FLOATING GHOST -->
+
+  
 </body>
 </html>
