@@ -2,22 +2,16 @@
   "name": "SE7EN CINEMA Premium",
   "short_name": "SE7EN",
   "description": "Stream the latest movies and TV shows.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#E95420",
   "icons": [
-    {
-      "src": "https://image.tmdb.org/t/p/w192/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://image.tmdb.org/t/p/w500/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "/media/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/media/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/media/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
