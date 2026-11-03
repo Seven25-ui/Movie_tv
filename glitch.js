@@ -6,6 +6,7 @@
      window.GLITCH_DURATION = 18000;   // unsa kadugay mo-play (ms)
      window.GLITCH_ONCE = true;        // mo-play kausa ra matag session (dili matag refresh)
      window.GLITCH_AUTO = false;       // dili auto, ikaw ra mo-tawag: glitch() o glitch(8000)
+     window.GLITCH_IGNORE_REDUCED_MOTION = true; // mo-play bisan naka-"reduce motion" ang device
    Test:  idugang ang ?glitch sa URL  */
 (function () {
   if (window.__glitch) return;
@@ -131,7 +132,7 @@
   function auto() {
     var delay = window.GLITCH_DELAY != null ? window.GLITCH_DELAY : 3000;
     if (forced) { setTimeout(play, delay); return; }
-    if (window.GLITCH_AUTO === false || reduce) return;
+    if (window.GLITCH_AUTO === false || (reduce && !window.GLITCH_IGNORE_REDUCED_MOTION)) return;
     if (window.GLITCH_ONCE && seen()) return;
     mark(); setTimeout(play, delay);
   }
