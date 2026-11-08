@@ -19,7 +19,43 @@
         /* Header */
         h2 { 
             color: var(--accent); text-align: center; font-family: 'Orbitron';
-            font-size: 20px; padding: 25px 0; margin: 0; letter-spacing: 2px;
+            font-size: 20px; padding: 25px 0 15px; margin: 0; letter-spacing: 2px;
+        }
+
+        /* Live Search */
+        .search-wrap {
+            position: sticky; top: 0; z-index: 500;
+            background: var(--bg); padding: 10px 15px 12px;
+        }
+        .search-box {
+            position: relative; max-width: 600px; margin: 0 auto;
+        }
+        .search-box i.fa-search {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: #777; font-size: 14px; pointer-events: none;
+        }
+        #search-input {
+            width: 100%; box-sizing: border-box;
+            background: var(--card-bg); color: #fff;
+            border: 1px solid #2a2a2a; border-radius: 50px;
+            padding: 13px 44px 13px 42px; font-size: 15px;
+            font-family: 'Roboto', sans-serif; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.2);
+        }
+        #search-input::placeholder { color: #666; }
+        #clear-search {
+            display: none; position: absolute; right: 8px; top: 50%;
+            transform: translateY(-50%); background: none; border: none;
+            color: #999; font-size: 22px; cursor: pointer; padding: 4px 10px;
+        }
+
+        .status-msg {
+            grid-column: 1 / -1; text-align: center; color: #777;
+            padding: 40px 10px; font-size: 14px;
         }
 
         /* Movie Grid */
@@ -121,7 +157,16 @@ footer span {
 </script>
 
 
-    <h2>🔥 GLOBAL TRENDING</h2>
+    <h2 id="page-title">🔥 GLOBAL TRENDING</h2>
+
+    <!-- LIVE SEARCH -->
+    <div class="search-wrap">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="search" id="search-input" placeholder="Search movies..." autocomplete="off" enterkeyhint="search">
+            <button id="clear-search" type="button" aria-label="Clear search">&times;</button>
+        </div>
+    </div>
     
     <div id="movie-grid" class="grid-container"></div>
 
@@ -158,57 +203,125 @@ footer span {
 
 <footer>
     <p>© 2026 SE7EN GLOBAL. ALL RIGHTS RESERVED.</p>
-    <p style="font-size: 10px; margin-top: 5px;">POWERED BY <span>SE7EN TEAM</span>
+    <p style="font-size: 10px; margin-top: 5px;">POWERED BY <span>SE7EN TEAM</span></p>
 </footer>
+    </div>
 
     <script>
     const apiKey = '3455ebd9bf16f0b30d2ed31128bf933c';
-    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&region=US`;
+    const trendingUrl = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}&region=US`;
+    const searchUrl = (q) => `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(q)}&include_adult=false`;
+
+    const grid = document.getElementById('movie-grid');
+    const input = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-search');
+    const pageTitle = document.getElementById('page-title');
+
+    let requestId = 0;     // para ignore-on ang old results kung paspas ang type
+    let debounceTimer = null;
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+    }
+
+    function showMessage(text) {
+        grid.innerHTML = `<div class="status-msg">${text}</div>`;
+    }
+
+    function renderMovies(movies, withAd) {
+        grid.innerHTML = '';
+
+        movies.forEach((movie, index) => {
+            // 1. Movie Card Logic
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.onclick = () => playMovie(movie.id);
+            const title = escapeHtml(movie.title || 'Untitled');
+            const rating = (movie.vote_average || 0).toFixed(1);
+            card.innerHTML = `
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${title}" loading="lazy">
+                <div class="movie-info">
+                    <div class="movie-title">${title}</div>
+                    <div class="rating">⭐ ${rating}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+
+            // 2. Insert Native Banner at index 4 (trending lang, dili sa search)
+            if (withAd && index === 4) {
+                const adDiv = document.createElement('div');
+                adDiv.className = 'native-ad-box';
+                adDiv.innerHTML = `
+                    <p style="color: #666; font-size: 10px; margin-bottom: 8px;">Recommended for You</p>
+                    <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
+                `;
+                grid.appendChild(adDiv);
+
+                const script = document.createElement('script');
+                script.async = "async";
+                script.dataset.cfasync = "false";
+                script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
+                adDiv.appendChild(script);
+            }
+        });
+    }
 
     async function fetchMovies() {
+        const myId = ++requestId;
         try {
-            const response = await fetch(url);
+            const response = await fetch(trendingUrl);
             const data = await response.json();
-            const grid = document.getElementById('movie-grid');
-
-            if (!grid) return; // Siguroha nga naa ang grid sa HTML
-            grid.innerHTML = '';
-
-            data.results.slice(0, 12).forEach((movie, index) => {
-                // 1. Movie Card Logic
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.onclick = () => playMovie(movie.id);
-                card.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <div class="movie-info">
-                        <div class="movie-title">${movie.title}</div>
-                        <div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>
-                    </div>
-                `;
-                grid.appendChild(card);
-
-                // 2. Insert Native Banner at index 4
-                if (index === 4) {
-                    const adDiv = document.createElement('div');
-                    adDiv.className = 'native-ad-box';
-                    adDiv.innerHTML = `
-                        <p style="color: #666; font-size: 10px; margin-bottom: 8px;">Recommended for You</p>
-                        <div id="container-1ebaa3930d67bc4f175aaf45aeba75dd"></div>
-                    `;
-                    grid.appendChild(adDiv);
-
-                    const script = document.createElement('script');
-                    script.async = "async";
-                    script.dataset.cfasync = "false";
-                    script.src = "https://pl28733694.effectivegatecpm.com/1ebaa3930d67bc4f175aaf45aeba75dd/invoke.js";
-                    adDiv.appendChild(script);
-                }
-            });
+            if (myId !== requestId) return; // naay mas bag-ong request na
+            pageTitle.textContent = '🔥 GLOBAL TRENDING';
+            renderMovies(data.results.filter(m => m.poster_path).slice(0, 12), true);
         } catch (error) { 
-            console.error("Error fetching movies:", error); 
+            console.error("Error fetching movies:", error);
+            if (myId === requestId) showMessage('Error loading movies. Try again.');
         }
     }
+
+    async function searchMovies(query) {
+        const myId = ++requestId;
+        showMessage('Searching...');
+        try {
+            const response = await fetch(searchUrl(query));
+            const data = await response.json();
+            if (myId !== requestId) return; // naay mas bag-ong request na
+            const results = (data.results || []).filter(m => m.poster_path).slice(0, 20);
+            pageTitle.textContent = '🔍 SEARCH RESULTS';
+            if (results.length === 0) {
+                showMessage(`Walay nakita para sa "${escapeHtml(query)}"`);
+            } else {
+                renderMovies(results, false);
+            }
+        } catch (error) {
+            console.error("Error searching movies:", error);
+            if (myId === requestId) showMessage('Error sa search. Try again.');
+        }
+    }
+
+    // Live search: mo-search 400ms human ka mo-undang ug type
+    input.addEventListener('input', () => {
+        const query = input.value.trim();
+        clearBtn.style.display = input.value ? 'block' : 'none';
+        clearTimeout(debounceTimer);
+
+        if (!query) {
+            fetchMovies(); // balik sa trending
+            return;
+        }
+        debounceTimer = setTimeout(() => searchMovies(query), 400);
+    });
+
+    clearBtn.addEventListener('click', () => {
+        input.value = '';
+        clearBtn.style.display = 'none';
+        clearTimeout(debounceTimer);
+        fetchMovies();
+        input.focus();
+    });
 
     function playMovie(id) {
     const overlay = document.getElementById('player-overlay');
