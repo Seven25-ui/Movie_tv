@@ -20,7 +20,7 @@
   function play(ms) {
     if (running || !document.body) return;
     running = true;
-    ms = ms || window.GLITCH_DURATION || 18000;
+    ms = ms || window.GLITCH_DURATION || 9000;
 
     var root = document.documentElement, body = document.body;
     var cv = document.createElement('canvas');
