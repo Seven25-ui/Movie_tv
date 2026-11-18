@@ -1,4 +1,4 @@
-const CACHE = 'se7en-v1';
+const CACHE = 'se7en-v2';
 const SHELL = ['/', '/index.html', '/manifest.json', '/media/icon-192.png', '/media/icon-512.png'];
 
 self.addEventListener('install', (e) => {
