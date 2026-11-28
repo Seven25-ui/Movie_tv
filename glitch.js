@@ -2,7 +2,7 @@
    Mo-gawas automatic 3 segundos human ma-abli ang page, molungtad og 18 segundos, dayon mawala.
    Realistic nga storm: fractal nga kidlat nga naay step-leader (mo-ulan paubos), 2-5 ka balik-igo (strobe),
    sanga-sanga, bloom/glow, flash sa tibuok screen, panganod nga mo-hayag gikan sa sulod, sheet/cloud
-   lightning, ulan, gamay nga pag-uyog, ug dalogdog nga naay delay depende sa gilay-on.
+   lightning, ulan, gamay nga pag-uyog, ug realistic nga dalogdog (crack + rolling rumble + echo) nga naay delay depende sa gilay-on.
    Gamita:  <script src="glitch.js" defer></script>  sa ubos sa imong index.html
    Options (ibutang sa dili pa i-load ang glitch.js):
      window.GLITCH_DELAY = 3000;       // unsa kadugay una mo-gawas (ms)
@@ -25,46 +25,134 @@
   function rnd(a, b) { return a + Math.random() * (b - a); }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 
-  /* ---------- tunog: dalogdog ---------- */
-  var ac = null, noiseBuf = null;
-  function audioReady() {
-    if (window.GLITCH_SOUND === false) return false;
-    try {
-      if (!ac) {
-        var AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC) return false;
-        ac = new AC();
-        var len = ac.sampleRate * 4, b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0), last = 0;
-        for (var i = 0; i < len; i++) { var w = Math.random() * 2 - 1; last = (last + .02 * w) / 1.02; d[i] = last * 3.5; }
-        noiseBuf = b;
-        document.addEventListener('pointerdown', function () { if (ac && ac.state === 'suspended') ac.resume(); }, { once: true });
-      }
-      return ac.state === 'running';
-    } catch (e) { return false; }
+  /* ---------- tunog: dalogdog + ulan (WebAudio, gi-synthesize) ---------- */
+  var ac = null, master = null, verb = null, whiteBuf = null, brownBuf = null, rainN = null;
+
+  function makeNoise(kind, secs) {
+    var len = Math.floor(ac.sampleRate * secs), b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0), last = 0;
+    for (var i = 0; i < len; i++) {
+      var w = Math.random() * 2 - 1;
+      if (kind === 'brown') { last = (last + .02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w;
+    }
+    return b;
   }
-  function thunder(power, rumbleOnly) {
+  function makeIR(secs) { // reverb: nagdaghan nga eko sa kalangitan
+    var len = Math.floor(ac.sampleRate * secs), b = ac.createBuffer(2, len, ac.sampleRate);
+    for (var c = 0; c < 2; c++) {
+      var d = b.getChannelData(c), y = 0;
+      for (var i = 0; i < len; i++) {
+        var v = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6);
+        y += .28 * (v - y); d[i] = y;
+      }
+    }
+    return b;
+  }
+  function initAudio() {
+    if (ac || window.GLITCH_SOUND === false) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    ac = new AC();
+    whiteBuf = makeNoise('white', 3);
+    brownBuf = makeNoise('brown', 8);
+    master = ac.createGain(); master.gain.value = .9;
+    var comp = ac.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.ratio.value = 6; comp.attack.value = .003; comp.release.value = .25;
+    master.connect(comp); comp.connect(ac.destination);
+    verb = ac.createConvolver(); verb.buffer = makeIR(3.2);
+    verb.connect(master);
+  }
+  function unlock() {
+    if (window.GLITCH_SOUND === false) return;
+    try { initAudio(); if (ac && ac.state === 'suspended') ac.resume(); } catch (e) {}
+  }
+  ['pointerdown', 'touchstart', 'keydown', 'click'].forEach(function (ev) { document.addEventListener(ev, unlock, { passive: true }); });
+  function audioReady() { return window.GLITCH_SOUND !== false && !!ac && ac.state === 'running'; }
+
+  // realistic nga dalogdog: crack (kung duol) + thump + rolling nga rumble
+  function thunder(power, dist, cloudOnly) {
     if (!audioReady()) return;
     try {
-      var t = ac.currentTime + .02;
-      var src = ac.createBufferSource(); src.buffer = noiseBuf;
-      var lp = ac.createBiquadFilter(); lp.type = 'lowpass';
-      lp.frequency.setValueAtTime(300 + 600 * power, t);
-      lp.frequency.exponentialRampToValueAtTime(60, t + 3.2);
-      var g = ac.createGain();
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.linearRampToValueAtTime(.95 * power, t + (rumbleOnly ? .35 : .07));
-      g.gain.setTargetAtTime(0.0001, t + .3, rumbleOnly ? 1.1 : .8);
-      src.connect(lp); lp.connect(g); g.connect(ac.destination);
-      src.start(t, Math.random() * .5); src.stop(t + 4);
-      if (power > .65 && !rumbleOnly) { // "crack" sa duol nga igo
-        var s2 = ac.createBufferSource(); s2.buffer = noiseBuf;
-        var hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1800;
-        var g2 = ac.createGain();
-        g2.gain.setValueAtTime(.4 * power, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + .22);
-        s2.connect(hp); hp.connect(g2); g2.connect(ac.destination);
-        s2.start(t, 1); s2.stop(t + .3);
+      var t = ac.currentTime + .03, close = 1 - dist, j;
+      // output bus: pan + dry/wet
+      var out = ac.createGain(); out.gain.value = clamp(.3 + .7 * power, 0, 1) * (cloudOnly ? .6 : 1);
+      var bus = out;
+      if (ac.createStereoPanner) { var pn = ac.createStereoPanner(); pn.pan.value = rnd(-.8, .8); out.connect(pn); bus = pn; }
+      var dry = ac.createGain(); dry.gain.value = 1 - .35 * dist; bus.connect(dry); dry.connect(master);
+      var wet = ac.createGain(); wet.gain.value = .25 + .6 * dist; bus.connect(wet); wet.connect(verb);
+
+      // 1) rolling rumble
+      var dur = 3 + dist * 2 + power * 1.2;
+      var src = ac.createBufferSource(); src.buffer = brownBuf;
+      var hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 28;
+      var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = .7;
+      lp.frequency.setValueAtTime(260 + 700 * close, t);
+      lp.frequency.exponentialRampToValueAtTime(55, t + dur);
+      var g = ac.createGain(); g.gain.setValueAtTime(.0001, t);
+      var att = .08 + dist * .5 + (cloudOnly ? .3 : 0);
+      g.gain.linearRampToValueAtTime(1, t + att);
+      var nb = 3 + ((Math.random() * 4) | 0), sp = (dur - att) / (nb + 1);
+      for (j = 1; j <= nb; j++) {
+        var tp = att + sp * j, env = Math.pow(1 - tp / dur, 1.3);
+        g.gain.linearRampToValueAtTime(env * rnd(.25, .5), t + tp - sp * .45);   // lungag
+        g.gain.linearRampToValueAtTime(env * rnd(.65, 1), t + tp);               // taas (gugulong)
+      }
+      g.gain.linearRampToValueAtTime(.0001, t + dur);
+      var rg = ac.createGain(); rg.gain.value = .55 + .45 * close;
+      src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(rg); rg.connect(out);
+      src.start(t, rnd(0, .4)); src.stop(t + dur + .1);
+
+      // 2) crack + crackle (kung duol ra)
+      if (close > .45 && !cloudOnly) {
+        var cs = ac.createBufferSource(); cs.buffer = whiteBuf;
+        var chp = ac.createBiquadFilter(); chp.type = 'highpass'; chp.frequency.value = 650;
+        var clp = ac.createBiquadFilter(); clp.type = 'lowpass'; clp.frequency.value = 7000;
+        var cg = ac.createGain(); cg.gain.setValueAtTime(.0001, t);
+        cg.gain.linearRampToValueAtTime(close, t + .004);
+        cg.gain.setTargetAtTime(.0001, t + .004, .045);
+        var ks = ac.createBufferSource(); ks.buffer = whiteBuf;
+        var khp = ac.createBiquadFilter(); khp.type = 'highpass'; khp.frequency.value = 900;
+        var kg = ac.createGain(); kg.gain.setValueAtTime(.0001, t);
+        var tcs = [], n = 10 + Math.floor(close * 18);
+        for (j = 0; j < n; j++) tcs.push(t + .04 + Math.pow(Math.random(), 1.6) * .9);
+        tcs.sort(function (a, b) { return a - b; });
+        for (j = 0; j < n; j++) {
+          kg.gain.setValueAtTime(rnd(.2, .8) * close * Math.exp(-(tcs[j] - t) * 2.2), tcs[j]);
+          kg.gain.setTargetAtTime(.0001, tcs[j] + .002, .006);
+        }
+        cs.connect(chp); chp.connect(clp); clp.connect(cg); cg.connect(out);
+        ks.connect(khp); khp.connect(kg); kg.connect(out);
+        cs.start(t); cs.stop(t + 1); ks.start(t, 1); ks.stop(t + 1.2);
+      }
+
+      // 3) thump sa ubos (kung duol kaayo)
+      if (close > .6 && power > .6 && !cloudOnly) {
+        var os = ac.createOscillator(); os.type = 'sine';
+        os.frequency.setValueAtTime(80, t); os.frequency.exponentialRampToValueAtTime(32, t + .5);
+        var og = ac.createGain(); og.gain.setValueAtTime(.0001, t);
+        og.gain.linearRampToValueAtTime(.9 * power, t + .012);
+        og.gain.setTargetAtTime(.0001, t + .03, .18);
+        os.connect(og); og.connect(out); os.start(t); os.stop(t + 1);
       }
     } catch (e) {}
+  }
+
+  // ambient nga ulan
+  function rainStart() {
+    if (rainN || !audioReady()) return;
+    try {
+      var s = ac.createBufferSource(); s.buffer = whiteBuf; s.loop = true;
+      var hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 900;
+      var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 6500;
+      var g = ac.createGain(); g.gain.value = .0001;
+      s.connect(hp); hp.connect(lp); lp.connect(g); g.connect(master);
+      s.start(); rainN = { s: s, g: g };
+    } catch (e) {}
+  }
+  function rainSet(v) { if (rainN) try { rainN.g.gain.setTargetAtTime(Math.max(.0001, v), ac.currentTime, .3); } catch (e) {} }
+  function rainStop() {
+    if (!rainN) return;
+    var r = rainN; rainN = null;
+    try { r.g.gain.setTargetAtTime(.0001, ac.currentTime, .2); setTimeout(function () { try { r.s.stop(); } catch (e) {} }, 1200); } catch (e) {}
   }
 
   /* ---------- geometry sa kidlat ---------- */
@@ -126,7 +214,6 @@
     s.life = s.leader + t + 1900;
     s.fscale = power * (cloudOnly ? .55 : 1) * (.4 + .6 * (1 - dist));
     s.thunderAt = now + s.leader + dist * 2400 + rnd(100, 500);
-    s.thunderPow = power * (1 - dist * .6) * (cloudOnly ? .5 : 1);
     return s;
   }
 
@@ -277,7 +364,7 @@
         s = strikes[i]; updateStrike(s, now);
         F += s.F;
         if (!s.cloudOnly && s.power > .65 && s.dist < .35 && s.a2 >= 0 && s.a2 < 150) shake = Math.max(shake, s.power);
-        if (!s.thunderDone && now >= s.thunderAt) { s.thunderDone = true; thunder(s.thunderPow * (.5 + .5 * storm), s.cloudOnly); }
+        if (!s.thunderDone && now >= s.thunderAt) { s.thunderDone = true; thunder(s.power * (.5 + .5 * storm), s.dist, s.cloudOnly); }
       }
       F = clamp(F, 0, 1.3);
 
@@ -289,6 +376,7 @@
       cloudOff = (cloudOff + .3) % (W * 1.5);
       drawCloud(ctx, 1, .85 * storm);
 
+      if (rain) { if (!rainN && storm > .02) rainStart(); rainSet(.045 * storm); }
       if (rain && storm > .02) {
         ctx.globalAlpha = (.26 + .25 * clamp(F, 0, 1)) * storm; ctx.strokeStyle = '#b6c8ff'; ctx.lineWidth = 1;
         ctx.beginPath();
@@ -361,7 +449,7 @@
     }
 
     function cleanup() {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(raf); rainStop();
       window.removeEventListener('resize', size);
       if (cv.parentNode) cv.parentNode.removeChild(cv);
       body.style.position = oldPos; body.style.left = oldLeft;
